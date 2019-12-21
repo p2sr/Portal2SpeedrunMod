@@ -1,0 +1,10 @@
+"Extras"
+{
+	"speedrunmode"
+	{
+		"title"		"BEGIN THE SPEEDRUN"
+		"subtitle"	"Gotta go fast!"
+		"pic"		"srmode/thumbnail"
+		"map"		"sp_a1_intro1"
+	}
+}
