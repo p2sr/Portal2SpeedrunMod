@@ -1,6 +1,6 @@
 //*****************************************************
 //*****************************************************
-//====SPEEDRUN MODE v0.4 by Krzyhau====
+//====SPEEDRUN MODE v0.5 by Krzyhau====
 //this mod removes all of major and most of minor cutscenes
 //from the game, reducing the time for speedruning it lol.
 //*****************************************************
