@@ -2,9 +2,16 @@
 {
 	"speedrunmode"
 	{
-		"title"		"BEGIN THE SPEEDRUN"
+		"title"		"Begin The Speedrun"
 		"subtitle"	"Gotta go fast!"
 		"pic"		"srmode/thumbnail"
 		"map"		"sp_a1_intro1"
+	}
+	"speedruncom"
+	{
+		"title"		"Official Leaderboard"
+		"subtitle"	"nobody uses speedrun.com"
+		"pic"		"srmode/srcom_thumbnail"
+		"url"		"https://www.speedrun.com/portal_2_category_extensions#Portal_2_Speedrun_Mod"
 	}
 }
