@@ -32,6 +32,9 @@ function modlog(msg){
   printl("### SPEEDRUN MODE ###: "+msg);
 }
 
+
+//this part was used when this was an addon to a main game, but not it's separate mod, so these are useless now lol
+
 SRMODE_DEBUG <- -102001
 SRMODE_INIT <- -102000
 
@@ -66,14 +69,19 @@ function spTransitionListFix(){
   }
 }
 
+
 //load function
 function OnPostSpawn(){
   local auto = GetEntity("logic_auto")
   if(!auto){
-    //modlog("No logic_auto loaded yet. Speedrun Mode initialisation failed.")
+    modlog("No logic_auto loaded yet. Speedrun Mode initialisation failed.")
     return false
   }
+  //necessary to use OnMapSpawn event, since OnPostSpawn can be executed before some entities are even spawned
   EntFireByHandle(auto, "AddOutput", "OnMapSpawn "+self.GetName()+":RunScriptCode:SpeedrunModeLoad():0:1", 0, null, null)
+
+  //removing chapter titles
+  CHAPTER_TITLES = []
 }
 
 
@@ -105,7 +113,6 @@ function SpeedrunModeLoad(){
       blockAnnouncerDelay = 15
       EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro01\")", 3)
       EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro04\")", 7.2)
-
       break
     case "sp_a1_intro2":
       EntFire("Room_01-glados_congrats_trigger", "AddOutput" "OnTrigger departure_elevator-blocked_elevator_tube_anim:Trigger::0:1", 0.0)
@@ -115,6 +122,10 @@ function SpeedrunModeLoad(){
       EntFire("departure_elevator-tube_blockage_01", "Kill", 0)
       EntFire("departure_elevator-tube_blockage_02", "Kill", 0)
       EntFire("departure_elevator-source_elevator_door_open_trigger", "AddOutput" "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0.0)
+      break
+    case "sp_a1_intro4":
+      EntFire("section_2_trigger_portal_spawn_a2_rm3a", "AddOutput", "OnTrigger room_3_portal_activate_rl:Trigger::0:1")
+      EntFire("section_2_trigger_portal_spawn_a2_rm3a", "AddOutput", "OnTrigger room_3_portal_activate_rl:Disable::1:1")
       break
     case "sp_a1_intro6":
       EntFire("departure_elevator-source_elevator_door_open_trigger", "Kill", 0)
@@ -128,19 +139,23 @@ function SpeedrunModeLoad(){
       
       EntFire("offrails_airlock_door_1_open_rl", "Trigger")
       
+      EntFire("transition_entry_door-open_door", "Trigger")
+      EntFire("transition_entry_door-open_door", "Kill",0,1)
+
       EntFire("transition_trigger", "AddOutput" "OnStartTouch @transition_script:RunScriptCode:TransitionFromMap():0.5:1", 0.0)
       break
     case "sp_a1_wakeup": //HEKCING MESS, I DONT EVEN KNOW WHAT DOES WHAT, FORGOT TO COMMENT THIS AAAAAAAAGHGHH
+
       EntFire("@sphere", "Kill")
-      EntFire("@switch_door_open_rl", "Trigger", 0, 0.2)
+      EntFire("@switch_door_open_rl", "Trigger", 0, 0)
       EntFire("@switch_door_open_rl", "Kill", 0, 0.4)
+      EntFire("training_door", "SetSpeed", 200)
       EntFire("dont_see_switch_vcd_trigger", "Enable", 0.0)
       EntFire("dont_see_switch_vcd_trigger", "AddOutput" "OnStartTouch basement_breakers_socket_relay:Trigger::0:1", 0.0)
       EntFire("socket_powered_rl", "Trigger")
       EntFire("socket_powered_rl", "Kill", 1)
       EntFire("playerproxy", "setdropenabled", 1, 0.01)
       EntFire("relay_hallway_fog_and_tonemap", "AddOutput", "OnTrigger training_door:Open::0:1")
-      EntFire("training_door", "SetSpeed", 20)
       EntFire("basement_breakers_upper_blocker", "Kill")
       EntFire("basement_breaker_room_entry_trigger", "starttouch")
       EntFire("basement_breakers_entrance_door", "Open", 0, 1)
@@ -162,7 +177,7 @@ function SpeedrunModeLoad(){
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger shaft_blocker:Disable::4.3:1", 0.0)
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_aperture_door:Open::5.3:1", 0.0)
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger platform_areaportal:Open::5.3:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger glados_start:Trigger::13.3:1", 0.0)
+      //EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger glados_start:Trigger::13.3:1", 0.0)
       
       EntFire("basement_breakers_start", "Disable") //disabling old cutscene
       //allow player to get to the incinerator on their own
@@ -192,10 +207,13 @@ function SpeedrunModeLoad(){
     case "sp_a2_laser_over_goo":
       EntFire("arrival_elevator-leaving_elevator_trigger", "Kill", 0)
       EntFire("@glados", "RunScriptCode", "PuzzleStart()", 0)
-      EntFire("InstanceAuto69-corridor_repair-corridor_repair", "Trigger", 4)
+      EntFire("InstanceAuto69-corridor_repair-corridor_repair", "Trigger", 2)
       EntFire("InstanceAuto69-corridor_repair-proxy", "Kill", 0)
+      EntFire("InstanceAuto69-corridor_repair-blocking_door", "Kill")
+      EntFire("InstanceAuto69-corridor_repair-blocking_door_2", "Kill")
       break
     case "sp_a2_catapult_intro":
+      EntFire("door_1-door_open_relay", "Trigger")
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Trigger::1:1", 0)
       break
     case "sp_a2_trust_fling":
@@ -213,23 +231,24 @@ function SpeedrunModeLoad(){
       EntFire("relay_lift3_down", "Enable", 0)
       EntFire("relay_lift3_up", "Enable", 0)
       EntFire("start_platform_relay", "Trigger", 0)
-      EntFire("room_2_exit_door-player_in_door_trigger", "Enable")
-      EntFire("room_2_exit_door-player_in_door_trigger", "AddOutput", "OnTrigger @summon_elevator:Enable::0:1", 0)
-      EntFire("room_2_exit_door-player_in_door_trigger", "AddOutput", "OnTrigger @summon_elevator:Trigger::0.1:1", 0)
+      EntFire("@summon_elevator","Enable")
+      EntFire("@summon_elevator","Trigger",0,0.1)
       break
     case "sp_a2_sphere_peek":
       EntFire("@trigger_this_to_fix_ceiling", "Trigger", 1)
       EntFire("landing_01-ramp_close", "AddOutput", "OnTrigger !self:Disable::1:1",0)
       EntFire("wall_replace_02_relay", "AddOutput", "OnTrigger landing_01-ramp_close:Trigger::0:1",0)
+
+      EntFire("ramp_up_relay", "Trigger", 0, 1)
+      EntFire("ramp_up_relay", "Kill", 0, 2)
       break
     case "sp_a2_bridge_intro":
       EntFire("departure_elevator-elevator_turret_wife", "Kill", 1)
       break
     case "sp_a2_bridge_the_gap":
-      EntFire("trick_door_start_relay_2", "Disable", 0)
+      EntFire("trick_door_start_relay_3", "Disable", 0)
       EntFire("start_wheatley_window_scene_relay", "Disable", 0)
-      EntFire("trick_door_left", "AddOutput", "OnClose trick_door_left:Open::0.01:0", 0)
-      EntFire("trick_door_right", "AddOutput", "OnClose trick_door_right:Open::0.01:0", 0)
+      EntFire("trick_door_start_relay_2", "AddOutput", "OnTrigger trick_door_open_relay:Trigger::5:0", 0)
       break
     case "sp_a2_turret_intro":
       EntFire("exit_airlock_door-open_door_slow", "Trigger")
@@ -237,6 +256,11 @@ function SpeedrunModeLoad(){
       EntFire("exit_airlock_door-open_door", "Disable", 0)
       break
     case "sp_a2_laser_relays":
+      EntFire("exit_airlock_door-proxy", "Kill")
+      EntFire("exit_airlock_door-open_door", "Trigger",0,0)
+      EntFire("departure_elevator-elevator_turrets", "KillHierarchy")
+      EntFire("departure_elevator-elevator_turrets_02", "KillHierarchy")
+      EntFire("departure_elevator-elevator_turrets_03", "KillHierarchy")
       EntFire("lift_gate_close_rl", "AddOutput", "OnTrigger lift_trigger:Enable::0.5:1", 0)
       break
     case "sp_a2_column_blocker":
@@ -262,9 +286,21 @@ function SpeedrunModeLoad(){
       EntFire("transition_trigger","AddOutput","OnStartTouch @command:Command:setpos_exact "+telepos.x+" "+telepos.y+" "+telepos.z+":0.5:1")
       
       break
+    case "sp_a2_bts2":
+      EntFire("controlroom_gate_a_rotating", "AddOutput", "OnFullyClosed exit_elevator_move_relay:Trigger::0:1")
+      EntFire("controlroom_gate_a_rotating", "AddOutput", "OnFullyClosed exit_elevator_move_relay:Disable::1:1")
+      EntFire("controlroom_gate_a_rotating", "SetSpeed", 300)
+      EntFire("controlroom_gate_b_rotating", "SetSpeed", 300)
+      EntFire("exit_elevator_train", "SetMaxSpeed", 300, 1)
+      EntFire("security_door_1_open", "Disable")
+      EntFire("exit_security_door-open_door", "Trigger", 0, 0)
+      
+      EntFire("transition_trigger", "AddOutput", "OnStartTouch transition_noportal_volume:Activate::0:1")
+      EntFire("transition_trigger", "AddOutput", "OnStartTouch @transition_script:RunScriptCode:TransitionFromMap():0.1:1")
+      break
     case "sp_a2_bts3":
       EntFire("entry_airlock_door-proxy", "Kill")
-      EntFire("entry_airlock_door-open_door_malfunction","Trigger",0,1)
+      EntFire("entry_airlock_door-open_door_malfunction","Trigger",0,0)
       EntFire("entry_canyon_clip", "Kill")
       EntFire("@sphere", "EnableFlashlight")
       EntFire("entry_canyon_powering_off_relay", "Disable")
@@ -276,8 +312,15 @@ function SpeedrunModeLoad(){
         EntFire("entry_canyon_paired_light_"+i,"TurnOff")
         EntFire("entry_canyon_paired_light_"+i+"_model", "Skin", 1)
       }
+
+      EntFire("exit_airlock_door-open_door", "Trigger")
+      EntFire("exit_airlock_door-open_door", "Kill",0,1)
+      EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
       break
     case "sp_a2_bts4":
+      EntFire("entry_airlock_door-open_door", "Trigger")
+      EntFire("entry_airlock_door-open_door", "Kill",0,1)
+
       //always spawn broken turrets
       EntFire("turret_conveyor_1_pre_switch_case", "Kill")
       EntFire("turret_conveyor_1_post_switch_case", "Kill")
@@ -288,8 +331,20 @@ function SpeedrunModeLoad(){
       
       //CreateSceneEntity("scenes/npc/announcer/sp_sabotage_factory_line04.vcd") //template missing
       //CreateSceneEntity("scenes/npc/announcer/sp_sabotage_factory_line05.vcd") //new template accepted
+      EntFire("exit_airlock_door-open_door", "Trigger")
+      EntFire("exit_airlock_door-open_door", "Kill",0,1)
+      EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
       break
     case "sp_a2_bts5":
+      EntFire("exit_airlock_door-proxy", "Kill")
+      EntFire("exit_airlock_door-open_door", "Trigger",0,0)
+
+      EntFire("airlock_door_01-proxy", "Kill")
+      EntFire("airlock_door_01-open_door", "Trigger")
+      EntFire("airlock_door_02-proxy", "Kill")
+      EntFire("airlock_door_02-open_door", "Trigger")
+      EntFire("airlock_door_01_areaportal", "Open")
+
       EntFire("exit_elevator_close_entrance_relay", "AddOutput", "OnTrigger lift:SetSpeed:250:0:1")
       //execute cutscene faster
       EntFire("tube_counter" "AddOutput", "OnHitMax destroy_tanks_relay:Trigger::0:1")
@@ -298,7 +353,7 @@ function SpeedrunModeLoad(){
       
       EntFire("tank_destruction_rl", "AddOutput", "OnTrigger tank_explosions_rl:Trigger::0:1")
       EntFire("tank_destruction_rl", "AddOutput", "OnTrigger exit_dialog_trigger:Enable::1:1")
-      
+
       break
     case "sp_a2_core":
       blockAnnouncerDelay=-1
@@ -350,6 +405,11 @@ function SpeedrunModeLoad(){
       EntFire("begin_wheatley_emergence_relay", "Kill")
       EntFire("button_press_relay", "AddOutput", "OnTrigger @glados:Kill::16:1")
       EntFire("button_press_relay", "AddOutput", "OnTrigger maintenance_pit_script:Kill::16:1")
+
+      //ending trigger
+      local trigger2 = Entities.FindByClassnameNearest("trigger_once", Vector(0, 304, -10438), 100)
+      local po = GetPlayer().GetOrigin()
+      EntFireByHandle(trigger2, "SetLocalOrigin", "0 304 -2426", 1, null, null)
       break
     case "sp_a3_01":
       //beginning
@@ -400,7 +460,7 @@ function SpeedrunModeLoad(){
       EntFire("logic_branch_listener", "AddOutput", "OnAllTrue door_spotlight_2_fill:TurnOn::7:1")
       break
     case "sp_a3_02":
-      
+      EntFire("finale_4_wrongwarp", "Activate")
       break
     case "sp_a3_03":
       EntFire("AutoInstance1-push_button_knob", "AddOutput", "OnIn powerup_door_trigger:Enable::0:1")
@@ -410,18 +470,36 @@ function SpeedrunModeLoad(){
       FastUndergroundTransition(null, 3)
       break
     case "sp_a3_jump_intro":
+      EntFire("AutoInstance1-entrance_lift_prop", "Kill")
+      EntFire("InstanceAuto12-entrance_lift_train", "SetSpeed", 200, 0.1)
       EntFire("InstanceAuto12-entrance_lift_train", "SetMaxSpeed", 200)
-      local pp = GetPlayer().GetOrigin()
-      pp.z = -72
-      GetPlayer().SetOrigin(pp)
-      EntFire("!player", "RunScriptCode", "local pp=self.GetOrigin()\npp.z=-450\nself.SetOrigin(pp)", 0.01)
-      EntFire("InstanceAuto12-entrance_lift_train_path_2", "inpass", 0, 1)
+      EntFire("InstanceAuto12-entrance_lift_doortop_movelinear", "Open", 0, 2)
+      EntFire("InstanceAuto12-entrance_lift_doorbottom_movelinear", "Open", 0, 2)
+      local entsToMove = ["!player", "InstanceAuto12-entrance_lift_train", "@test_dome_lift_entry_teleport", "InstanceAuto12-entrance_lift_train_path_1", "InstanceAuto12-entrance_lift_train_path_2"]
+      local movecode = 
+      "local pos = self.GetOrigin()\n" +
+      "if(pos.x < -8000)pos.x = -432\n" +
+      "self.SetOrigin(pos)\n"
+      foreach (index, ent in entsToMove){
+        EntFire(ent,"RunScriptCode", movecode)
+      }
+      //safety teleport
+      EntFire("InstanceAuto12-entrance_lift_train", "AddOutput", "OnStart !player:RunScriptCode:"+movecode+":0:1")
       FastUndergroundTransition(null, 24)
       break
     case "sp_a3_bomb_flings":
+      //make bomb spawn rate much faster
+      EntFire("trigger_to_drop", "Kill")
+      EntFire("paint_bomb_maker", "AddOutput", "OnEntitySpawned paint_bomb_maker:ForceSpawn::0.25:-1")
+      EntFire("paint_sprayer_button", "AddOutput", "OnPressed paint_bomb_maker:ForceSpawn::0:1")
+
       FastUndergroundTransition(8, 22)
       break
     case "sp_a3_crazy_box":
+
+      //make bomb spawn rate much faster
+      EntFire("paint_bomb_template", "ForceSpawn", 0, 0)
+
       FastUndergroundTransition(17, 21)
       break
     case "sp_a3_transition01":
@@ -437,8 +515,10 @@ function SpeedrunModeLoad(){
       break
     case "sp_a3_speed_flings":
       FastUndergroundTransition(6, 3)
-      EntFire("paint_bounce_timer", "FireTimer", null, 5.8)
-      EntFire("paint_speed_timer", "FireTimer", null, 3.8)
+      EntFire("paint_sprayer_speed", "Start")
+      EntFire("paint_sprayer_bounce", "Start")
+      EntFire("paint_bounce_timer", "Kill")
+      EntFire("paint_speed_timer", "Kill")
       break
     case "sp_a3_portal_intro":
       FastUndergroundTransition(-1,null)
@@ -454,6 +534,13 @@ function SpeedrunModeLoad(){
       EntFire("sphere_entrance_lift_train_path_2", "AddOutput", "OnPass sphere_entrance_lift_train_path_3:inpass::0:1")
       break
     case "sp_a3_end":
+      //faster gel drop
+      EntFire("paint_trickle_blue_1", "AddOutput", "OnUser1 paint_trickle_blue_1:FireUser1::0.2:-1")
+      EntFire("paint_trickle_blue_1", "AddOutput", "OnUser1 paint_trickle_blue_1:Stop::0:-1")
+      EntFire("paint_trickle_blue_1", "AddOutput", "OnUser1 paint_trickle_blue_1:Start::0.01:-1")
+      EntFire("paint_trickle_blue_1", "FireUser1", 0, 0.1)
+
+      //make vault doors opened
       EntFire("lightsout", "Kill")
       EntFire("lightsout_spotlights", "Kill")
       EntFire("lightsout_sound", "Kill")
@@ -462,6 +549,7 @@ function SpeedrunModeLoad(){
       EntFire("departure_elevator-logic_source_elevator_door_open", "Enable", 0, 2.9)
       EntFire("departure_elevator-logic_source_elevator_door_open", "Trigger", 0, 3)
       EntFire("departure_elevator-source_elevator_door_open_trigger", "Kill", 0, 0)
+      EntFire("pumproom_lift_tracktrain", "SetMaxSpeed", 250)
       break
     case "sp_a4_intro":
       EntFire("button_1_solved", "Kill")
@@ -517,129 +605,166 @@ function SpeedrunModeLoad(){
       EntFire("start_ramp", "Trigger", 0, 1)
       break
     case "sp_a4_jump_polarity":
-	  local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(2336, -64, 192), 10)
-	  EntFireByHandle(trigger, "Kill", "0", 0, null, null)
-	  
-	  EntFire("antechamber-paint_meSilly", "Start")
-	  EntFire("antechamber-paint_meSilly", "Stop", 0, 3)
-	  EntFire("antechamber_exit", "SetAnimation", "Open")
+      local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(2336, -64, 192), 10)
+      EntFireByHandle(trigger, "Kill", "0", 0, null, null)
+
+      EntFire("antechamber-paint_meSilly", "Start")
+      EntFire("antechamber-paint_meSilly", "Stop", 0, 3)
+      EntFire("antechamber_exit", "SetAnimation", "Open")
       break
     case "sp_a4_finale1":
-	  EntFire("tbeam_crusher_delivery", "SetLinearForce", 1500.0)
-	  EntFire("paint_bomb_maker", "ForceSpawn", 0, 0.5)
+      EntFire("final_door-open_door", "Trigger")
+      EntFire("final_door-open_door", "Kill", 0, 0.1)
+
+      EntFire("tbeam_crusher_delivery", "SetLinearForce", 1400.0)
+      EntFire("paint_bomb_maker", "ForceSpawn", 0, 0.5)
+      EntFire("paint_bomb_maker", "ForceSpawn", 0, 1.5)
+
+      EntFire("areaportal_airlock_1", "Open")
+      EntFire("liftshaft_airlock_exit-proxy", "Kill")
+      EntFire("liftshaft_airlock_exit-open_door", "Trigger")
       break
     case "sp_a4_finale2":
 	
-	  local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(3194.35, 704, -146.12), 100)
+      local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(3194.35, 704, -146.12), 100)
       EntFireByHandle(trigger, "Kill", "0", 0, null, null)
-	
-	  EntFire("a4_chamber_fx_a_1", "SetAnimation", "grind1")
-	  EntFire("a4_chamber_fx_a_1", "SetPlaybackRate", 10)
-	  EntFire("a4_chamber_fx_b_1", "SetAnimation", "grind1")
-	  EntFire("a4_chamber_fx_b_1", "SetPlaybackRate", 10)
-	  EntFire("a4_chamberArms_fx_a_1", "SetAnimation", "grind1")
-	  EntFire("a4_chamberArms_fx_a_1", "SetPlaybackRate", 10)
+
+      EntFire("a4_chamber_fx_a_1", "SetAnimation", "grind1")
+      EntFire("a4_chamber_fx_a_1", "SetPlaybackRate", 10)
+      EntFire("a4_chamber_fx_b_1", "SetAnimation", "grind1")
+      EntFire("a4_chamber_fx_b_1", "SetPlaybackRate", 10)
+      EntFire("a4_chamberArms_fx_a_1", "SetAnimation", "grind1")
+      EntFire("a4_chamberArms_fx_a_1", "SetPlaybackRate", 10)
       EntFire("a4_armsWall_fx_A_1", "SetAnimation", "grind1")
-	  EntFire("a4_armsWall_fx_A_1", "SetPlaybackRate", 10)
-	  EntFire("walkway_breakpoint", "Wake", 0, 0.5)
-	  EntFire("ovelinear_chamber", "Open")
-	  EntFire("shake_chamber_move", "StartShake")
-	  EntFire("catwalk_snap_sfx", "PlaySound", 0, 0)
-	  EntFire("relay_chamber_stopped", "Trigger")
-	  
+      EntFire("a4_armsWall_fx_A_1", "SetPlaybackRate", 10)
+      EntFire("walkway_breakpoint", "Wake", 0, 0.5)
+      EntFire("ovelinear_chamber", "Open")
+      EntFire("shake_chamber_move", "StartShake")
+      EntFire("catwalk_snap_sfx", "PlaySound", 0, 0)
+      EntFire("relay_chamber_stopped", "Trigger")
+
+      EntFire("areaportal_airlock_1", "Open")
+      EntFire("bts_door_1-open_door", "Trigger")
+      EntFire("bts_door_1-proxy", "Kill", 0, 1)
+
+      EntFire("areaportal_bts_door_2", "Open", 0, 2)
+      EntFire("bts_door_2-open_door", "Trigger", 0, 2)
+      EntFire("bts_door_2-proxy", "Kill", 0, 3)
+
+      local trigger2 = Entities.FindByClassnameNearest("trigger_once", Vector(-878.3, -1216.03, -448), 100)
+      local po = GetPlayer().GetOrigin()
+      EntFireByHandle(trigger2, "SetLocalOrigin", po.x+" "+po.y+" "+po.z, 1, null, null)
+
+      EntFire("relay_world_shudder", "Kill")
+      EntFire("shake_pipe_fall", "Kill")
+
       break
     case "sp_a4_finale3":
-	  EntFire("practice_bomb_timer", "disable")
+      EntFire("practice_bomb_timer", "disable")
       EntFire("bomb_divert_screw_rotator", "Start")
-	  EntFire("bomb_divert_vertical_door", "Open")
-	  EntFire("bomb_divert_big_rotate", "Open")
-	  EntFire("bomb_divert_bomb_timer", "Enable")
-	  EntFire("bomb_track_1_tube_sprite", "Color 255 9 9")
-	  EntFire("autoinstance1-button", "AddOutput", "OnPressed practice_bomb_timer:enable::0.1:1")
-	  EntFire("autoinstance1-button", "AddOutput", "OnPressed bomb_track_1_2:EnableAlternatePath::0:1")
-	  EntFire("autoinstance1-button", "AddOutput", "OnPressed bomb_track_1_2:EnableAlternatePath::0:1")
-	  EntFire("tractorbeam_emitter", "SetLinearForce", 1000.0)
-	  
+      EntFire("bomb_divert_vertical_door", "Open")
+      EntFire("bomb_divert_big_rotate", "Open")
+      EntFire("bomb_divert_bomb_timer", "Enable")
+      EntFire("bomb_track_1_tube_sprite", "Color 255 9 9")
+      EntFire("autoinstance1-button", "AddOutput", "OnPressed practice_bomb_timer:enable::0.1:1")
+      EntFire("autoinstance1-button", "AddOutput", "OnPressed bomb_track_1_2:EnableAlternatePath::0:1")
+      EntFire("autoinstance1-button", "AddOutput", "OnPressed bomb_track_1_2:EnableAlternatePath::0:1")
+      EntFire("tractorbeam_emitter", "SetLinearForce", 1000.0)
+
       break
     case "sp_a4_finale4":
-	  local ent  = GetEntity("potatos_socket_insertion_relay")
+      local ent  = GetEntity("potatos_socket_insertion_relay")
       EntFireByHandle(ent, "AddOutput", "OnTrigger breakers_up:Trigger::0:1", 0, null, null)
       EntFireByHandle(ent, "AddOutput", "OnTrigger basement_breakers_platform:SetSpeed:1:0.1:1", 0, null, null)
       EntFireByHandle(ent, "AddOutput", "OnTrigger breaker_hatch_door:Open::3:1", 0, null, null)
       EntFireByHandle(ent, "AddOutput", "OnTrigger hatch_clip:Disable::3:1", 0, null, null)
-	  
-	  EntFire("breaker_path2", "AddOutput", "OnPass wheatley_bomb_relay:trigger::0:1")
 
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_white_event_relay:Kill::0:1")
+      EntFire("breaker_path2", "AddOutput", "OnPass wheatley_bomb_relay:trigger::0:1")
 
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_timer:Disable::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_relay:CancelPending::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_model:SetAnimation:pipe_explode_anim:0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_intact_model:Disable::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_end_relay:CancelPending::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_model:Enable::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_intact_model:DisableCollision::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger futbol_shoot_relay:CancelPending::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_white_sprayer_relay:Trigger::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_pipe_relay:Disable::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger core_hit_trigger:Enable::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger shake_white_paint_pipe_break:StartShake::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_sound:PlaySound::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger light_dynamic_wheatley:TurnOff::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger sound_paint_spray:PlaySound::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger relay_paint_smear:Trigger::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_shadow_brush:Kill::0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_shield:SetAnimation:anim10_liftAnim:1.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_white_panels_relay:trigger::1.6:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_lookat_player_relay:trigger::2.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger shake_white_paint_pipe_break:StartShake::2.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger sound_paint_spray:Volume:0:5.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger sound_paint_spray:StopSound::5.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_shield:SetAnimation:anim11_lowerAnim:0.1:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_relay:trigger::2.6:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_timer:enable::2.6:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger autosave0_relay:trigger::2.6:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger background_fire3:start::2.6:1")
-	  EntFire("paint_portal_trigger", "AddOutput", "OnTrigger background_fire3_sound:playsound::2.6:1")
-	  
-	  //ent_fire wheatley_continue_1 trigger; ent_fire wheatley_futbol_guard_relay2 trigger
-	  
-	  //socket3_trigger/relay
-	  //wheatley_continue_3
-	  //wheatley_attack_path1
-	  
-	  //fire_relay
-	  //sprinkler_relay
-	  //sprinkler_relay_erase
-	  //stalemate_relay
-	  //stalemate_door
-	  
-	  EntFire("socket1_relay", "AddOutput", "OnTrigger wheatley_continue_1:Trigger::2:1")
-	  EntFire("socket1_relay", "AddOutput", "OnTrigger wheatley_futbol_guard_relay2:Trigger::4:1")
-	  
-	  EntFire("socket2_relay", "AddOutput", "OnTrigger wheatley_continue_2:Trigger::2:1")
-	  EntFire("socket2_relay", "AddOutput", "OnTrigger wheatley_futbol_guard_relay3:Trigger::4:1")
-	  
-	  EntFire("socket3_relay", "AddOutput", "OnTrigger fire_relay:Trigger::2:1")
-	  EntFire("socket3_relay", "AddOutput", "OnTrigger sprinkler_relay:Trigger::4:1")
-	  EntFire("socket3_relay", "AddOutput", "OnTrigger stalemate_relay:Trigger::10:1")
-	  
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_white_event_relay:Kill::0:1")
+
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_timer:Disable::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_relay:CancelPending::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_model:SetAnimation:pipe_explode_anim:0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_intact_model:Disable::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_end_relay:CancelPending::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_model:Enable::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_intact_model:DisableCollision::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger futbol_shoot_relay:CancelPending::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_white_sprayer_relay:Trigger::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_pipe_relay:Disable::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger core_hit_trigger:Enable::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger shake_white_paint_pipe_break:StartShake::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_pipe_white_sound:PlaySound::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger light_dynamic_wheatley:TurnOff::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger sound_paint_spray:PlaySound::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger relay_paint_smear:Trigger::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_shadow_brush:Kill::0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_shield:SetAnimation:anim10_liftAnim:1.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger paint_white_panels_relay:trigger::1.6:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_lookat_player_relay:trigger::2.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger shake_white_paint_pipe_break:StartShake::2.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger sound_paint_spray:Volume:0:5.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger sound_paint_spray:StopSound::5.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_shield:SetAnimation:anim11_lowerAnim:0.1:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_relay:trigger::2.6:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger wheatley_futbol_timer:enable::2.6:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger autosave0_relay:trigger::2.6:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger background_fire3:start::2.6:1")
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger background_fire3_sound:playsound::2.6:1")
+
+      //ent_fire wheatley_continue_1 trigger; ent_fire wheatley_futbol_guard_relay2 trigger
+
+      //socket3_trigger/relay
+      //wheatley_continue_3
+      //wheatley_attack_path1
+
+      //fire_relay
+      //sprinkler_relay
+      //sprinkler_relay_erase
+      //stalemate_relay
+      //stalemate_door
+
+      EntFire("socket1_relay", "AddOutput", "OnTrigger wheatley_continue_1:Trigger::2:1")
+      EntFire("socket1_relay", "AddOutput", "OnTrigger wheatley_futbol_guard_relay2:Trigger::4:1")
+
+      EntFire("socket2_relay", "AddOutput", "OnTrigger wheatley_continue_2:Trigger::2:1")
+      EntFire("socket2_relay", "AddOutput", "OnTrigger wheatley_futbol_guard_relay3:Trigger::4:1")
+
+      EntFire("socket3_relay", "AddOutput", "OnTrigger fire_relay:Trigger::2:1")
+      EntFire("socket3_relay", "AddOutput", "OnTrigger sprinkler_relay:Trigger::4:1")
+      EntFire("socket3_relay", "AddOutput", "OnTrigger stalemate_relay:Trigger::10:1")
+
       break
   }
+
   //don't let the wheatley screen appear
   EntFire("monitor1-proxy", "Kill")
   EntFire("monitor2-proxy", "Kill")
   
   //activate departure ele faster
-  EntFire("departure_elevator-blocked_elevator_tube_anim", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0)
-  EntFire("departure_elevator-blocked_elevator_tube_anim", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Disable::1:1", 0)
-  
+  //EntFire("departure_elevator-blocked_elevator_tube_anim", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0)
+  //EntFire("departure_elevator-blocked_elevator_tube_anim", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Disable::1:1", 0)
+  EntFire("departure_elevator-elevator_arrive", "Trigger", 0, 4)
+  EntFire("departure_elevator-elevator_arrive", "Disable", 0, 8)
+  EntFire("departure_elevator-logic_source_elevator_door_open", "Trigger", 0, 4)
+  EntFire("departure_elevator-logic_source_elevator_door_open", "Disable", 0, 8)
+  //kills all stuff falling through ele tube
+  EntFire("departure_elevator-vac*", "Kill")
+  //EntFire("departure_elevator-elevator_1_player_telepor", "Kill")
+  ::TransitionFired <- 1
+
   //activate fast arrival
   EntFire("arrival_elevator-elevator_1", "SetMaxSpeed", 400)
   EntFire("arrival_elevator-elevator_1", "SetSpeed", 400)
+  EntFire("arrival_elevator-source_elevator_door_open_trigger", "AddOutput", "OnTrigger arrival_elevator-open:Trigger::0:1")
+  EntFire("arrival_elevator-source_elevator_door_open_trigger", "AddOutput", "OnTrigger arrival_elevator-open:Disable::0.1:1")
   
   //activate fast departure for "modern" elevators
   AddOutput("departure_elevator-close", "OnTrigger", "FastTransition")
+  EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-signs_off:Trigger::0.5:1")
+  EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-elevator_1:RunScriptCode:StartMoving():0.5:1")
+  EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-floor_clip:Disable::0.5:1")
   
   //kill glados (metal bitch aint tell me what to do)
   if(blockAnnouncerDelay>=0){
@@ -681,7 +806,7 @@ function FastUndergroundTransition(idin, idout){
 function FastTransition(){
   //transition is always ready lol
   TransitionReady()
-  modlog("Fast transition will be executed in 2 seconds...");
-  EntFire("@transition_from_map","Trigger","",2.0);
-	EntFire("@transition_with_survey","Trigger","",2.0);
+  modlog("Fast transition will be executed in 1.5 seconds...");
+  EntFire("@transition_from_map","Trigger","",1.5);
+	EntFire("@transition_with_survey","Trigger","",1.5);
 }
