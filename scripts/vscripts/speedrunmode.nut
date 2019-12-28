@@ -1,6 +1,6 @@
 //*****************************************************
 //*****************************************************
-//====SPEEDRUN MODE v0.6 by Krzyhau====
+//====SPEEDRUN MODE v0.7 by Krzyhau====
 //this mod removes all of major and most of minor cutscenes
 //from the game, reducing the time for speedruning it lol.
 //*****************************************************
@@ -131,11 +131,29 @@ function SpeedrunModeLoad(){
       EntFire("departure_elevator-tube_blockage_01", "Kill", 0)
       EntFire("departure_elevator-tube_blockage_02", "Kill", 0)
       EntFire("departure_elevator-source_elevator_door_open_trigger", "AddOutput" "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0.0)
+
+      //open doors faster
+      EntFire("door_1", "Open")
+
+      //kill wheatley because why not lets be hitler
+      EntFire("spherebot_train_1_chassis_1", "KillHierarchy")
+
+      //open end doors earlier
+      EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger door_3-door_open_relay:Trigger::0:1")
+
+      //activate second portal faster
+      EntFire("room_2_portal_activate_rl", "Kill")
+      EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger portal_orange_mtg:SetActivatedState:1:0:1")
+      EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger emitter_orange_mtg:Skin:2:0:1")
+      EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger room_2_portal_shake:StartShake::0:1")
       break
     case "sp_a1_intro4":
       //open portal in third room earlier
       EntFire("section_2_trigger_portal_spawn_a2_rm3a", "AddOutput", "OnTrigger room_3_portal_activate_rl:Trigger::0:1")
       EntFire("section_2_trigger_portal_spawn_a2_rm3a", "AddOutput", "OnTrigger room_3_portal_activate_rl:Disable::1:1")
+
+      //open last doors earlier
+      EntFire("room_3_portal_activate_rl", "AddOutput", "OnTrigger door_2-door_open_relay:Trigger::2:1")
 
       //open portal in second room earlier
       EntFire("section_2_trigger_portal_spawn_a1_rm3a", "Kill")
@@ -145,8 +163,9 @@ function SpeedrunModeLoad(){
       break
     case "sp_a1_intro5":
       //faster portal
-      EntFire("room_1_portal_activate_rl", "Trigger")
-      EntFire("room_1_portal_activate_rl", "Kill", 0, 1)
+      //EntFire("room_1_portal_activate_rl", "Trigger")
+      //EntFire("room_1_portal_activate_rl", "Kill", 0, 1)
+      //apparently not because bets is fat
       break
     case "sp_a1_intro6":
       //faster portal
@@ -155,6 +174,9 @@ function SpeedrunModeLoad(){
       //i cant believe how much stuff is just sitting here, serving literally no purpose
       EntFire("departure_elevator-source_elevator_door_open_trigger", "Kill", 0)
       EntFire("success_trigger", "AddOutput", "OnTrigger departure_elevator-logic_source_elevator_door_open:Trigger::0:1",0)
+
+      //make door 3 open faster
+      EntFire("room_1_door_close_rl" "AddOutput", "OnTrigger room_2_entry_door-door_open_relay:Trigger::0:1")
       break
     case "sp_a1_intro7":
       //spawn portal earlier
@@ -179,22 +201,25 @@ function SpeedrunModeLoad(){
     case "sp_a1_wakeup": 
       //HEKCING MESS, I DONT EVEN KNOW WHAT DOES WHAT, FORGOT TO COMMENT THIS AAAAAAAAGHGHH
       EntFire("@sphere", "Kill")
-      EntFire("@switch_door_open_rl", "Trigger", 0, 0)
+      EntFire("transition_entry_door-door_1", "SetPlaybackRate", 10)
+      EntFire("@switch_door_open_rl", "Trigger", 0, 0.1)
       EntFire("@switch_door_open_rl", "Kill", 0, 0.4)
       //EntFire("training_door", "SetSpeed", 200)
       EntFire("training_door", "Kill") //just kill these fucking doors lmaof
       EntFire("dont_see_switch_vcd_trigger", "Enable", 0.0)
       EntFire("dont_see_switch_vcd_trigger", "AddOutput" "OnStartTouch basement_breakers_socket_relay:Trigger::0:1", 0.0)
-      EntFire("socket_powered_rl", "Trigger")
-      EntFire("socket_powered_rl", "Kill", 1)
+      //EntFire("socket_powered_rl", "Trigger")
+      //EntFire("socket_powered_rl", "Kill", 1)
       EntFire("playerproxy", "setdropenabled", 1, 0.01)
       EntFire("relay_hallway_fog_and_tonemap", "AddOutput", "OnTrigger training_door:Open::0:1")
       EntFire("basement_breakers_upper_blocker", "Kill")
       EntFire("basement_breaker_room_entry_trigger", "starttouch")
       EntFire("basement_breakers_entrance_door", "Open", 0, 1)
-      EntFire("aud_World.LightPowerOnLg", "Kill")
+      //EntFire("aud_World.LightPowerOnLg", "Kill")
       EntFire("@FallingTrigger", "AddOutput", "OnStartTouch @music_piece_of_work:StopSound::0:1")
       EntFire("basement_breakers_prop_0", "SetAnimation", "breaker_shaft_open_hatch", 2)
+
+      /* 
       //recreation of powerup initialization cutscene, but faster
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_prop_0:SetAnimation:breaker_shaft_rotate_90:1:1", 0.0)
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_bootup_wav:PlaySound::0:1", 0.0)
@@ -211,14 +236,31 @@ function SpeedrunModeLoad(){
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_aperture_door:Open::5.3:1", 0.0)
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger platform_areaportal:Open::5.3:1", 0.0)
       //EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger glados_start:Trigger::13.3:1", 0.0)
-      
+      */
+
       EntFire("basement_breakers_start", "Disable") //disabling old cutscene
+      /*
       //allow player to get to the incinerator on their own
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_upper_blocker:Disable::1:1", 0.0)
       EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger relay_incinerator_open:Trigger::18:1", 0.0)
+      */
+
       //making portal disappear before level transition
       EntFire("@transition_from_map", "AddOutput", "OnTrigger viewmodel:DisableDraw::0:1", 0.0)
       EntFire("@transition_from_map", "AddOutput", "OnTrigger weapon_portalgun:Kill::0:1", 0.0)
+      
+      //different ending (fall instead of)
+      EntFire("breaker_train", "KillHierarchy")
+      EntFire("do_not_touch_anything_trigger", "Kill")
+      EntFire("basement_breakers_prop_0", "KillHierarchy")
+      //8976 1088 -568
+      EntFire("incinerator_entry_portal_1", "SetLocalOrigin", "8976 1088 -616")
+      EntFire("incinerator_entry_portal_1", "SetPartner", "incinerator_entry_portal_2")
+      EntFire("incinerator_entry_portal_1", "Open")
+
+      //make beginning doors faster
+      FasterVertDoor("transition_entry_door")
+
       break
     case "sp_a2_intro":
       //new spawn position
@@ -248,8 +290,11 @@ function SpeedrunModeLoad(){
     case "sp_a2_catapult_intro":
       EntFire("door_1-door_open_relay", "Trigger")
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Trigger::1:1", 0)
+      EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Kill::1.1:1", 0)
+      EntFire("hallway_sim_blocker", "Kill")
       break
     case "sp_a2_trust_fling":
+      //hide panels at the beginning
       EntFire("wall_panel_1-repair_wall", "Kill", 0)
       EntFire("wall_panel_2-repair_wall", "Kill", 0)
       for(local i=1;i<=2;i++)for(local j=1;j<=8;j++){
@@ -257,6 +302,13 @@ function SpeedrunModeLoad(){
       }
       EntFire("entry_wall_panel_sound", "Kill", 0)
       EntFire("initial_arm_collision", "Kill", 0)
+
+      //make catapults faster
+      EntFire("flingroom_1_circular_catapult_1", "SetPlayerSpeed", "700")
+      EntFire("flingroom_1_circular_catapult_1", "SetPhysicsSpeed", "700")
+
+      EntFire("flingroom_1_circular_catapult_2", "SetPlayerSpeed", "700")
+      EntFire("flingroom_1_circular_catapult_2", "SetPhysicsSpeed", "700")
       break
     case "sp_a2_pit_flings":
       EntFire("companion_cube_skin_trigger", "Kill", 0)
@@ -277,11 +329,22 @@ function SpeedrunModeLoad(){
       break
     case "sp_a2_bridge_intro":
       EntFire("departure_elevator-elevator_turret_wife", "Kill", 1)
+
+      //sometimes I just wonder why I hate someone without apparent reason
+      //anyway so fuck you bets
+      EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger door_52-door_open_relay:Trigger::0:1")
+      EntFire("floor_up_relay", "Trigger")
+      EntFire("floor_up_relay", "Kill", 0, 0.1)
       break
     case "sp_a2_bridge_the_gap":
-      EntFire("trick_door_start_relay_3", "Disable", 0)
-      EntFire("start_wheatley_window_scene_relay", "Disable", 0)
-      EntFire("trick_door_start_relay_2", "AddOutput", "OnTrigger trick_door_open_relay:Trigger::5:0", 0)
+      //EntFire("trick_door_start_relay_3", "Disable", 0)
+      //EntFire("start_wheatley_window_scene_relay", "Disable", 0)
+      //EntFire("trick_door_start_relay_2", "AddOutput", "OnTrigger trick_door_open_relay:Trigger::5:0", 0)
+
+      //remove doorskip
+      local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(-1074, -640, 1224), 100)
+      EntFireByHandle(trigger, "Kill", "", 0, null, null)
+
       break
     case "sp_a2_turret_intro":
       EntFire("exit_airlock_door-open_door_slow", "Trigger")
@@ -289,13 +352,19 @@ function SpeedrunModeLoad(){
       EntFire("exit_airlock_door-open_door", "Disable", 0)
       break
     case "sp_a2_laser_relays":
+      FasterVertDoor("exit_airlock_door");
       EntFire("exit_airlock_door-proxy", "Kill")
-      EntFire("exit_airlock_door-open_door", "Trigger",0,0)
+      EntFire("exit_airlock_door-open_door", "Trigger",0,0.2)
       EntFire("departure_elevator-elevator_turrets", "KillHierarchy")
       EntFire("departure_elevator-elevator_turrets_02", "KillHierarchy")
       EntFire("departure_elevator-elevator_turrets_03", "KillHierarchy")
       EntFire("lift_gate_close_rl", "AddOutput", "OnTrigger lift_trigger:Enable::0.5:1", 0)
       break
+    case "sp_a2_laser_vs_turret":
+      //make turrets explode faster if portals are in right position and laser is activated
+      EntFire("button_1_pressed", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:StartFastFakeExplosionsInLvT():0:-1", 0)
+      EntFire("button_1_unpressed", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:EndFastFakeExplosionsInLvT():0:-1", 0)
+      break;
     case "sp_a2_column_blocker":
       EntFire("blackout_teleport_player_to_surprise", "Kill", 0)
       EntFire("surprise_room_lightswitch_sound", "Kill", 0)
@@ -315,8 +384,9 @@ function SpeedrunModeLoad(){
       EntFire("@jailbreak_exit_trigger","AddOutput","OnStartTouch jailbreak_chamber_unlit-test_chamber_bridge:Enable::0:1")
       
       //player can miss post transition trigger in bts2, workaround
-      local telepos = GetEntity("@exit_teleport").GetOrigin();
-      EntFire("transition_trigger","AddOutput","OnStartTouch @command:Command:setpos_exact "+telepos.x+" "+telepos.y+" "+telepos.z+":0.5:1")
+      //I think you don't need it anymore and it's just making the game slower, but i'm too lazy to test it lol
+      //local telepos = GetEntity("@exit_teleport").GetOrigin();
+      //EntFire("transition_trigger","AddOutput","OnStartTouch @command:Command:setpos_exact "+telepos.x+" "+telepos.y+" "+telepos.z+":0.5:1")
       
       break
     case "sp_a2_bts2":
@@ -351,8 +421,11 @@ function SpeedrunModeLoad(){
       EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
       break
     case "sp_a2_bts4":
-      EntFire("entry_airlock_door-open_door", "Trigger")
+      FasterVertDoor("entry_airlock_door")
+      EntFire("entry_airlock_door-open_door", "Trigger",0,0.3)
       EntFire("entry_airlock_door-open_door", "Kill",0,1)
+
+      
 
       //always spawn broken turrets
       EntFire("turret_conveyor_1_pre_switch_case", "Kill")
@@ -367,10 +440,21 @@ function SpeedrunModeLoad(){
       EntFire("exit_airlock_door-open_door", "Trigger")
       EntFire("exit_airlock_door-open_door", "Kill",0,1)
       EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
+
+      local turretCode =
+      "local i,v\n"+
+      "foreach(i,v in TurretVoManager.vcds){\n"+
+      "if(v.group[0]==97){v.secs=0;v.handle=null}\n"+ //if group is "announcer_template", the only one with A as 1st character, same as above
+      "if(v.group[7]==116&&v.secs!=0.85)v.group=null\n"+ //if group is "defect_test", the only one with T as 8th character, hack to avoid using string in event script
+      "}\n"//+"TurretVoManager.DoTemplate<-function(){return 0}"
+
+      EntFire("turret_vo_manager", "RunScriptCode", turretCode, 0.1)
+
       break
     case "sp_a2_bts5":
+      FasterVertDoor("exit_airlock_door")
       EntFire("exit_airlock_door-proxy", "Kill")
-      EntFire("exit_airlock_door-open_door", "Trigger",0,0)
+      EntFire("exit_airlock_door-open_door", "Trigger",0,0.2)
 
       EntFire("airlock_door_01-proxy", "Kill")
       EntFire("airlock_door_01-open_door", "Trigger")
@@ -550,6 +634,10 @@ function SpeedrunModeLoad(){
       //make bomb spawn rate much faster
       EntFire("paint_bomb_template", "ForceSpawn", 0, 0)
 
+      //make heckign doors opened fuck you bets
+      EntFire("AutoInstance2-door_open1", "Trigger")
+      EntFire("AutoInstance2-door_open1", "Kill", 0, 0.1)
+
       FastUndergroundTransition(17, 21)
       break
     case "sp_a3_transition01":
@@ -565,6 +653,10 @@ function SpeedrunModeLoad(){
       EntFire("pump_machine_counter", "AddOutput", "OnHitMax pumproom_door_top_trigger:Enable::0:1")
       EntFire("pump_machine_counter", "AddOutput", "OnHitMax pumproom_fizzlerdoor_prop:SetAnimation:open:0:1")
       EntFire("pump_machine_counter", "AddOutput", "OnHitMax pumproom_exterior_portalblocker:Kill::0:1")
+
+      //open some doors
+      EntFire("pumproom_door_bottom_button", "Press")
+      EntFire("pumproom_door_top_button", "Press")
       break
     case "sp_a3_speed_ramp":
       FastUndergroundTransition(20, 14)
@@ -588,6 +680,10 @@ function SpeedrunModeLoad(){
       EntFire("sphere_entrance_lift_door_bottom", "AddOutput", "OnFullyClosed sphere_entrance_lift_train:RunScriptCode:"+poscode+":1.5:1")
       
       EntFire("sphere_entrance_lift_train_path_2", "AddOutput", "OnPass sphere_entrance_lift_train_path_3:inpass::0:1")
+
+      //open some doors
+      EntFire("liftshaft_entrance_door-door_button", "Press")
+      EntFire("liftshaft_exit_door_button", "Press")
       break
     case "sp_a3_end":
       //faster gel drop
@@ -608,6 +704,7 @@ function SpeedrunModeLoad(){
       EntFire("pumproom_lift_tracktrain", "SetMaxSpeed", 250)
       break
     case "sp_a4_intro":
+
       EntFire("button_1_solved", "Kill")
       EntFire("wheatley_monitor1-coverpanel_bottom", "Close",0,1)
       EntFire("wheatley_monitor1-coverpanel_top", "Close",0,1)
@@ -615,10 +712,12 @@ function SpeedrunModeLoad(){
         EntFire("wheatley_monitor"+i+"-monitor_arm", "Kill")
       }
       EntFire("catwalk_lift_door", "SetSpeed", 100)
-      EntFire("catwalk_gate2_door_left", "SetSpeed", 100)
-      EntFire("catwalk_gate2_door_right", "SetSpeed", 100)
+      EntFire("catwalk_gate2_door_left", "SetSpeed", 300)
+      EntFire("catwalk_gate2_door_right", "SetSpeed", 300)
       EntFire("entrance_door_counter", "Add", 1)
-      EntFire("test_chamber1_platform", "SetMaxSpeed", 200)
+      EntFire("entrance_door_counter", "AddOutput", "OnHitMax @entrance_door1-door_open_relay:Trigger::0:1")
+      EntFire("test_chamber1_platform", "SetMaxSpeed", 400)
+      
       
       EntFire("wheatley_monitor5-monitor_glass", "Enable")
       EntFire("wheatley_monitor5-relay_disable_screen", "Trigger")
@@ -662,6 +761,8 @@ function SpeedrunModeLoad(){
       EntFire("breakpanel4", "Kill")
       EntFire("exit_door-door_open_relay", "Trigger")
       EntFire("start_ramp", "Trigger", 0, 1)
+
+      EntFire("tb_catch_inner_door", "Open")
       break
     case "sp_a4_jump_polarity":
       local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(2336, -64, 192), 10)
@@ -711,13 +812,18 @@ function SpeedrunModeLoad(){
       EntFire("bts_door_1-open_door", "Trigger")
       EntFire("bts_door_1-proxy", "Kill", 0, 1)
 
-      EntFire("areaportal_bts_door_2", "Open", 0, 2)
-      EntFire("bts_door_2-open_door", "Trigger", 0, 2)
-      EntFire("bts_door_2-proxy", "Kill", 0, 3)
+      EntFire("areaportal_bts_door_2", "Open", 0, 0)
+      EntFire("bts_door_2-open_door", "Trigger", 0)
+      EntFire("bts_door_2-proxy", "Kill", 0, 0.1)
 
       local trigger2 = Entities.FindByClassnameNearest("trigger_once", Vector(-878.3, -1216.03, -448), 100)
-      EntFireByHandle(trigger2, "SetLocalOrigin","3778.25 703.97 -96", 1, null, null)
+      EntFireByHandle(trigger2, "SetLocalOrigin","3778.25 703.97 -96", 0, null, null)
+      EntFireByHandle(trigger2, "AddOutput", "OnTrigger areaportal_bts_door_2:Open::3:1", 0, null, null)
 
+      FasterVertDoor("entrance_door")
+
+      EntFire("exit_door-open_door", "Trigger")
+      EntFire("exit_door-open_door", "Kill",0,0.1zw)
       break
     case "sp_a4_finale3":
       EntFire("practice_bomb_timer", "disable")
@@ -730,6 +836,11 @@ function SpeedrunModeLoad(){
       EntFire("autoinstance1-button", "AddOutput", "OnPressed bomb_track_1_2:EnableAlternatePath::0:1")
       EntFire("autoinstance1-button", "AddOutput", "OnPressed bomb_track_1_2:EnableAlternatePath::0:1")
       EntFire("tractorbeam_emitter", "SetLinearForce", 1000.0)
+
+      FasterVertDoor("door_lair")
+      FasterVertDoor("entry_door", 0.3)
+      //cant use my function because weird naming and entities and generally fuck you valve
+      EntFire("start_speed_particles", "AddOutput", "OnTrigger airlock_door2:SetAnimation:vert_door_open_idle:0.1:-1")
 
       break
     case "sp_a4_finale4":
@@ -833,7 +944,10 @@ function SpeedrunModeLoad(){
   EntFire("arrival_elevator-elevator_1", "AddOutput", "OnArrivedAtDestinationNode arrival_elevator-open:Trigger::0:1")
   EntFire("arrival_elevator-elevator_1", "AddOutput", "OnArrivedAtDestinationNode arrival_elevator-open:Disable::0.1:1")
 
-
+  //open EVERY FUCKING door much faster
+  EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger door_0-door_open_relay:Trigger::0:1")
+  EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger @entry_door-door_open_relay:Trigger::0:1")
+  EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger room_1_entry_door-door_open_relay:Trigger::0:1")
   //activate fast departure for "modern" elevators
   AddOutput("departure_elevator-close", "OnTrigger", "FastTransition")
   EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-signs_off:Trigger::0.5:1")
@@ -846,7 +960,6 @@ function SpeedrunModeLoad(){
     EntFire("@cave", "Kill", 0.0, blockAnnouncerDelay)
   }
 
-  
 }
 
 //nice function for handling all elevator events in underground section
@@ -854,9 +967,11 @@ function FastUndergroundTransition(idin, idout){
   if(idout){
     local elename = "InstanceAuto"+idout+"-exit_lift_doortop_movelinear"
     local elename2 = "InstanceAuto"+idout+"-exit_lift_train"
+    local elename3 = "InstanceAuto"+idout+"-exit_lift_doorbottom_movelinear"
     if(idout<0){
       elename = "exit_lift_doortop_movelinear"
       elename2 = "exit_lift_train"
+      elename3 = "exit_lift_doorbottom_movelinear"
     }
     EntFire(elename, "AddOutput", "OnFullyClosed "+elename2+":StartForward::0:1")
     EntFire(elename, "AddOutput", "OnFullyClosed @transition_script:RunScriptCode:TransitionReady():0:1")
@@ -864,6 +979,10 @@ function FastUndergroundTransition(idin, idout){
     EntFire(elename, "AddOutput", "OnFullyClosed @transition_from_map:Trigger::1:1")
     EntFire(elename, "AddOutput", "OnFullyClosed @transition_with_survey:Trigger::1:1")
     EntFire(elename2, "SetMaxSpeed", 200)
+
+    //make end eles already opened
+    EntFire(elename, "Open")
+    EntFire(elename3, "Open")
   }
   if(idin){
     local elename = "InstanceAuto"+idin+"-entrance_lift_train"
@@ -879,10 +998,49 @@ function FastUndergroundTransition(idin, idout){
   
 }
 
+function FasterVertDoor(prefabname, speed=0.1){
+  EntFire(prefabname+"-open_door", "AddOutput", "OnTrigger "+prefabname+"-door_1:SetAnimation:vert_door_open_idle:"+speed+":-1")
+}
+
 function FastTransition(){
   //transition is always ready lol
   TransitionReady()
   modlog("Fast transition will be executed in 1.5 seconds...");
   EntFire("@transition_from_map","Trigger","",1.5);
 	EntFire("@transition_with_survey","Trigger","",1.5);
+}
+
+
+
+//LvT faster turret explosion sequence... fuck me
+
+LVT_FAKEEXPLO_DONE <- false;
+function StartFastFakeExplosionsInLvT(){
+  if(!LVT_FAKEEXPLO_DONE){
+    self.ConnectOutput("OnUser1", "FastFakeExplosionsInLvT");
+    EntFire(self.GetName(), "FireUser1")
+    modlog("Testing LvT fast explosion...")
+  }
+}
+function EndFastFakeExplosionsInLvT(){
+  self.DisconnectOutput("OnUser1", "FastFakeExplosionsInLvT");
+}
+function FastFakeExplosionsInLvT(){
+  if(!LVT_FAKEEXPLO_DONE){
+    local portal1 = Entities.FindByClassnameNearest("prop_portal", Vector(288, -320, 280), 20)
+    local portal2 = Entities.FindByClassnameNearest("prop_portal", Vector(64, 96, 260), 10)
+    //make sure portals are in the correct spot. hopefully placement helpers are good enough so there are no weird cases.
+    if(portal1 && portal2){
+      //assuming turrets are in correct positions
+      local turret1 = Entities.FindByClassnameNearest("npc_portal_turret_floor", Vector(288,-48,288), 50)
+      local turret2 = Entities.FindByClassnameNearest("npc_portal_turret_floor", Vector(288, 80,288), 50)
+      local turret3 = Entities.FindByClassnameNearest("npc_portal_turret_floor", Vector(288,208,288), 50)
+      if(turret1)EntFireByHandle(turret1, "SelfDestructImmediately", "", 0.7, null, null)
+      else if(turret2)EntFireByHandle(turret2, "SelfDestructImmediately", "", 0.7, null, null)
+      else if(turret3)EntFireByHandle(turret3, "SelfDestructImmediately", "", 0.7, null, null)
+      else LVT_FAKEEXPLO_DONE = true;
+      //EntFire(self.getName(), "RunScriptCode", "FastFakeExplosionsInLvT()", 0.7)
+    }
+    EntFire(self.GetName(), "FireUser1", 0, 0.1)
+  }
 }
