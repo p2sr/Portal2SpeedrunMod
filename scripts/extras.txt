@@ -12,6 +12,6 @@
 		"title"		"Official Leaderboard"
 		"subtitle"	"nobody uses speedrun.com"
 		"pic"		"srmode/srcom_thumbnail"
-		"url"		"https://www.speedrun.com/portal_2_category_extensions#Portal_2_Speedrun_Mod"
+		"url"		"https://www.speedrun.com/p2sm"
 	}
 }
