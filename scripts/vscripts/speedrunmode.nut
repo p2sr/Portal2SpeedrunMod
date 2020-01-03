@@ -38,9 +38,19 @@ function modlog(msg){
 SRMODE_DEBUG <- -102001
 SRMODE_INIT <- -102000
 
+//unwanted dialogues
+DIALOGUES <- [
+  630,553, //intro1
+  316,317,318, //intro3
+  497, //bts1
+  320, //bts3
+  -3129,-3128,-1995,-1996,-1997,-1998,-1999,-2000,-2001,-2002, //portal_intro
+  591, //finale4
+]
+
+
 function Init(){
-  //SendToConsole("developer "+SRMODE_INIT)
-  //SendToConsole("changelevel sp_a1_intro1")
+
 }
 
 function PostInit(){
@@ -60,9 +70,9 @@ function IsSpeedrunModeOn(){
 }
 
 function spTransitionListFix(){
-  if(FIRST_MAP_WITH_POTATO_GUN!="sp_a3_02"){
+  if(FIRST_MAP_WITH_POTATO_GUN!="sp_a3_end"){
     modlog("Fixing sp_transition_list...")
-    FIRST_MAP_WITH_POTATO_GUN = "sp_a3_02"
+    FIRST_MAP_WITH_POTATO_GUN = "sp_a3_end"
     //MapPlayOrder[35] = "@B"
     //MapPlayOrder[37] = "@B"
     //MapPlayOrder[38] = "@B"
@@ -82,6 +92,7 @@ function OnPostSpawn(){
 
   //removing chapter titles
   CHAPTER_TITLES = []
+  Init()
 }
 
 
@@ -100,7 +111,7 @@ function SpeedrunModeLoad(){
 
   //in some levels, we want to leave dialogue entity active
   local blockAnnouncerDelay = 0;
-  
+
   switch(GetMapName()){
     case "sp_a1_intro1":
       //creating beginning cutscene out of original elements in glass chamber
@@ -120,10 +131,34 @@ function SpeedrunModeLoad(){
       //keep saving active
       EntFire("@command", "Command", "map_wants_save_disable 0", 0)
 
+      //make sure fog works
+      EntFire(self.GetName(), "RunScriptCode", "FogControl()", 2)
+
+      //remove door rng
+      EntFire("exit_door_right_a00_wiggle", "Kill")
       break
     case "sp_a1_intro2":
       //that one is not really needed since ele is already waiting, but im gonna leave it lol
       EntFire("Room_01-glados_congrats_trigger", "AddOutput" "OnTrigger departure_elevator-blocked_elevator_tube_anim:Trigger::0:1", 0.0)
+
+      //making portals faster
+      EntFire("orange_portal_activate_rl", "Trigger")
+      EntFire("orange_portal_activate_rl", "Kill", 0, 3)
+
+      EntFire("blue_1_portal_activate_rl", "Kill")
+      EntFire("logic_make_blue_1", "AddOutput", "OnTrigger portal_blue_1:SetActivatedState:1:0.01:-1")
+      EntFire("logic_make_blue_1", "AddOutput", "OnTrigger emitter_blue_1:Skin:1:0.01:-1")
+      EntFire("logic_make_blue_1", "AddOutput", "OnTrigger shake_portal_spawn_room1a:StartShake::0.01:-1")
+
+      EntFire("blue_2_portal_activate_rl", "Kill")
+      EntFire("logic_make_blue_2", "AddOutput", "OnTrigger portal_blue_2:SetActivatedState:1:0.01:-1")
+      EntFire("logic_make_blue_2", "AddOutput", "OnTrigger emitter_blue_2:Skin:1:0.01:-1")
+      EntFire("logic_make_blue_2", "AddOutput", "OnTrigger shake_portal_spawn_room1a:StartShake::0.01:-1")
+
+      EntFire("blue_3_portal_activate_rl", "Kill")
+      EntFire("logic_make_blue_3", "AddOutput", "OnTrigger portal_blue_3:SetActivatedState:1:0.01:-1")
+      EntFire("logic_make_blue_3", "AddOutput", "OnTrigger emitter_blue_3:Skin:1:0.01:-1")
+      EntFire("logic_make_blue_3", "AddOutput", "OnTrigger shake_portal_spawn_room1a:StartShake::0.01:-1")
       break
     case "sp_a1_intro3":
       //same as above, completely unnecessary stuff, but oh well
@@ -146,6 +181,11 @@ function SpeedrunModeLoad(){
       EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger portal_orange_mtg:SetActivatedState:1:0:1")
       EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger emitter_orange_mtg:Skin:2:0:1")
       EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger room_2_portal_shake:StartShake::0:1")
+
+      //dialogue fix
+      //EntFire("glados_trigger", "Kill")
+      
+
       break
     case "sp_a1_intro4":
       //open portal in third room earlier
@@ -164,7 +204,7 @@ function SpeedrunModeLoad(){
     case "sp_a1_intro5":
       //faster portal
       //EntFire("room_1_portal_activate_rl", "Trigger")
-      //EntFire("room_1_portal_activate_rl", "Kill", 0, 1)
+      //EntFire("room_1_portal_activate_rl", "Kill", 0, 30)
       //apparently not because bets is fat
       break
     case "sp_a1_intro6":
@@ -197,6 +237,9 @@ function SpeedrunModeLoad(){
 
       //making transition trigger fire much faster
       EntFire("transition_trigger", "AddOutput" "OnStartTouch @transition_script:RunScriptCode:TransitionFromMap():0.5:1", 0.0)
+
+      //bring back turret dialogues cuz ITS CUTeEE
+      EntFire("sphere_filter", "Kill")
       break
     case "sp_a1_wakeup": 
       //HEKCING MESS, I DONT EVEN KNOW WHAT DOES WHAT, FORGOT TO COMMENT THIS AAAAAAAAGHGHH
@@ -279,6 +322,25 @@ function SpeedrunModeLoad(){
       EntFire("departure_elevator-blocked_elevator_tube_anim", "Kill", 0)
       EntFire("door_0-door_close_relay", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0)
       break
+    case "sp_a2_laser_intro":
+      EntFire("start", "Kill")
+      //EntFire("@ball_launcher_door", "Open")
+      EntFire("@ball_launcher_door", "KillHierarchy")
+      EntFire("ball_catcher_door", "Open", 0, 0.5)
+      EntFire("laser_emitter_wall_door", "Trigger")
+      EntFire("laser_emitter_door_horizontal", "Open", 0, 0.5)
+      EntFire("laser_catcher_side_mover", "KillHierarchy")
+      EntFire("laser_catcher_door", "Close", 0, 1)
+      EntFire("func_door", "SetSpeed", 1000)
+      EntFire("lift_a", "SetSpeed", 200, 1.0)
+      break
+    case "sp_a2_dual_lasers":
+      //make "Dual lasers floor non-cancer"
+      EntFire("platform_door", "Close", 0.5)
+      EntFire("rotating_wall_noportal_volume", "Kill")
+      //also fire lasers because why not
+      EntFire("env_portal_laser", "TurnOn")
+      break
     case "sp_a2_laser_over_goo":
       EntFire("arrival_elevator-leaving_elevator_trigger", "Kill", 0)
       EntFire("@glados", "RunScriptCode", "PuzzleStart()", 0)
@@ -286,6 +348,9 @@ function SpeedrunModeLoad(){
       EntFire("InstanceAuto69-corridor_repair-proxy", "Kill", 0)
       EntFire("InstanceAuto69-corridor_repair-blocking_door", "Kill")
       EntFire("InstanceAuto69-corridor_repair-blocking_door_2", "Kill")
+      EntFire("entry_landing_close_relay", "Kill")
+      EntFire("entry_landing_open_relay", "Kill")
+      EntFire("door_1-door_open_relay", "Trigger")
       break
     case "sp_a2_catapult_intro":
       EntFire("door_1-door_open_relay", "Trigger")
@@ -327,6 +392,10 @@ function SpeedrunModeLoad(){
       EntFire("ramp_up_relay", "Trigger", 0, 1)
       EntFire("ramp_up_relay", "Kill", 0, 2)
       break
+    case "sp_a2_ricochet":
+      EntFire("cube_retrieved_relay", "Trigger")
+      EntFire("cube_retrieved_relay", "Kill", 0, 1)
+      break
     case "sp_a2_bridge_intro":
       EntFire("departure_elevator-elevator_turret_wife", "Kill", 1)
 
@@ -364,16 +433,26 @@ function SpeedrunModeLoad(){
       //make turrets explode faster if portals are in right position and laser is activated
       EntFire("button_1_pressed", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:StartFastFakeExplosionsInLvT():0:-1", 0)
       EntFire("button_1_unpressed", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:EndFastFakeExplosionsInLvT():0:-1", 0)
+
+      //remove all small turret parts (and stuff in BtS, because who walks there anyway)
+      EntFire("npc_portal_turret_floor", "AddOutput", "OnExplode prop_physics:Kill::0.01:1")
       break;
     case "sp_a2_column_blocker":
       EntFire("blackout_teleport_player_to_surprise", "Kill", 0)
       EntFire("surprise_room_lightswitch_sound", "Kill", 0)
       EntFire("blackout_lights_off_fade", "Kill", 0)
       EntFire("surprise_room_lights_on", "Trigger", 0)
-      EntFire("@glados", "Kill", 0)
       EntFire("door_0-door_close_relay", "AddOutput" "OnTrigger surprise_room_door_relay:Trigger::0:1", 0.0)
+
+      //dialogue
+      EntFire("@glados", "RunScriptCode", "SceneTableLookup[-400] = SceneTable[SceneTableLookup[-400]].next")
+      break
+    case "sp_a2_triple_laser":
+
       break
     case "sp_a2_bts1":
+      EntFire("chamber_door-door_open_relay", "Trigger")
+
       EntFire("@jailbreak_exit_trigger", "Enable",0)
       EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch @jailbreak_begin_logic:CancelPending::1:1")
       EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch jailbreak_chamber_unlit-jailbreak_peak_logic:Trigger::2:1")
@@ -383,11 +462,18 @@ function SpeedrunModeLoad(){
       //EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch jailbreak_chamber_unlit-jailbreak_1st_wall_2_1_open_logic:Trigger::0:1")
       EntFire("@jailbreak_exit_trigger","AddOutput","OnStartTouch jailbreak_chamber_unlit-test_chamber_bridge:Enable::0:1")
       
+
+
       //player can miss post transition trigger in bts2, workaround
       //I think you don't need it anymore and it's just making the game slower, but i'm too lazy to test it lol
       //local telepos = GetEntity("@exit_teleport").GetOrigin();
       //EntFire("transition_trigger","AddOutput","OnStartTouch @command:Command:setpos_exact "+telepos.x+" "+telepos.y+" "+telepos.z+":0.5:1")
       
+      //fix dialogue
+      //EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch @glados:RunScriptCode:WheatleyGoGoGoNag():3:1")
+      EntFire("@glados", "RunScriptCode", "delete JailbreakICanHearYou")
+      EntFire("@glados", "RunScriptCode", "SceneTableLookup[498] = SceneTable[SceneTableLookup[498]].next")
+      EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch @glados:RunScriptCode:nuke();GladosPlayVcd(498):1.5:1")
       break
     case "sp_a2_bts2":
       EntFire("controlroom_gate_a_rotating", "AddOutput", "OnFullyClosed exit_elevator_move_relay:Trigger::0:1")
@@ -453,6 +539,12 @@ function SpeedrunModeLoad(){
       break
     case "sp_a2_bts5":
       FasterVertDoor("exit_airlock_door")
+
+      //make 2nd floor door open faster
+      EntFire("security_door-open_door_slow", "Kill")
+      EntFire("button_relay", "AddOutput", "OnTrigger security_door-open_door:Trigger::0:1")
+      FasterVertDoor("security_door")
+
       EntFire("exit_airlock_door-proxy", "Kill")
       EntFire("exit_airlock_door-open_door", "Trigger",0,0.2)
 
@@ -465,11 +557,23 @@ function SpeedrunModeLoad(){
       EntFire("exit_elevator_close_entrance_relay", "AddOutput", "OnTrigger lift:SetSpeed:250:0:1")
       //execute cutscene faster
       EntFire("tube_counter" "AddOutput", "OnHitMax destroy_tanks_relay:Trigger::0:1")
+      EntFire("tube_counter" "AddOutput", "OnHitMax destroy_tanks_relay:Kill::1:1")
+      EntFire("tube_counter" "AddOutput", "OnHitMax tank_destruction_rl:Trigger::0:1")
       EntFire("tube_counter" "AddOutput", "OnHitMax tube_counter:CancelPending::0:1")
       EntFire("tube_counter" "AddOutput", "OnHitMax full_tubes_animation_start_relays:Trigger::0:1")
       
       EntFire("tank_destruction_rl", "AddOutput", "OnTrigger tank_explosions_rl:Trigger::0:1")
-      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger exit_dialog_trigger:Enable::1:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger exit_dialog_trigger:Enable::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger @sphere:SetIdleSequence:sphere_damaged_tube_suck_idle:0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger pipe_connector:Break::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger pipe_connector_secondary:Break::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger collapse_start_relay:Trigger::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger full_tubes_a*:Kill::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger full_tubes_b*:Kill::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger full_tubes_c*:Kill::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger full_tubes_d*:Kill::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger full_tubes_e*:EnableDraw::0:1")
+      EntFire("tank_destruction_rl", "AddOutput", "OnTrigger full_tubes_e*:FireUser1::0:1")
 
       //make portalable surface spawn rate higher
       local spawnPointOffset = 192+64
@@ -488,6 +592,15 @@ function SpeedrunModeLoad(){
       EntFire("button_relay", "AddOutput", "OnTrigger @laser_blocker:Kill::0:1")
       EntFire("button_relay", "AddOutput", "OnTrigger @command:Command:ent_fire side_1_panelpath_1-panel_1_top_const* kill:0:1")
       EntFire("button_relay", "AddOutput", "OnTrigger @command:Command:ent_fire side_1_panelpath_2-panel_1_top_const* kill:0:1")
+      
+      //remove ele doors
+      EntFire("lift_blocker", "Kill", 1)
+      EntFire("controlroom_gate_b_rotating", "Kill", 1)
+      EntFire("controlroom_gate_a_rotating", "Kill", 1)
+      //local model = Entities.FindByClassnameWithin(null, "prop_dynamic", Vector(2885, 944, 3610), 1)
+      //local model2 = Entities.FindByClassnameWithin(model, "prop_dynamic", Vector(2885, 944, 3610), 1)
+      //EntFireByHandle(model2, "Kill", "", 1, null, null)
+
       break
     case "sp_a2_core":
       blockAnnouncerDelay=-1
@@ -529,9 +642,9 @@ function SpeedrunModeLoad(){
       
       //ele
       EntFire("exit_elevator_train", "KillHierarchy")
-      EntFire("button_press_relay", "AddOutput", "OnTrigger iris_door_elevator_pit:Open::5:1")
-      EntFire("button_press_relay", "AddOutput", "OnTrigger escape_elevator_clip:Kill::5:1")
-      EntFire("button_press_relay", "AddOutput", "OnTrigger elevator_pit_areaportal:Open::5:1")
+      EntFire("button_press_relay", "AddOutput", "OnTrigger iris_door_elevator_pit:Open::1:1")
+      EntFire("button_press_relay", "AddOutput", "OnTrigger escape_elevator_clip:Kill::1:1")
+      EntFire("button_press_relay", "AddOutput", "OnTrigger elevator_pit_areaportal:Open::1:1")
       EntFire("elevator_door_player_clip", "Kill")
       EntFire("exit_elevator_lower_frame_mover", "KillHierarchy")
       
@@ -542,7 +655,6 @@ function SpeedrunModeLoad(){
 
       //ending trigger
       local trigger2 = Entities.FindByClassnameNearest("trigger_once", Vector(0, 304, -10438), 100)
-      local po = GetPlayer().GetOrigin()
       EntFireByHandle(trigger2, "SetLocalOrigin", "0 304 -2426", 1, null, null)
       break
     case "sp_a3_01":
@@ -592,11 +704,21 @@ function SpeedrunModeLoad(){
       for(local i=5;i<=8;i++) EntFire("logic_branch_listener", "AddOutput", "OnAllTrue platform_doors_"+i+":Open::8:1")
       EntFire("logic_branch_listener", "AddOutput", "OnAllTrue door_spotlight_1:TurnOn::7:1")
       EntFire("logic_branch_listener", "AddOutput", "OnAllTrue door_spotlight_2_fill:TurnOn::7:1")
+
+      //Open ending doors right away
+      EntFire("AutoInstance1-door_button", "Press")
+
+      //put transition trigger closer
+      local transition_trigger = Entities.FindByClassnameNearest("trigger_once", Vector(6016, 4496, -448), 10)
+      EntFireByHandle(transition_trigger, "SetLocalOrigin", "5952 4496 -448", 0, null, null)
+
       break
     case "sp_a3_02":
       EntFire("finale_4_wrongwarp", "Activate")
       break
     case "sp_a3_03":
+      EntFire("door1_button", "Press")
+
       EntFire("AutoInstance1-push_button_knob", "AddOutput", "OnIn powerup_door_trigger:Enable::0:1")
       EntFire("main_elevator_up_relay", "AddOutput", "OnTrigger main_elevator:SetMaxSpeed:300:0.01:-1")
       EntFire("pump_machine_relay", "AddOutput", "OnTrigger controlroom_gate_a_rotating:Open::0.01:1")
@@ -620,6 +742,9 @@ function SpeedrunModeLoad(){
       //safety teleport
       EntFire("InstanceAuto12-entrance_lift_train", "AddOutput", "OnStart !player:RunScriptCode:"+movecode+":0:1")
       FastUndergroundTransition(null, 24)
+
+      //dialogue
+      EntFire("@glados", "RunScriptCode", "GladosPlayVcd(-5053)", 3)
       break
     case "sp_a3_bomb_flings":
       //make bomb spawn rate much faster
@@ -660,6 +785,18 @@ function SpeedrunModeLoad(){
       break
     case "sp_a3_speed_ramp":
       FastUndergroundTransition(20, 14)
+
+
+      //dialogue (also fuck you valve)
+      local gladosbitch = Entities.FindByClassnameNearest("generic_actor", Vector(428, -2904, 338), 10)
+      EntFireByHandle(gladosbitch, "Kill", "0", 0, null, null)
+
+      local dialogueCode = 
+      "foreach (idx,val in scenequeue){delete scenequeue[idx]}\n"+
+      "SceneTable[SceneTableLookup[-5074]].next = SceneTable[SceneTable[SceneTableLookup[-5074]].next].next\n"+
+      "SceneTable[SceneTable[SceneTable[SceneTableLookup[-5074]].next].next].next = null"
+      EntFire("@glados", "RunScriptCode", dialogueCode, 1)
+      EntFire("@cave", "RunScriptCode", dialogueCode, 1)
       break
     case "sp_a3_speed_flings":
       FastUndergroundTransition(6, 3)
@@ -686,11 +823,16 @@ function SpeedrunModeLoad(){
       EntFire("liftshaft_exit_door_button", "Press")
       break
     case "sp_a3_end":
+      //faster doors at the beginning
+      EntFire("entrance_door_button", "Press")
+      EntFire("entrance_door_prop", "SetAnimation", "open_idle", 0.3)
+      EntFire("entrance_door_prop", "SetAnimation", "open_idle", 0.5)//just in case LMFAO
+
       //faster gel drop
       EntFire("paint_trickle_blue_1", "AddOutput", "OnUser1 paint_trickle_blue_1:FireUser1::0.2:-1")
       EntFire("paint_trickle_blue_1", "AddOutput", "OnUser1 paint_trickle_blue_1:Stop::0:-1")
-      EntFire("paint_trickle_blue_1", "AddOutput", "OnUser1 paint_trickle_blue_1:Start::0.01:-1")
-      EntFire("paint_trickle_blue_1", "FireUser1", 0, 0.1)
+      EntFire("paint_trickle_blue_1", "AddOutput", "OnUser1 paint_trickle_blue_1:Start::0.1:-1")
+      EntFire("paint_trickle_blue_1", "FireUser1", 0, 0.5)
 
       //make vault doors opened
       EntFire("lightsout", "Kill")
@@ -706,11 +848,11 @@ function SpeedrunModeLoad(){
     case "sp_a4_intro":
 
       EntFire("button_1_solved", "Kill")
-      EntFire("wheatley_monitor1-coverpanel_bottom", "Close",0,1)
+      /* EntFire("wheatley_monitor1-coverpanel_bottom", "Close",0,1)
       EntFire("wheatley_monitor1-coverpanel_top", "Close",0,1)
       for(local i=1;i<=4;i++){
         EntFire("wheatley_monitor"+i+"-monitor_arm", "Kill")
-      }
+      } */
       EntFire("catwalk_lift_door", "SetSpeed", 100)
       EntFire("catwalk_gate2_door_left", "SetSpeed", 300)
       EntFire("catwalk_gate2_door_right", "SetSpeed", 300)
@@ -719,8 +861,8 @@ function SpeedrunModeLoad(){
       EntFire("test_chamber1_platform", "SetMaxSpeed", 400)
       
       
-      EntFire("wheatley_monitor5-monitor_glass", "Enable")
-      EntFire("wheatley_monitor5-relay_disable_screen", "Trigger")
+      /* EntFire("wheatley_monitor5-monitor_glass", "Enable")
+      EntFire("wheatley_monitor5-relay_disable_screen", "Trigger") */
       EntFire("test1_end_trigger", "AddOutput", "OnTrigger room2_wall_open:Trigger::0:1")
       EntFire("test2_end_trigger", "AddOutput", "OnTrigger @exit_door-door_open_relay:Trigger::0:1")
       break
@@ -749,9 +891,13 @@ function SpeedrunModeLoad(){
       EntFire("tbeam", "SetLinearForce", 1400.0)
 
       EntFire("wheatley_monitor_1-proxy", "Kill")
+
+      //open panels faster
+      EntFire("open_tb_catch_relay", "Trigger")
+      EntFire("open_tb_catch_relay", "Kill", 0, 5)
       break
     case "sp_a4_speed_tb_catch":
-      EntFire("wheatley_monitor-proxy", "Kill")
+      //EntFire("wheatley_monitor-proxy", "Kill")
       EntFire("shake_chamber", "Kill")
       EntFire("chamber_exit", "SetSpeed", 10000) //RAMMING SPEED
       EntFire("chamber_exit", "Open")
@@ -763,6 +909,11 @@ function SpeedrunModeLoad(){
       EntFire("start_ramp", "Trigger", 0, 1)
 
       EntFire("tb_catch_inner_door", "Open")
+
+      EntFire("start_chamber_destruction", "Kill")
+
+      //fix dialogue -4448_01
+      EntFire("@glados", "RunScriptCode", "delete SceneTable[SceneTable[SceneTableLookup[-4448]].next].next")
       break
     case "sp_a4_jump_polarity":
       local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(2336, -64, 192), 10)
@@ -783,6 +934,16 @@ function SpeedrunModeLoad(){
       EntFire("areaportal_airlock_1", "Open")
       EntFire("liftshaft_airlock_exit-proxy", "Kill")
       EntFire("liftshaft_airlock_exit-open_door", "Trigger")
+      EntFire("backstop", "SetLocalOrigin", "-8952 -2008 -296")
+      EntFire("backstop", "Toggle", "", 0.1)
+      EntFire("backstop", "Toggle", "", 1.1)
+
+      local dialogueCode = 
+      "SceneTable[SceneTable[SceneTableLookup[-4801]].next].next = "+
+      "SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTableLookup[-4801]].next].next].next].next].next].next\n"+
+      "SceneTable[SceneTable[SceneTableLookup[-4801]].next].postdelay = 0.5"
+      EntFire("@glados", "RunScriptCode", dialogueCode, 1)
+      EntFire("@glados", "RunScriptCode", "nuke()", 8.5)
       break
     case "sp_a4_finale2":
       EntFire("relay_world_shudder", "Kill")
@@ -810,7 +971,7 @@ function SpeedrunModeLoad(){
 
       EntFire("areaportal_airlock_1", "Open")
       EntFire("bts_door_1-open_door", "Trigger")
-      EntFire("bts_door_1-proxy", "Kill", 0, 1)
+      EntFire("bts_door_1-open_door", "Kill", 0, 1)
 
       EntFire("areaportal_bts_door_2", "Open", 0, 0)
       EntFire("bts_door_2-open_door", "Trigger", 0)
@@ -820,10 +981,22 @@ function SpeedrunModeLoad(){
       EntFireByHandle(trigger2, "SetLocalOrigin","3778.25 703.97 -96", 0, null, null)
       EntFireByHandle(trigger2, "AddOutput", "OnTrigger areaportal_bts_door_2:Open::3:1", 0, null, null)
 
-      FasterVertDoor("entrance_door")
+      //TODO: sometimes these doors are not opening, so I increased wait time from 0.1 to 0.2, if that doesn't work: maually call faster animation
+      FasterVertDoor("entrance_door", 0.2)
 
       EntFire("exit_door-open_door", "Trigger")
-      EntFire("exit_door-open_door", "Kill",0,0.1zw)
+      //EntFire("exit_door-open_door", "Kill",0,0.1)
+      //fuck that idk the previous line didnt work
+      local trigger2 = Entities.FindByClassnameNearest("trigger_once", Vector(-3145,-1301.94,-266), 100)
+      EntFireByHandle(trigger2, "Kill","", 0, null, null)
+
+      //open ambush doors
+      EntFire("relay_turret_ambush", "AddOutput", "OnTrigger relay_open_door:Trigger::0:1")
+      EntFire("relay_close_door", "Kill")
+
+      //prevent catwalk thingy
+      EntFire("walkway_push", "Kill")
+      EntFire("relay_walkway_fall", "Kill")
       break
     case "sp_a4_finale3":
       EntFire("practice_bomb_timer", "disable")
@@ -889,6 +1062,7 @@ function SpeedrunModeLoad(){
       EntFire("paint_portal_trigger", "AddOutput", "OnTrigger background_fire3:start::2.6:1")
       EntFire("paint_portal_trigger", "AddOutput", "OnTrigger background_fire3_sound:playsound::2.6:1")
 
+      EntFire("paint_portal_trigger", "AddOutput", "OnTrigger @glados:RunScriptCode:GladosPlayVcd(593):0:1")
       //ent_fire wheatley_continue_1 trigger; ent_fire wheatley_futbol_guard_relay2 trigger
 
       //socket3_trigger/relay
@@ -910,6 +1084,7 @@ function SpeedrunModeLoad(){
       EntFire("socket3_relay", "AddOutput", "OnTrigger fire_relay:Trigger::2:1")
       EntFire("socket3_relay", "AddOutput", "OnTrigger sprinkler_relay:Trigger::4:1")
       EntFire("socket3_relay", "AddOutput", "OnTrigger stalemate_relay:Trigger::10:1")
+      EntFire("socket2_relay", "AddOutput", "OnTrigger @glados:RunScriptCode:sp_a4_finale4_set_thorn():5:1")
 
       //making rocks/debree/whatever this fucking is appear earlier
       EntFire("socket3_relay", "AddOutput", "OnTrigger wedge18-panel_bottom_model:Enable::0:1")
@@ -917,12 +1092,29 @@ function SpeedrunModeLoad(){
       EntFire("socket3_relay", "AddOutput", "OnTrigger wedge18-panel_bottom:Kill::0:1")
       EntFire("socket3_relay", "AddOutput", "OnTrigger wedge18-panel_bottom_relay:Kill::0:1")
 
+      //fix some dialogue
+      local dialogFixCode = 
+      "delete SceneTable[SceneTableLookup[633]].next\n" +
+      "delete SceneTable[SceneTableLookup[634]].next\n" +
+      "delete SceneTable[SceneTableLookup[593]].next\n" +
+      "SceneTableLookup[599] = SceneTableLookup[600]\n" +
+      "delete SceneTable[SceneTableLookup[600]].next\n" +
+      "delete SceneTable[SceneTableLookup[597]].next\n" +
+      "delete SceneTable[SceneTableLookup[598]].next\n" +
+      "SceneTableLookup[-7400] = SceneTable[SceneTableLookup[-7400]].next\n" +
+      "SceneTable[SceneTableLookup[-7400]].next = " + //jesus fucking christus
+      "SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTable[SceneTableLookup[-7400]].next].next].next].next].next].next].next].next].next].next].next].next].next].next"
+      
+
+      EntFire("@glados", "RunScriptCode", dialogFixCode)
+
+
       break
   }
 
   //don't let the wheatley screen appear
-  EntFire("monitor1-proxy", "Kill")
-  EntFire("monitor2-proxy", "Kill")
+  //EntFire("monitor1-proxy", "Kill")
+  //EntFire("monitor2-proxy", "Kill")
   
   //activate departure ele faster
   //EntFire("departure_elevator-blocked_elevator_tube_anim", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0)
@@ -956,10 +1148,21 @@ function SpeedrunModeLoad(){
   
   //kill glados (metal bitch aint tell me what to do)
   if(blockAnnouncerDelay>=0){
-    EntFire("@glados", "Kill", 0.0, blockAnnouncerDelay)
-    EntFire("@cave", "Kill", 0.0, blockAnnouncerDelay)
+    //EntFire("@glados", "Kill", 0.0, blockAnnouncerDelay)
+    //EntFire("@cave", "Kill", 0.0, blockAnnouncerDelay)
   }
 
+  //fog lol
+  FogControl()
+
+  //remove all unwanted dialogues
+  local sceneremoval = "";
+  foreach(i,v in DIALOGUES){
+    sceneremoval += "delete SceneTableLookup["+v+"]\n"
+  }
+  EntFire("@glados", "RunScriptCode", sceneremoval)
+
+  //EntFire("@sphere", "AddOutput", "modelscale 2")
 }
 
 //nice function for handling all elevator events in underground section
@@ -1000,6 +1203,7 @@ function FastUndergroundTransition(idin, idout){
 
 function FasterVertDoor(prefabname, speed=0.1){
   EntFire(prefabname+"-open_door", "AddOutput", "OnTrigger "+prefabname+"-door_1:SetAnimation:vert_door_open_idle:"+speed+":-1")
+  EntFire(prefabname+"-open_door", "AddOutput", "OnTrigger "+prefabname+"-door_1:SetAnimation:vert_door_open_idle:"+(speed+0.3)+":-1")//just in case LMFAO
 }
 
 function FastTransition(){
@@ -1043,4 +1247,16 @@ function FastFakeExplosionsInLvT(){
     }
     EntFire(self.GetName(), "FireUser1", 0, 0.1)
   }
+}
+
+
+function FogControl(){
+  //SendToConsole("fog_enabled 0")
+  //SendToConsole("fog_override 1")
+  //SendToConsole("fog_colorskybox 150 200 255")
+  //SendToConsole("fog_color 40 80 120")
+  //SendToConsole("fog_start -100")
+  EntFire("env_fog_controller", "SetColor", "40 80 120")
+  EntFire("env_fog_controller", "SetColorSecondary", "255 255 255")
+  EntFire("env_fog_controller", "SetStartDist", "-50")
 }
