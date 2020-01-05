@@ -1,6 +1,6 @@
 //*****************************************************
 //*****************************************************
-//====SPEEDRUN MODE v0.7 by Krzyhau====
+//====SPEEDRUN MODE v0.9 by Krzyhau====
 //this mod removes all of major and most of minor cutscenes
 //from the game, reducing the time for speedruning it lol.
 //*****************************************************
@@ -130,9 +130,6 @@ function SpeedrunModeLoad(){
 
       //keep saving active
       EntFire("@command", "Command", "map_wants_save_disable 0", 0)
-
-      //make sure fog works
-      EntFire(self.GetName(), "RunScriptCode", "FogControl()", 2)
 
       //remove door rng
       EntFire("exit_door_right_a00_wiggle", "Kill")
@@ -317,7 +314,7 @@ function SpeedrunModeLoad(){
       EntFire("!player", "RunScriptCode", "GetPlayer().SetAngles(89, -90, 0)", 0.1)
       SendToConsole("fadein")
       //fix portal
-      EntFire("go_up","AddOutput","OnTrigger portalgun_button:Unlock::0:1")
+      EntFire("robo_light_flicker_01","AddOutput","OnTrigger portalgun_button:Unlock::0:0.1")
       //fix ele
       EntFire("departure_elevator-blocked_elevator_tube_anim", "Kill", 0)
       EntFire("door_0-door_close_relay", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0)
@@ -374,6 +371,11 @@ function SpeedrunModeLoad(){
 
       EntFire("flingroom_1_circular_catapult_2", "SetPlayerSpeed", "700")
       EntFire("flingroom_1_circular_catapult_2", "SetPhysicsSpeed", "700")
+
+      //button panel thingies
+      EntFire("open_button_escape_panels", "Trigger", 0, 8)
+      EntFire("close_button_escape_panels", "Kill", 0, 8)
+      EntFire("open_button_escape_panels", "Kill", 0, 10)
       break
     case "sp_a2_pit_flings":
       EntFire("companion_cube_skin_trigger", "Kill", 0)
@@ -386,11 +388,15 @@ function SpeedrunModeLoad(){
       break
     case "sp_a2_sphere_peek":
       EntFire("@trigger_this_to_fix_ceiling", "Trigger", 1)
+      EntFire("@trigger_this_to_fix_catapult", "Trigger", 2)
       EntFire("landing_01-ramp_close", "AddOutput", "OnTrigger !self:Disable::1:1",0)
       EntFire("wall_replace_02_relay", "AddOutput", "OnTrigger landing_01-ramp_close:Trigger::0:1",0)
 
       EntFire("ramp_up_relay", "Trigger", 0, 1)
       EntFire("ramp_up_relay", "Kill", 0, 2)
+
+      EntFire("landing_01-ramp_close", "Trigger")
+      EntFire("landing_01-proxy", "Kill")
       break
     case "sp_a2_ricochet":
       EntFire("cube_retrieved_relay", "Trigger")
@@ -458,6 +464,8 @@ function SpeedrunModeLoad(){
       EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch jailbreak_chamber_unlit-jailbreak_peak_logic:Trigger::2:1")
       EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch @jailbreak_1st_wall_2_2_open_logic:Trigger::2:1")
       EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch @jailbreak_1st_wall_1_2_open_logic:Trigger::2:1")
+      EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch @jailbreak_1st_wall_2_2_open_logic:Kill::2.1:1")
+      EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch @jailbreak_1st_wall_1_2_open_logic:Kill::2.1:1")
       //EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch jailbreak_chamber_unlit-jailbreak_1st_wall_1_1_open_logic:Trigger::0:1")
       //EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch jailbreak_chamber_unlit-jailbreak_1st_wall_2_1_open_logic:Trigger::0:1")
       EntFire("@jailbreak_exit_trigger","AddOutput","OnStartTouch jailbreak_chamber_unlit-test_chamber_bridge:Enable::0:1")
@@ -474,6 +482,15 @@ function SpeedrunModeLoad(){
       EntFire("@glados", "RunScriptCode", "delete JailbreakICanHearYou")
       EntFire("@glados", "RunScriptCode", "SceneTableLookup[498] = SceneTable[SceneTableLookup[498]].next")
       EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch @glados:RunScriptCode:nuke();GladosPlayVcd(498):1.5:1")
+      
+      //switch bridges, easiest solution to keep the "second" one opened
+      local bridge1 = GetEntity("jailbreak_chamber_lit-test_chamber_bridge")
+      local bridge2 = GetEntity("jailbreak_chamber_unlit-test_chamber_bridge")
+      local bridge1pos = bridge1.GetOrigin()
+      local bridge2pos = bridge2.GetOrigin()
+      bridge1.SetOrigin(bridge2pos)
+      bridge2.SetOrigin(bridge1pos)
+      EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch jailbreak_chamber_lit-test_chamber_bridge:Enable::1:1")
       break
     case "sp_a2_bts2":
       EntFire("controlroom_gate_a_rotating", "AddOutput", "OnFullyClosed exit_elevator_move_relay:Trigger::0:1")
@@ -488,6 +505,8 @@ function SpeedrunModeLoad(){
       EntFire("transition_trigger", "AddOutput", "OnStartTouch @transition_script:RunScriptCode:TransitionFromMap():0.1:1")
       break
     case "sp_a2_bts3":
+
+      EntFire("entry_airlock_door-door_1", "SetPlaybackRate", "5", 0.4)
       EntFire("entry_airlock_door-proxy", "Kill")
       EntFire("entry_airlock_door-open_door_malfunction","Trigger",0,0)
       EntFire("entry_canyon_clip", "Kill")
@@ -505,6 +524,10 @@ function SpeedrunModeLoad(){
       EntFire("exit_airlock_door-open_door", "Trigger")
       EntFire("exit_airlock_door-open_door", "Kill",0,1)
       EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
+
+      //better fog for better visibility
+      //EntFire("env_fog_controller", "SetStartDist", 0, 0.5)
+      EntFire("env_fog_controller", "SetColor", "50 80 110", 0.2)
       break
     case "sp_a2_bts4":
       FasterVertDoor("entry_airlock_door")
@@ -712,6 +735,11 @@ function SpeedrunModeLoad(){
       local transition_trigger = Entities.FindByClassnameNearest("trigger_once", Vector(6016, 4496, -448), 10)
       EntFireByHandle(transition_trigger, "SetLocalOrigin", "5952 4496 -448", 0, null, null)
 
+      //noone asked for it but it would be nice for this to be pressed already lol
+      local lightslever = Entities.FindByClassnameNearest("func_button", Vector(3692, 4482, -370), 10)
+      EntFire("AutoInstance1-circuit_breaker_lever_sound", "Kill")
+      EntFireByHandle(lightslever, "Press", "", 0.1, null, null)
+
       break
     case "sp_a3_02":
       EntFire("finale_4_wrongwarp", "Activate")
@@ -821,6 +849,11 @@ function SpeedrunModeLoad(){
       //open some doors
       EntFire("liftshaft_entrance_door-door_button", "Press")
       EntFire("liftshaft_exit_door_button", "Press")
+
+      EntFire("sphere_entrance_lift_door_top", "Open")
+      EntFire("sphere_entrance_lift_door_bottom", "Open")
+      EntFire("damaged_sphere_door_4-door_open", "Trigger")
+      EntFire("damaged_sphere_door_4-door_open", "Kill", 1)
       break
     case "sp_a3_end":
       //faster doors at the beginning
@@ -844,6 +877,10 @@ function SpeedrunModeLoad(){
       EntFire("departure_elevator-logic_source_elevator_door_open", "Trigger", 0, 3)
       EntFire("departure_elevator-source_elevator_door_open_trigger", "Kill", 0, 0)
       EntFire("pumproom_lift_tracktrain", "SetMaxSpeed", 250)
+
+      //hopefully that fixes the shake thingy someone had
+      //bruh like there are no reason for shaking to exist in this map anyway lol
+      EntFire("env_shake", "Kill")
       break
     case "sp_a4_intro":
 
@@ -934,9 +971,12 @@ function SpeedrunModeLoad(){
       EntFire("areaportal_airlock_1", "Open")
       EntFire("liftshaft_airlock_exit-proxy", "Kill")
       EntFire("liftshaft_airlock_exit-open_door", "Trigger")
-      EntFire("backstop", "SetLocalOrigin", "-8952 -2008 -296")
-      EntFire("backstop", "Toggle", "", 0.1)
-      EntFire("backstop", "Toggle", "", 1.1)
+      //EntFire("backstop", "SetLocalOrigin", "-8952 -2008 -296")
+      //EntFire("backstop", "Toggle", "", 0.1)
+      //EntFire("backstop", "Toggle", "", 1.1)
+      EntFire("backstop", "Kill")
+      EntFire("relay_anvil", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:Finale1VeloBlock():0:1")
+
 
       local dialogueCode = 
       "SceneTable[SceneTable[SceneTableLookup[-4801]].next].next = "+
@@ -982,7 +1022,11 @@ function SpeedrunModeLoad(){
       EntFireByHandle(trigger2, "AddOutput", "OnTrigger areaportal_bts_door_2:Open::3:1", 0, null, null)
 
       //TODO: sometimes these doors are not opening, so I increased wait time from 0.1 to 0.2, if that doesn't work: maually call faster animation
-      FasterVertDoor("entrance_door", 0.2)
+      FasterVertDoor("entrance_door", 0.1)
+      //i cant even
+      for(local i = 0;i<1;i+=0.2){
+        EntFire("entrance_door-door_1", "SetAnimation", "vert_door_open_idle", i)
+      }
 
       EntFire("exit_door-open_door", "Trigger")
       //EntFire("exit_door-open_door", "Kill",0,0.1)
@@ -1154,6 +1198,8 @@ function SpeedrunModeLoad(){
 
   //fog lol
   FogControl()
+  //make sure fog works
+  EntFire(self.GetName(), "RunScriptCode", "FogControl()", 0.1)
 
   //remove all unwanted dialogues
   local sceneremoval = "";
@@ -1249,14 +1295,74 @@ function FastFakeExplosionsInLvT(){
   }
 }
 
+function Finale1VeloBlock(){
+  local p = GetPlayer().GetVelocity()
+  GetPlayer().SetVelocity(Vector(-300,p.y,p.z))
+}
+
+
+FUCKING_FOG_VALUES <- 
+[
+  {name="sp_a1_intro1",color1=64,color2=255,start=500.0,end=6000},
+  {name="@environment_wheatly_state_02",color1=40,color2=255,start=128,end=1750},
+  {name="fog_testchamber",color1=64,color2=18,start=128,end=5000},
+  {name="environment_fog_neuro_1",color1=11,color2=255,start=1,end=2500},
+  {name="@environment_lake_fog",color1=100,color2=255,start=0,end=10000},
+  {name="@environment_wheatley_z_fog",color1=0,color2=255,start=10000,end=11000},
+  {name="fog_factory",color1=22,color2=255,start=1,end=2000},
+  {name="@environment_darkness_fog",color1=22,color2=255,start=1,end=2500},
+  {name="@environment_destroyed_b_fog",color1=80,color2=255,start=128,end=5000},
+  {name="@environment_act4_fog_01",color1=80,color2=255,start=128,end=2500},
+  {name="@environment_fan_fog",color1=22,color2=255,start=128,end=3600},
+  {name="@environment_glados_intro_fog",color1=63,color2=255,start=0,end=3500},
+  {name="@environment_destroyed_fog",color1=80,color2=255,start=128,end=2500},
+  {name="@environment_tuberide_fog",color1=170,color2=150,start=128,end=5500},
+  {name="@environment_jailbreak_fog",color1=160,color2=255,start=128,end=4000},
+  {name="pumproom_fog",color1=100,color2=255,start=700,end=10000},
+  {name="fog_intro_ride",color1=120,color2=255,start=500,end=8000},
+  {name="@environment_underground_fog",color1=37,color2=255,start=0,end=4500},
+  {name="@environment_wheatley_tbeam_fog",color1=71,color2=255,start=128,end=5000},
+  {name="@environment_darkness_1_fog",color1=11,color2=255,start=1,end=2500},
+  {name="@environment_darkness_fog_2",color1=11,color2=255,start=1,end=2500},
+  {name="fog_destroyed_chambers",color1=80,color2=255,start=0,end=2500},
+  {name="environment_fog_neuro_2",color1=22,color2=255,start=1,end=2500},
+  {name="@environment_act4_fog_02",color1=80,color2=255,start=128,end=3500},
+  {name="@environment_bottomless_pit_falling_fog",color1=8,color2=50,start=0,end=3000},
+  {name="environment_vista_fog",color1=25,color2=255,start=-500,end=1700},
+  {name="@environment_bottomless_pit_fog",color1=100,color2=255,start=0,end=6000},
+  {name="@environment_darkness_fog_3",color1=0,color2=255,start=1,end=2500},
+  {name="fog_bts",color1=64,color2=18,start=1,end=5000},
+  {name="@environment_act4_fog_03",color1=80,color2=255,start=64,end=6000},
+  {name="@environment_red_state",color1=35,color2=255,start=128,end=2500},
+  {name="@environment_darkness_fog_4",color1=0,color2=255,start=1,end=1000},
+  {name="@environment_darkness_fog_5",color1=0,color2=255,start=1,end=768},
+  {name="@environment_moonshot_1",color1=22,color2=255,start=10000,end=11000},
+  {name="environment_fog_neuro_3",color1=35,color2=255,start=1,end=2500},
+  {name="fog_controller",color1=100,color2=255,start=500,end=5000},
+  {name="@environment_mines_fog",color1=100,color2=255,start=0,end=6000},
+  {name="@environment_bts_fog",color1=141,color2=152,start=1,end=5000},
+  {name="@environment_lake_b_fog",color1=100,color2=255,start=0,end=4500},
+  {name="@environment_glados",color1=88,color2=255,start=128,end=1750},
+  {name="@environment_wheatly_state_01",color1=203,color2=255,start=128,end=1750},
+  {name="@environment_testchamber_fog",color1=64,color2=255,start=128,end=5000},
+]
 
 function FogControl(){
-  //SendToConsole("fog_enabled 0")
-  //SendToConsole("fog_override 1")
-  //SendToConsole("fog_colorskybox 150 200 255")
-  //SendToConsole("fog_color 40 80 120")
-  //SendToConsole("fog_start -100")
-  EntFire("env_fog_controller", "SetColor", "40 80 120")
-  EntFire("env_fog_controller", "SetColorSecondary", "255 255 255")
-  EntFire("env_fog_controller", "SetStartDist", "-50")
+  //EntFire("env_fog_controller", "SetColorSecondary", "0 20 40")
+  //EntFire("env_fog_controller", "SetColor", "30 60 90")
+  //EntFire("env_fog_controller", "SetStartDist", "-50")
+
+  foreach (i, fog in FUCKING_FOG_VALUES){
+    local b = floor(fog.color1*1.3);
+    local g = floor(fog.color1*0.8);
+    local r = floor(fog.color1*0.4);
+
+    if(GetMapName()==fog.name){
+      EntFire("env_fog_controller", "SetColor", r+" "+g+" "+b);
+    }else{
+      EntFire(fog.name, "SetColor", r+" "+g+" "+b);
+    }
+    
+  }
+
 }
