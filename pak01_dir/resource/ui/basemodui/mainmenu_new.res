@@ -87,4 +87,23 @@
 		"command"					"QuitGame"
 		"ActivationType"			"1"
 	}
+
+	"BtnPlaySolo"
+	{
+		"ControlName"				"BaseModHybridButton"
+		"fieldName"					"BtnPlaySolo"
+		"xpos"						"10"
+		"ypos"						"450"
+		"wide"						"220"
+		"tall"						"20"
+		"autoResize"				"1"
+		"pinCorner"					"0"
+		"visible"					"1"
+		"enabled"					"0"
+		"tabPosition"				"0"
+		"labelText"					"#P2SM_VERSION"
+		"style"						"MainMenuButton"
+		"ActivationType"			"1"
+		"FocusDisabledBorderSize"	"1"
+	}
 }
