@@ -14,4 +14,11 @@
 		"pic"		"srmode/srcom_thumbnail"
 		"url"		"https://www.speedrun.com/p2sm"
 	}
+	"freeze"
+	{
+		"title"		"freeze the game"
+		"subtitle"	"it also makes background green lmfao"
+		"pic"		"tools/toolsclip"
+		"command"	"alias peanut butter; alias butter peanut; peanut; butter"
+	}
 }
