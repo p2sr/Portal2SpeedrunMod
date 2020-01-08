@@ -1,5 +1,5 @@
-//####SPEEDRUN MODE####
-DoIncludeScript("speedrunmode", self.GetScriptScope())
+//####SPEEDRUN MOD####
+DoIncludeScript("speedrunmod", self.GetScriptScope())
 
 DBG <- 0
 FORCE_GUN_AND_HALLWAY <- 0
@@ -262,9 +262,6 @@ MapPlayOrder<- [
 // --------------------------------------------------------
 function OnPostTransition()
 {
-  //### SPEEDRUN MODE ###
-  if(IsSpeedrunModeOn())spTransitionListFix()
-  
 	local foundMap = false
 	
 	foreach (index, map in MapPlayOrder)

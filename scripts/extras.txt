@@ -2,10 +2,23 @@
 {
 	"speedrunmode"
 	{
-		"title"		"Begin The Speedrun"
-		"subtitle"	"Gotta go fast!"
+		"title"		"Normal%"
+		"subtitle"	"Original mode of the Speedrun Mod."
 		"pic"		"srmode/thumbnail"
-		"map"		"sp_a1_intro1"
+		"command"	"developer -0;map sp_a1_intro1"
+	}
+	"speedrunmode_dialogue"
+	{
+		"title"		"Normal% (no dialogue)"
+		"subtitle"	"Original mode, but without dialogue."
+		"pic"		"srmode/thumbnail"
+		"command"	"developer -1;map sp_a1_intro1"
+	}
+	"separator"
+	{
+		"title"		"=========================="
+		"subtitle"	""
+		"pic"		"srmode/thumbnail"
 	}
 	"speedruncom"
 	{
@@ -13,12 +26,5 @@
 		"subtitle"	"nobody uses speedrun.com"
 		"pic"		"srmode/srcom_thumbnail"
 		"url"		"https://www.speedrun.com/p2sm"
-	}
-	"freeze"
-	{
-		"title"		"freeze the game"
-		"subtitle"	"it also makes background green lmfao"
-		"pic"		"tools/toolsclip"
-		"command"	"alias peanut butter; alias butter peanut; peanut; butter"
 	}
 }
