@@ -7,7 +7,7 @@ Features:
 - Dialogue is completely removed;
 - Elevators are much faster;
 - Majority of doors are opened faster or already opened;
-- ...and many more improvement for your speedrunning experience;
+- ...and many more improvements for your speedrunning experience;
 
 Future of the mod:
 I'm planning to make this mod a family fun box for whole speedrunning community, containing more than just one mode. After I'm happy with Cutsceneless Mode, I want to create:
@@ -17,3 +17,9 @@ I'm planning to make this mod a family fun box for whole speedrunning community,
 - Fat Run (complete the game while being 1,875x larger)
 - Potato Challenge (A copy of SMO's Baloon World)
 - ..and many more
+
+Credits:
+- Blenderiste 09 - Chapter 9 scripting.
+- Big D - constantly motivating me to finish this mod.
+- NeKz - creator of [Chaos plugin](https://github.com/NeKzor/chaos/) that I used for creating Speedrun Mod Simple Modifier.
+- Betsruner, Can't Even, Rex, Spidda and many others - beta testing.
