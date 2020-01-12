@@ -35,7 +35,7 @@
 		"tabPosition"				"0"
 		"navUp"						"BtnQuit"
 		"navDown"					"BtnOptions"
-		"labelText"					"Speedrun Mode"
+		"labelText"					"Speedrun Mod"
 		"style"						"MainMenuButton"
 		"command"					"Extras"
 		"ActivationType"			"1"

@@ -32,6 +32,6 @@
 		"title"		"Credits"
 		"subtitle"	"For all of the people."
 		"pic"		"srmod/srcom_thumbnail"
-		"map"		"credits"
+		"command"	"map credits"
 	}
 }
