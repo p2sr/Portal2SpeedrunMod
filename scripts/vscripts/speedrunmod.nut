@@ -40,15 +40,6 @@ function GetModeInfo(){
   return {id=modeNumber,param=modeParam,devLevel=devLevel}
 }
 
-function TrustUserToNotChangeDevLevel(){
-  local modeInfo = GetModeInfo()
-  SendToConsole("developer "+modeInfo.devLevel+" >>> DO NOT CHANGE THIS <<<")
-  //because developer mode will be active, we need to prevent developer stuff from appearing
-
-  SendToConsole("contimes 0") //hide ingame console output on top-left
-  SendToConsole("phys_penetration_error_time 0") //hide vphysics penetration alerts
-}
-
 
 
 //actual script loader
@@ -68,6 +59,10 @@ DoIncludeScript("modes/default", self.GetScriptScope())
 
 
 function OnPostSpawn(){
+  //debug mode info
+  local info = GetModeInfo();
+  printl("### SPEEDRUN MOD ###: Preparing the mod in mode "+info.id+", param:"+info.param)
+
   local auto = GetEntity("logic_auto")
   if(!auto){
     modlog("No logic_auto loaded yet. Speedrun Mod initialisation failed.")
@@ -84,7 +79,6 @@ function OnPostSpawn(){
 
 
 function OnMapSpawn(){
-  TrustUserToNotChangeDevLevel()
   foreach (modename, func in MAP_SPAWN_FUNCTIONS){
     modlog("Loading OnMapSpawn function for "+modename+".")
     func()

@@ -557,10 +557,13 @@ function SpeedrunModeLoad(){
       EntFire("button_relay", "AddOutput", "OnTrigger @command:Command:ent_fire side_1_panelpath_1-panel_1_top_const* kill:0:1")
       EntFire("button_relay", "AddOutput", "OnTrigger @command:Command:ent_fire side_1_panelpath_2-panel_1_top_const* kill:0:1")
       
-      //remove ele doors
-      EntFire("lift_blocker", "Kill", 1)
-      EntFire("controlroom_gate_b_rotating", "Kill", 1)
-      EntFire("controlroom_gate_a_rotating", "Kill", 1)
+      //fix ele
+      //EntFire("lift_blocker", "Kill", 1)
+      EntFire("exit_elevator_close_entrance_relay", "AddOutput", "OnTrigger lift_blocker:Kill::2.8:1")
+      EntFire("controlroom_gate_b_rotating", "SetSpeed", 300)
+      EntFire("controlroom_gate_a_rotating", "SetSpeed", 300)
+      EntFire("exit_elevator_close_entrance_relay", "AddOutput", "OnTrigger controlroom_gate_a_rotating:Open::2.8:1")
+      EntFire("exit_elevator_close_entrance_relay", "AddOutput", "OnTrigger controlroom_gate_b_rotating:Open::2.8:1")
       //local model = Entities.FindByClassnameWithin(null, "prop_dynamic", Vector(2885, 944, 3610), 1)
       //local model2 = Entities.FindByClassnameWithin(model, "prop_dynamic", Vector(2885, 944, 3610), 1)
       //EntFireByHandle(model2, "Kill", "", 1, null, null)
@@ -1108,7 +1111,7 @@ function SpeedrunModeLoad(){
 
       EntFire("ending_relay", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:Finale4Anim(1):6.5:1")
       EntFire("ending_suction_relay", "AddOutput", "OnTrigger replace_fade:Fade::11:1")
-      EntFire("ending_suction_relay", "AddOutput", "OnTrigger @command:Command:disconnect:16:1")
+      EntFire("ending_suction_relay", "AddOutput", "OnTrigger @command:Command:changelevel credits:16:1")
       break
   }
 
@@ -1261,8 +1264,8 @@ function Finale4Anim(frame){
   local v = GetEntity("ending_vehicle")
   local vpos = v.GetOrigin()
   
-  vpos.z -= 5*1/((frame+20)/20.0)
-  vpos.y += frame*0.02
+  vpos.z -= 5*1/((frame+50)/50.0)
+  vpos.y += frame*0.05
   v.SetAbsOrigin(vpos)
 
   EntFire(self.GetName(), "RunScriptCode", "Finale4Anim("+(frame+1)+")", 0.001)

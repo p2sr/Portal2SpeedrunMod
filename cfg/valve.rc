@@ -1,0 +1,8 @@
+exec joystick.cfg
+exec autoexec.cfg
+
+stuffcmds
+
+plugin_load smsm
+
+startupmenu

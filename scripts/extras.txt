@@ -4,27 +4,34 @@
 	{
 		"title"		"Normal%"
 		"subtitle"	"Original mode of the Speedrun Mod."
-		"pic"		"srmode/thumbnail"
-		"command"	"developer -0;map sp_a1_intro1"
+		"pic"		"srmod/menu_modes/normal"
+		"command"	"sm_mode 0;sm_param 0;map sp_a1_intro1"
 	}
 	"speedrunmode_dialogue"
 	{
 		"title"		"Normal% (no dialogue)"
 		"subtitle"	"Original mode, but without dialogue."
-		"pic"		"srmode/thumbnail"
-		"command"	"developer -1;map sp_a1_intro1"
+		"pic"		"srmod/menu_modes/normal_muted"
+		"command"	"sm_mode 0;sm_param 1;map sp_a1_intro1"
 	}
 	"separator"
 	{
 		"title"		"=========================="
 		"subtitle"	""
-		"pic"		"srmode/thumbnail"
+		"pic"		""
 	}
 	"speedruncom"
 	{
 		"title"		"Official Leaderboard"
 		"subtitle"	"nobody uses speedrun.com"
-		"pic"		"srmode/srcom_thumbnail"
+		"pic"		"srmod/srcom_thumbnail"
 		"url"		"https://www.speedrun.com/p2sm"
+	}
+	"credits"
+	{
+		"title"		"Credits"
+		"subtitle"	"For all of the people."
+		"pic"		"srmod/srcom_thumbnail"
+		"map"		"credits"
 	}
 }
