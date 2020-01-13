@@ -11,6 +11,7 @@ Features:
 
 Future of the mod:
 I'm planning to make this mod a family fun box for whole speedrunning community, containing more than just one mode. After I'm happy with Cutsceneless Mode, I want to create:
+- fog% (complete the game with really dense fog)
 - 100 Portals Run (complete the game in 100 portals)
 - 100% Run (complete the game with all achievements)
 - Randomized Map Order (well... yes)
