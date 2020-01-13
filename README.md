@@ -18,7 +18,7 @@ I'm planning to make this mod a family fun box for whole speedrunning community,
 - Fat Run (complete the game while being 1,875x larger)
 - Potato Challenge (A copy of SMO's Baloon World)
 - Celeste% (idk, people force me to do it to meme msushi)
-- ..and many more
+- ...and many more
 
 Credits:
 - Blenderiste 09 - Chapter 9 scripting.
