@@ -40,6 +40,14 @@ function GetModeInfo(){
   return {id=modeNumber,param=modeParam,devLevel=devLevel}
 }
 
+function GetModeID(){
+  return GetModeInfo().id
+}
+
+function GetModeParam(){
+  return GetModeInfo().param
+}
+
 
 
 //actual script loader
@@ -52,7 +60,13 @@ function AddModeFunctions(modeName, postSpawnFunc, mapSpawnFunc){
   MAP_SPAWN_FUNCTIONS[modeName] <- mapSpawnFunc
 }
 
+SPEEDRUN_MODES <- {}
+SPEEDRUN_MODES[0] <- ["default"]
+SPEEDRUN_MODES[1] <- ["default", "fog_percent"]
+
 DoIncludeScript("modes/default", self.GetScriptScope())
+DoIncludeScript("modes/fog", self.GetScriptScope())
+
 
 
 
@@ -71,16 +85,18 @@ function OnPostSpawn(){
   //necessary to use OnMapSpawn event, since OnPostSpawn can be executed before some entities are even spawned
   EntFireByHandle(auto, "AddOutput", "OnMapSpawn "+self.GetName()+":RunScriptCode:OnMapSpawn():0:1", 0, null, null)
 
-  foreach (modename, func in POST_SPAWN_FUNCTIONS){
+  foreach (id, modename in SPEEDRUN_MODES[info.id]){
     modlog("Loading PostSpawn function for "+modename+".")
+    local func = POST_SPAWN_FUNCTIONS[modename]
     func()
   }
 }
 
 
 function OnMapSpawn(){
-  foreach (modename, func in MAP_SPAWN_FUNCTIONS){
+  foreach (id, modename in SPEEDRUN_MODES[GetModeID()]){
     modlog("Loading OnMapSpawn function for "+modename+".")
+    local func = MAP_SPAWN_FUNCTIONS[modename]
     func()
   }
 }

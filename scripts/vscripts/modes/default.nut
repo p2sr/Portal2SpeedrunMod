@@ -37,7 +37,7 @@ function SpeedrunModeLoad(){
 
 
   local disableDialogue = false
-  if(GetModeInfo().param>0)disableDialogue = true
+  if(GetModeID()==0 && GetModeParam()>0)disableDialogue = true
 
   //in some levels, we want to leave dialogue entity active
   local blockAnnouncerDelay = 0;
@@ -1362,4 +1362,7 @@ function FogControl(){
 
 }
 
-AddModeFunctions("speedrun_mode_default", SpeedrunModePostSpawn, SpeedrunModeLoad)
+
+
+
+AddModeFunctions("default", SpeedrunModePostSpawn, SpeedrunModeLoad)

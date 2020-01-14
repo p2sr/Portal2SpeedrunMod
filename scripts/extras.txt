@@ -14,6 +14,13 @@
 		"pic"		"srmod/menu_modes/normal_muted"
 		"command"	"sm_mode 0;sm_param 1;map sp_a1_intro1"
 	}
+	"fog_percent"
+	{
+		"title"		"Fog%"
+		"subtitle"	"Can you see anything?"
+		"pic"		"srmod/menu_modes/normal_muted"
+		"command"	"sm_mode 1;sm_param 0;map sp_a1_intro1"
+	}
 	"separator"
 	{
 		"title"		"=========================="
