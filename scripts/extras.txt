@@ -26,6 +26,7 @@
 		"title"		"=========================="
 		"subtitle"	""
 		"pic"		""
+		"url"		"https://www.youtube.com/watch?v=2ZIpFytCSVc"
 	}
 	"speedruncom"
 	{
