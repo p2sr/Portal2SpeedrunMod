@@ -9,6 +9,12 @@ Features:
 - Majority of doors are opened faster or already opened;
 - ...and many more improvements for your speedrunning experience;
 
+Installation:
+1. Download newest release archive from [releases tab](https://github.com/Krzyhau/Portal2SpeedrunMod/releases).
+2. Unzip `Portal 2 Speedrun Mod` folder into `sourcemods` directory (its default location is `Steam/steamapps/sourcemods/`).
+3. Restart Steam.
+4. A new game, called "Portal 2 Speedrun Mod" should appear in your library.
+
 Future of the mod:
 I'm planning to make this mod a family fun box for whole speedrunning community, containing more than just one mode. After I'm happy with Cutsceneless Mode, I want to create:
 - fog% (complete the game with really dense fog)
