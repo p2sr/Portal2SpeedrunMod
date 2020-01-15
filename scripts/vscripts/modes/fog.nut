@@ -14,10 +14,11 @@ function FogPercentLoad(){
 }
 
 function NewFogControl(){
-    EntFire("env_fog_controller", "SetColorSecondary", "200 215 230")
-    EntFire("env_fog_controller", "SetColor", "200 205 210")
-    EntFire("env_fog_controller", "SetStartDist", "0")
-    EntFire("env_fog_controller", "SetEndDist", "200")
+    EntFire("env_fog_controller", "SetColorSecondary", "70 75 80")
+    EntFire("env_fog_controller", "SetColor", "70 75 80")
+    EntFire("env_fog_controller", "SetStartDist", "-64")
+    EntFire("env_fog_controller", "SetEndDist", "128")
+    EntFire("env_fog_controller", "SetMaxDensity", 1)
 }
 
 AddModeFunctions("fog_percent", FogPercentPostSpawn, FogPercentLoad)

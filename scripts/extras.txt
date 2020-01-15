@@ -17,8 +17,8 @@
 	"fog_percent"
 	{
 		"title"		"Fog%"
-		"subtitle"	"Can you see anything?"
-		"pic"		"srmod/menu_modes/normal_muted"
+		"subtitle"	"Can you even see anything?"
+		"pic"		"srmod/menu_modes/fog"
 		"command"	"sm_mode 1;sm_param 0;map sp_a1_intro1"
 	}
 	"separator"
@@ -38,7 +38,7 @@
 	{
 		"title"		"Credits"
 		"subtitle"	"For all of the people."
-		"pic"		"srmod/srcom_thumbnail"
+		"pic"		"vgui/backgrounds/background05"
 		"command"	"map credits"
 	}
 }

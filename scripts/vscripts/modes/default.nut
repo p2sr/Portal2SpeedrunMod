@@ -470,7 +470,7 @@ function SpeedrunModeLoad(){
 
       //better fog for better visibility
       //EntFire("env_fog_controller", "SetStartDist", 0, 0.5)
-      EntFire("env_fog_controller", "SetColor", "50 80 110", 0.2)
+      //EntFire("env_fog_controller", "SetColor", "50 80 110", 0.2)
       break
     case "sp_a2_bts4":
       FasterVertDoor("entry_airlock_door")
@@ -1340,6 +1340,7 @@ FUCKING_FOG_VALUES <-
   {name="@environment_glados",color1=88,color2=255,start=128,end=1750},
   {name="@environment_wheatly_state_01",color1=203,color2=255,start=128,end=1750},
   {name="@environment_testchamber_fog",color1=64,color2=255,start=128,end=5000},
+  {name="sp_a2_bts3",color1=100,color2=100,start=0,end=1000}
 ]
 
 function FogControl(){
