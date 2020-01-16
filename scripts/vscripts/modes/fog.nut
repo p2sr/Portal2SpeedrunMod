@@ -23,7 +23,6 @@ function NewFogControl(){
     EntFire("env_fog_controller", "SetStartDist", "-64")
     EntFire("env_fog_controller", "SetEndDist", "128")
     EntFire("env_fog_controller", "SetMaxDensity", 1)
-    EntFire(self.GetName(), "AddOutput", "OnUser1 "+self.GetName()+":RunScriptCode:UpdateFogToVelocity():0:-1")
 }
 
 FOG_FADEAWAY_VALUE <- 0;
@@ -33,18 +32,20 @@ function UpdateFogToVelocity(){
     local vel = GetPlayer().GetVelocity();
     local totalVel = vel.x + vel.y + vel.z;
     if(totalVel == 0 && !FOG_FADEAWAY_END){
-        if(FOG_FADEAWAY_VALUE<110)FOG_FADEAWAY_VALUE++;
+        if(FOG_FADEAWAY_VALUE<250)FOG_FADEAWAY_VALUE++;
     }else{
         FOG_FADEAWAY_END=true;
-        FOG_FADEAWAY_VALUE-=10;
+        FOG_FADEAWAY_VALUE-=4;
         if(FOG_FADEAWAY_VALUE<0){
             FOG_FADEAWAY_VALUE=0;
             FOG_FADEAWAY_END = false;
         }
     }
-    local f = FOG_FADEAWAY_VALUE-60;
+    local f = FOG_FADEAWAY_VALUE-200;
     local value = 1-(f<0 ? 0 : f)*0.0025
     EntFire("env_fog_controller", "SetMaxDensity", value)
 }
+
+//r_paintblob_material 4
 
 AddModeFunctions("fog_percent", FogPercentPostSpawn, FogPercentLoad)
