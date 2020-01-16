@@ -10,6 +10,7 @@ Skips majority of cutscenes and make dumb things slightly less dumb.
 - ...and many more improvements for your speedrunning experience;
 
 ## Installation:
+0. Make sure you have original game (Portal 2, duh) installed on Steam.
 1. Download newest release archive from [releases tab](https://github.com/Krzyhau/Portal2SpeedrunMod/releases).
 2. Unzip `Portal 2 Speedrun Mod` folder into `sourcemods` directory (its default location is `Steam/steamapps/sourcemods/`).
 3. Restart Steam.
