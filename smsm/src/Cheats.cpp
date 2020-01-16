@@ -7,8 +7,6 @@
 
 #include "SMSM.hpp"
 
-#include "DevControl.hpp"
-
 Variable sv_transition_fade_time;
 Variable ui_loadingscreen_transition_time;
 Variable ui_loadingscreen_fadein_time;
@@ -46,16 +44,24 @@ void Cheats::Shutdown()
 
 CON_COMMAND(sm_mode, "Variable used by Speedrun Mod to determine currently played mode.\n") {
     if (args.ArgC() != 2) {
-        return console->Print("Current Speedrun Mod mode: %d\n", devcontrol.GetMode());
+        return console->Print("Current Speedrun Mod mode: %d\n", smsm.mode);
     }
     auto mode = std::atoi(args[1]);
-    devcontrol.SetMode(mode);
+    smsm.mode = mode;
 }
 
 CON_COMMAND(sm_param, "Variable used by Speedrun Mod to determine the state of currently played mode.\n") {
-    if (args.ArgC() != 2) {
-        return console->Print("Current Speedrun Mod param: %d\n", devcontrol.GetParam());
+    if (args.ArgC() == 2 || args.ArgC() == 3) {
+        int param = std::min(std::max(std::atoi(args[1]),0),1023);
+        if (args.ArgC() == 3) {
+            float value = (float)std::atof(args[2]);
+            smsm.modeParams[param] = value;
+        }
+        else {
+            return console->Print("Current Speedrun Mod param %d: %f\n", param, smsm.modeParams[param]);
+        }
     }
-    auto mode = std::atoi(args[1]);
-    devcontrol.SetParam(mode);
+    else {
+        return console->Print("Incorrect syntax. Use: sm_param [id] [value]");
+    }
 }

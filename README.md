@@ -15,7 +15,7 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 - Most of cutscenes were removed or shortened (like Tube Ride, Core etc.)
 - A full list of every change made by this mode will be published soon.
 
-### Fog%
+### Fog% (currently in development)
 - Everything from Normal%
 - Dense fog makes you unable to see further than 128 units.
 - If you don't move for 20 seconds, you can see through fog until you move again.

@@ -17,8 +17,6 @@
 #include "Utils.hpp"
 #include "Utils/Memory.hpp"
 
-#include "DevControl.hpp"
-
 SMSM smsm;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(SMSM, IServerPluginCallbacks, INTERFACEVERSION_ISERVERPLUGINCALLBACKS, smsm);
 
@@ -28,8 +26,7 @@ SMSM::SMSM()
     , modules(new Modules())
     , cheats(new Cheats())
     , clients()
-    , originalWheatleyCounter(0)
-    , isValueExposed(false)
+    , mode(0)
 {
 
 }
@@ -94,16 +91,8 @@ void SMSM::ClientActive(void* pEntity) {
     }
 }
 
-//disabling developer convar caused the actual value to reset on new session, workaround
-int SMSM::ClientConnect(bool* bAllowConnect, void* pEntity, const char* pszName, const char* pszAddress, char* reject, int maxrejectlen) {
-    
-    return 0;
-}
-void SMSM::ServerActivate(void* pEdictList, int edictCount, int clientMax) {
-    devcontrol.UnlockDeveloper();
-}
 void SMSM::ClientFullyConnect(void* pEdict) {
-    devcontrol.LockDeveloper();
+
     this->clients.push_back(pEdict);
 }
 
@@ -183,10 +172,37 @@ void SMSM::ForceAct5MenuBackground() {
     Memory::CloseModuleHandle(clientHandle);
 }
 
+bool SMSM::ProcessScriptRequest(float accessType, int id, float value, float* result) {
+    if (accessType == ScriptAccessKey::READ) {
+        if (id == -1) {
+            *result = (float)mode;
+        }
+        else if (id >= 0 && id < 1024) {
+            *result = modeParams[id];
+        }
+        return true;
+    }
+    else if (accessType == ScriptAccessKey::WRITE) {
+        if (id == -1) {
+            mode = (int)value;
+            *result = 1;
+        }
+        else if(id>=0 && id<1024){
+            modeParams[id] = value;
+            *result = 1;
+        }
+        return true;
+    }
+    else if (accessType == ScriptAccessKey::LOOP) {
+        *result = value;
+        return true;
+    }
+    return false;
+}
+
 
 void SMSM::StartMainThread() {
     this->ForceAct5MenuBackground();
-    devcontrol.RemoveAccess();
 }
 
 // Might fix potential deadlock
@@ -240,5 +256,11 @@ void SMSM::OnEdictAllocated(void* edict)
 }
 void SMSM::OnEdictFreed(const void* edict)
 {
+}
+int SMSM::ClientConnect(bool* bAllowConnect, void* pEntity, const char* pszName, const char* pszAddress, char* reject, int maxrejectlen) {
+    return 0;
+}
+void SMSM::ServerActivate(void* pEdictList, int edictCount, int clientMax) {
+
 }
 #pragma endregion

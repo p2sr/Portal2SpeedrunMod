@@ -32,37 +32,45 @@ function modlog(msg){
   printl("### SPEEDRUN MOD ###: "+msg);
 }
 
-//parse developer level to mode id
-function GetModeInfo(){
-  local devLevel = GetDeveloperLevel()
-  local modeNumber = abs(devLevel/1000000)
-  local modeParam = abs(devLevel%1000000)
-  return {id=modeNumber,param=modeParam,devLevel=devLevel}
+//Script access keys
+SCRIPT_ACCCESS_KEY_READ <- 999999.25
+SCRIPT_ACCCESS_KEY_WRITE <- 999999.50
+SCRIPT_ACCCESS_KEY_LOOP <- 999999.75
+
+
+
+//transform values between SMSM and script system
+function GetSMSMVariable(id,isInt=false){
+  local p = TraceLine(Vector(SCRIPT_ACCCESS_KEY_READ,id,0),Vector(0,0,0),null)
+  if(isInt)return RandomInt(p,p) //temporary workaround for float->int conversion
+  else return p
 }
 
+function SetSMSMVariable(id,value){
+  local result = TraceLine(Vector(SCRIPT_ACCCESS_KEY_WRITE,id,value),Vector(0,0,0),null)
+  return result==1
+}
+
+
+//-1 is mode number
 function GetModeID(){
-  return GetModeInfo().id
-}
-
-function GetModeParam(){
-  return GetModeInfo().param
+  return GetSMSMVariable(-1,true)
 }
 
 
 
 //actual script loader
-
-POST_SPAWN_FUNCTIONS <- {};
-MAP_SPAWN_FUNCTIONS <- {};
+POST_SPAWN_FUNCTIONS <- {}
+MAP_SPAWN_FUNCTIONS <- {}
 
 function AddModeFunctions(modeName, postSpawnFunc, mapSpawnFunc){
   POST_SPAWN_FUNCTIONS[modeName] <- postSpawnFunc
   MAP_SPAWN_FUNCTIONS[modeName] <- mapSpawnFunc
 }
 
-SPEEDRUN_MODES <- {}
-SPEEDRUN_MODES[0] <- ["default"]
-SPEEDRUN_MODES[1] <- ["default", "fog_percent"]
+SPEEDRUN_MODES <- {};
+SPEEDRUN_MODES[0] <- ["default"];
+SPEEDRUN_MODES[1] <- ["default", "fog_percent"];
 
 DoIncludeScript("modes/default", self.GetScriptScope())
 DoIncludeScript("modes/fog", self.GetScriptScope())
@@ -74,8 +82,9 @@ DoIncludeScript("modes/fog", self.GetScriptScope())
 
 function OnPostSpawn(){
   //debug mode info
-  local info = GetModeInfo();
-  printl("### SPEEDRUN MOD ###: Preparing the mod in mode "+info.id+", param:"+info.param)
+  local mode = GetModeID()
+  local firstParam = GetSMSMVariable(0)
+  printl("### SPEEDRUN MOD ###: Preparing the mod in mode "+mode+" (first param:"+firstParam+")")
 
   local auto = GetEntity("logic_auto")
   if(!auto){
@@ -85,7 +94,7 @@ function OnPostSpawn(){
   //necessary to use OnMapSpawn event, since OnPostSpawn can be executed before some entities are even spawned
   EntFireByHandle(auto, "AddOutput", "OnMapSpawn "+self.GetName()+":RunScriptCode:OnMapSpawn():0:1", 0, null, null)
 
-  foreach (id, modename in SPEEDRUN_MODES[info.id]){
+  foreach (id, modename in SPEEDRUN_MODES[mode]){
     modlog("Loading PostSpawn function for "+modename+".")
     local func = POST_SPAWN_FUNCTIONS[modename]
     func()
@@ -94,7 +103,8 @@ function OnPostSpawn(){
 
 
 function OnMapSpawn(){
-  foreach (id, modename in SPEEDRUN_MODES[GetModeID()]){
+  local mode = SPEEDRUN_MODES[GetModeID()]
+  foreach (id, modename in mode){
     modlog("Loading OnMapSpawn function for "+modename+".")
     local func = MAP_SPAWN_FUNCTIONS[modename]
     func()

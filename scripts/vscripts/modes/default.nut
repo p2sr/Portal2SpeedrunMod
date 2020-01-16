@@ -37,7 +37,7 @@ function SpeedrunModeLoad(){
 
 
   local disableDialogue = false
-  if(GetModeID()==0 && GetModeParam()>0)disableDialogue = true
+  if(GetModeID()==0 && GetSMSMVariable(0)>0)disableDialogue = true
 
   //in some levels, we want to leave dialogue entity active
   local blockAnnouncerDelay = 0;

@@ -29,6 +29,9 @@ int ChatPrintf;
 // CCommandBuffer
 int m_bWaitEnabled;
 
+// IEngineTrace
+int TraceRay;
+
 // Others
 int GetClientStateFunction;
 int cl;

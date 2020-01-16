@@ -4,6 +4,26 @@
 #include "Offsets.hpp"
 #include "Utils.hpp"
 #include "Variable.hpp"
+#include "Console.hpp"
+
+#include "SMSM.hpp"
+
+REDECL(Engine::TraceRay);
+
+DETOUR(Engine::TraceRay, const Ray_t& ray, unsigned int fMask, void* pTraceFilter, CGameTrace* pTrace) {
+    auto result = Engine::TraceRay(thisptr, ray, fMask, pTraceFilter, pTrace);
+
+    float requestResult = 0;
+    if (smsm.ProcessScriptRequest(ray.m_Start.x, (int)ray.m_Start.y, ray.m_Start.z, &requestResult)) {
+        pTrace->fraction = requestResult;
+        pTrace->fractionleftsolid = -requestResult + 1;
+        //console->Print("nice >:] %f %f\n");
+    }
+
+    return result;
+}
+
+
 
 Variable sv_cheats;
 
@@ -34,6 +54,11 @@ bool Engine::Init()
             auto m_bWaitEnabled2 = reinterpret_cast<bool*>((uintptr_t)m_bWaitEnabled + Offsets::CCommandBufferSize);
             *m_bWaitEnabled = *m_bWaitEnabled2 = true;
         }
+
+        this->engineTrace = Interface::Create(this->Name(), "EngineTraceServer004");
+        if (this->engineTrace) {
+            this->engineTrace->Hook(Engine::TraceRay_Hook, Engine::TraceRay, Offsets::TraceRay);
+        }
     }
 
     if (auto g_VEngineServer = Interface::Create(this->Name(), "VEngineServer0", false)) {
@@ -43,6 +68,7 @@ bool Engine::Init()
     sv_cheats = Variable("sv_cheats");
 
     return this->hasLoaded = this->hoststate
+        && this->engineTrace
         && this->GetActiveSplitScreenPlayerSlot
         && this->Cbuf_AddText
         && this->s_CommandBuffer
@@ -55,6 +81,9 @@ void Engine::Shutdown()
         auto m_bWaitEnabled = reinterpret_cast<bool*>((uintptr_t)s_CommandBuffer + Offsets::m_bWaitEnabled);
         auto m_bWaitEnabled2 = reinterpret_cast<bool*>((uintptr_t)m_bWaitEnabled + Offsets::CCommandBufferSize);
         *m_bWaitEnabled = *m_bWaitEnabled2 = false;
+    }
+    if (this->engineTrace) {
+        Interface::Delete(this->engineTrace);
     }
 }
 

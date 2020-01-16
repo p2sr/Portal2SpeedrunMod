@@ -6,6 +6,7 @@
 class Engine : public Module {
 public:
     CHostState* hoststate = nullptr;
+    Interface* engineTrace = nullptr;
 
     using _Cbuf_AddText = void(__cdecl*)(int slot, const char* pText, int nTickDelay);
 #ifdef _WIN32
@@ -25,6 +26,9 @@ public:
     bool Init() override;
     void Shutdown() override;
     const char* Name() override { return MODULE("engine"); }
+
+    // IEngineTrace::TraceRay
+    DECL_DETOUR(TraceRay, const Ray_t& ray, unsigned int fMask, void* pTraceFilter, CGameTrace* pTrace);
 };
 
 extern Engine* engine;

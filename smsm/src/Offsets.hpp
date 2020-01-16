@@ -29,6 +29,9 @@ extern int ChatPrintf;
 // CCommandBuffer
 extern int m_bWaitEnabled;
 
+// IEngineTrace
+extern int TraceRay;
+
 // Others
 extern int GetClientStateFunction;
 extern int cl;

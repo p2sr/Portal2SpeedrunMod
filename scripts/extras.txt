@@ -5,21 +5,21 @@
 		"title"		"Normal%"
 		"subtitle"	"Original mode of the Speedrun Mod."
 		"pic"		"srmod/menu_modes/normal"
-		"command"	"sm_mode 0;sm_param 0;map sp_a1_intro1"
+		"command"	"sm_mode 0;map sp_a1_intro1"
 	}
 	"speedrunmode_dialogue"
 	{
 		"title"		"Normal% (no dialogue)"
 		"subtitle"	"Original mode, but without dialogue."
 		"pic"		"srmod/menu_modes/normal_muted"
-		"command"	"sm_mode 0;sm_param 1;map sp_a1_intro1"
+		"command"	"sm_mode 0;sm_param 0 1;map sp_a1_intro1"
 	}
 	"fog_percent"
 	{
-		"title"		"Fog%"
+		"title"		"Fog% (beta)"
 		"subtitle"	"Can you even see anything?"
 		"pic"		"srmod/menu_modes/fog"
-		"command"	"sm_mode 1;sm_param 0;map sp_a1_intro1"
+		"command"	"sm_mode 1;map sp_a1_intro1"
 	}
 	"separator"
 	{

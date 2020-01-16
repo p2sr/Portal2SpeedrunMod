@@ -11,7 +11,6 @@ void Portal2::LoadOffsets()
 {
     using namespace Offsets;
 
-#ifdef _WIN32
     // engine.dll
 
     InternalSetValue = 12; // ConVar
@@ -29,6 +28,7 @@ void Portal2::LoadOffsets()
     hoststate = 1; // HostState_OnClientConnected
     AutoCompletionFunc = 66; // listdemo_CompletionFunc
     ClientCommand = 39; // CVEngineServer
+    TraceRay = 5; // IEngineTrace
 
     // client.dll
 
@@ -42,38 +42,6 @@ void Portal2::LoadOffsets()
     UnregisterConCommand = 10; // CCvar
     FindCommandBase = 13; // CCVar
     m_pConCommandList = 48; // CCvar
-#else
-    // engine.so
-
-    InternalSetValue = 19; // ConVar
-    InternalSetFloatValue = 20; // ConVar
-    InternalSetIntValue = 21; // ConVar
-    ClientCmd = 7; // CEngineClient
-    GetClientStateFunction = 11; // CEngineClient::ClientCmd
-    Cbuf_AddText = 45; // CEngineClient::ClientCmd
-    s_CommandBuffer = 69; // Cbuf_AddText
-    CCommandBufferSize = 9556; // Cbuf_AddText
-    m_bWaitEnabled = 8265; // CCommandBuffer::AddText
-    GetActiveSplitScreenPlayerSlot = 127; // CEngineClient
-    SetSignonState = 36; // CClientState
-    HostState_OnClientConnected = 735; // CClientState::SetSignonState
-    hoststate = 9; // HostState_OnClientConnected
-    AutoCompletionFunc = 37; // listdemo_CompletionFunc
-    ClientCommand = 39; // CVEngineServer
-
-    // client.so
-
-    GetHud = 104; // cc_leaderboard_enable
-    FindElement = 120; // cc_leaderboard_enable
-    ChatPrintf = 25; // CBaseHudChat
-
-    // libvstdlib.so
-
-    RegisterConCommand = 9; // CCVar
-    UnregisterConCommand = 10; // CCvar
-    FindCommandBase = 13; // CCvar
-    m_pConCommandList = 48; // CCvar
-#endif
 }
 const char* Portal2::Version()
 {
@@ -81,9 +49,5 @@ const char* Portal2::Version()
 }
 const char* Portal2::Process()
 {
-#ifdef _WIN32
     return "portal2.exe";
-#else
-    return "portal2_linux";
-#endif
 }

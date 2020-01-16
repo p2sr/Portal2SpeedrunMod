@@ -32,8 +32,8 @@ public:
 
     std::vector<void*> clients;
     
-    bool isValueExposed;
-    int originalWheatleyCounter;
+    int mode;
+    float modeParams[1024];
 public:
     SMSM();
 
@@ -69,10 +69,19 @@ public:
     void Cleanup();
 
     void ForceAct5MenuBackground();
+    bool ProcessScriptRequest(float accessType, int id, float value, float* result);
 
 private:
     void StartMainThread();
     
 };
+
+
+namespace ScriptAccessKey {
+    const float READ = 999999.25f;
+    const float WRITE = 999999.50f;
+    const float LOOP = 999999.75f;
+};
+
 
 extern SMSM smsm;
