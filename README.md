@@ -32,3 +32,4 @@ I'm planning to make this mod a family fun box for whole speedrunning community,
 - Big D - constantly motivating me to finish this mod.
 - NeKz - creator of [Chaos plugin](https://github.com/NeKzor/chaos/) that I used for creating Speedrun Mod Simple Modifier.
 - Betsruner, Can't Even, Rex, Spidda and many others - beta testing.
+- Valve - not creating Portal 3, damnit
