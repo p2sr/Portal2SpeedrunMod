@@ -28,11 +28,17 @@ function NewFogControl(){
 FOG_FADEAWAY_VALUE <- 0;
 FOG_FADEAWAY_END <- false;
 
+//TODO: find the sweet spot so it's still difficult but so people not have pain in the ass
+FOG_WAIT_TIME <- 4;
+FOG_FADE_TIME <- 5;
+
 function UpdateFogToVelocity(){
+    local i = (FOG_WAIT_TIME+FOG_FADE_TIME)*10;
+    local j = (FOG_WAIT_TIME)*10;
     local vel = GetPlayer().GetVelocity();
     local totalVel = vel.x + vel.y + vel.z;
     if(totalVel == 0 && !FOG_FADEAWAY_END){
-        if(FOG_FADEAWAY_VALUE<250)FOG_FADEAWAY_VALUE++;
+        if(FOG_FADEAWAY_VALUE<i)FOG_FADEAWAY_VALUE++;
     }else{
         FOG_FADEAWAY_END=true;
         FOG_FADEAWAY_VALUE-=4;
@@ -41,7 +47,7 @@ function UpdateFogToVelocity(){
             FOG_FADEAWAY_END = false;
         }
     }
-    local f = FOG_FADEAWAY_VALUE-200;
+    local f = FOG_FADEAWAY_VALUE-j;
     local value = 1-(f<0 ? 0 : f)*0.0025
     EntFire("env_fog_controller", "SetMaxDensity", value)
 }
