@@ -1195,6 +1195,15 @@ function SpeedrunModeLoad(){
   //EntFire("@sphere", "AddOutput", "modelscale 2")
 }
 
+
+function SpeedrunModeUpdate(){
+  if(LVT_BUTTON_ENABLED){
+    FastFakeExplosionsInLvT();
+  }
+}
+
+
+
 //nice function for handling all elevator events in underground section
 function FastUndergroundTransition(idin, idout){
   if(idout){
@@ -1249,15 +1258,18 @@ function FastTransition(){
 //LvT faster turret explosion sequence... fuck me
 
 LVT_FAKEEXPLO_DONE <- false;
+LVT_BUTTON_ENABLED <- false;
 function StartFastFakeExplosionsInLvT(){
   if(!LVT_FAKEEXPLO_DONE){
-    self.ConnectOutput("OnUser1", "FastFakeExplosionsInLvT");
-    EntFire(self.GetName(), "FireUser1")
+    //self.ConnectOutput("OnUser1", "FastFakeExplosionsInLvT");
+    //EntFire(self.GetName(), "FireUser1")
+    LVT_BUTTON_ENABLED = true
     modlog("Testing LvT fast explosion...")
   }
 }
 function EndFastFakeExplosionsInLvT(){
-  self.DisconnectOutput("OnUser1", "FastFakeExplosionsInLvT");
+  //self.DisconnectOutput("OnUser1", "FastFakeExplosionsInLvT");
+  LVT_BUTTON_ENABLED = false
 }
 function FastFakeExplosionsInLvT(){
   if(!LVT_FAKEEXPLO_DONE){
@@ -1276,6 +1288,8 @@ function FastFakeExplosionsInLvT(){
       //EntFire(self.getName(), "RunScriptCode", "FastFakeExplosionsInLvT()", 0.7)
     }
     EntFire(self.GetName(), "FireUser1", 0, 0.1)
+  }else{
+    LVT_BUTTON_ENABLED = false
   }
 }
 
@@ -1366,4 +1380,4 @@ function FogControl(){
 
 
 
-AddModeFunctions("default", SpeedrunModePostSpawn, SpeedrunModeLoad)
+AddModeFunctions("default", SpeedrunModePostSpawn, SpeedrunModeLoad, SpeedrunModeUpdate)

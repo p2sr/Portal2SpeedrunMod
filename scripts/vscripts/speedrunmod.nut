@@ -59,19 +59,23 @@ function GetModeID(){
 
 
 
-//actual script loader
+//actual script function loader
 POST_SPAWN_FUNCTIONS <- {}
 MAP_SPAWN_FUNCTIONS <- {}
+UPDATE_FUNCTIONS <- {}
 
-function AddModeFunctions(modeName, postSpawnFunc, mapSpawnFunc){
+function AddModeFunctions(modeName, postSpawnFunc, mapSpawnFunc, updateFunc){
   POST_SPAWN_FUNCTIONS[modeName] <- postSpawnFunc
   MAP_SPAWN_FUNCTIONS[modeName] <- mapSpawnFunc
+  UPDATE_FUNCTIONS[modeName] <- updateFunc
 }
 
+//all different modes
 SPEEDRUN_MODES <- {};
 SPEEDRUN_MODES[0] <- ["default"];
 SPEEDRUN_MODES[1] <- ["default", "fog_percent"];
 
+//all scripts
 DoIncludeScript("modes/default", self.GetScriptScope())
 DoIncludeScript("modes/fog", self.GetScriptScope())
 
@@ -99,6 +103,10 @@ function OnPostSpawn(){
     local func = POST_SPAWN_FUNCTIONS[modename]
     func()
   }
+
+  //override transition script Think function
+  TransitionThink <- Think
+  Think = SpeedrunModThink
 }
 
 
@@ -110,3 +118,18 @@ function OnMapSpawn(){
     func()
   }
 }
+
+function SpeedrunModThink(){
+  //apparently, when not in maploop, Think function is used only once, so that's pretty convenient for me
+  if ( initialized ){
+    local mode = SPEEDRUN_MODES[GetModeID()]
+    foreach (id, modename in mode){
+      local func = UPDATE_FUNCTIONS[modename]
+      func()
+    }
+    return 0.001;
+  }else{
+    TransitionThink()
+  }
+}
+
