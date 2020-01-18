@@ -33,22 +33,28 @@ function modlog(msg){
 }
 
 //Script access keys
-SCRIPT_ACCCESS_KEY_READ <- 999999.25
-SCRIPT_ACCCESS_KEY_WRITE <- 999999.50
-SCRIPT_ACCCESS_KEY_LOOP <- 999999.75
+SCRIPT_ACCESS_KEY_READ <- 999999.25
+SCRIPT_ACCESS_KEY_WRITE <- 999999.50
+SCRIPT_ACCESS_KEY_LOOP <- 999999.75
 
 
 
 //transform values between SMSM and script system
 function GetSMSMVariable(id,isInt=false){
-  local p = TraceLine(Vector(SCRIPT_ACCCESS_KEY_READ,id,0),Vector(0,0,0),null)
+  local p = TraceLine(Vector(SCRIPT_ACCESS_KEY_READ,id,0),Vector(0,0,0),null)
   if(isInt)return RandomInt(p,p) //temporary workaround for float->int conversion
   else return p
 }
 
 function SetSMSMVariable(id,value){
-  local result = TraceLine(Vector(SCRIPT_ACCCESS_KEY_WRITE,id,value),Vector(0,0,0),null)
+  local result = TraceLine(Vector(SCRIPT_ACCESS_KEY_WRITE,id,value),Vector(0,0,0),null)
   return result==1
+}
+
+function IsSMSMActive(){
+  local verificationKey = 69 //nice
+  local result = TraceLine(Vector(SCRIPT_ACCESS_KEY_LOOP,0,verificationKey),Vector(0,0,0),null)
+  return result==verificationKey
 }
 
 
@@ -85,28 +91,34 @@ DoIncludeScript("modes/fog", self.GetScriptScope())
 
 
 function OnPostSpawn(){
-  //debug mode info
-  local mode = GetModeID()
-  local firstParam = GetSMSMVariable(0)
-  printl("### SPEEDRUN MOD ###: Preparing the mod in mode "+mode+" (first param:"+firstParam+")")
 
-  local auto = GetEntity("logic_auto")
-  if(!auto){
-    modlog("No logic_auto loaded yet. Speedrun Mod initialisation failed.")
-    return false
+  if(!IsSMSMActive()){
+    modlog("SMSM PLUGIN VERIFICATION FAILED!!!!!!")
+    EntFire("@command", "Command", "disconnect", 1)
+  }else{
+    //debug mode info
+    local mode = GetModeID()
+    local firstParam = GetSMSMVariable(0)
+    printl("### SPEEDRUN MOD ###: Preparing the mod in mode "+mode+" (first param:"+firstParam+")")
+
+    local auto = GetEntity("logic_auto")
+    if(!auto){
+      modlog("No logic_auto loaded yet. Speedrun Mod initialisation failed.")
+      return false
+    }
+    //necessary to use OnMapSpawn event, since OnPostSpawn can be executed before some entities are even spawned
+    EntFireByHandle(auto, "AddOutput", "OnMapSpawn "+self.GetName()+":RunScriptCode:OnMapSpawn():0:1", 0, null, null)
+
+    foreach (id, modename in SPEEDRUN_MODES[mode]){
+      modlog("Loading PostSpawn function for "+modename+".")
+      local func = POST_SPAWN_FUNCTIONS[modename]
+      func()
+    }
+
+    //override transition script Think function
+    TransitionThink <- Think
+    Think = SpeedrunModThink
   }
-  //necessary to use OnMapSpawn event, since OnPostSpawn can be executed before some entities are even spawned
-  EntFireByHandle(auto, "AddOutput", "OnMapSpawn "+self.GetName()+":RunScriptCode:OnMapSpawn():0:1", 0, null, null)
-
-  foreach (id, modename in SPEEDRUN_MODES[mode]){
-    modlog("Loading PostSpawn function for "+modename+".")
-    local func = POST_SPAWN_FUNCTIONS[modename]
-    func()
-  }
-
-  //override transition script Think function
-  TransitionThink <- Think
-  Think = SpeedrunModThink
 }
 
 
