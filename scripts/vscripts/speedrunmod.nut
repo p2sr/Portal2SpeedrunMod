@@ -102,12 +102,6 @@ switch(GetModeID()){
 
 
 
-
-
-
-
-
-
 function OnPostSpawn(){
 
   if(!IsSMSMActive()){
