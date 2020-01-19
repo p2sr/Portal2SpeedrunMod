@@ -43,4 +43,5 @@ int s_CommandBuffer;
 int CCommandBufferSize;
 int GetHud;
 int FindElement;
+int ProcessMovement;
 }

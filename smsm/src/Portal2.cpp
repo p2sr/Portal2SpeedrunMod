@@ -29,6 +29,7 @@ void Portal2::LoadOffsets()
     AutoCompletionFunc = 66; // listdemo_CompletionFunc
     ClientCommand = 39; // CVEngineServer
     TraceRay = 5; // IEngineTrace
+    ProcessMovement = 1; // CGameMovement
 
     // client.dll
 

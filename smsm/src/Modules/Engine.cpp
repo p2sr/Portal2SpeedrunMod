@@ -9,20 +9,19 @@
 #include "SMSM.hpp"
 
 REDECL(Engine::TraceRay);
-
 DETOUR(Engine::TraceRay, const Ray_t& ray, unsigned int fMask, void* pTraceFilter, CGameTrace* pTrace) {
-    auto result = Engine::TraceRay(thisptr, ray, fMask, pTraceFilter, pTrace);
-
     float requestResult = 0;
     if (smsm.ProcessScriptRequest(ray.m_Start.x, (int)ray.m_Start.y, ray.m_Start.z, &requestResult)) {
         pTrace->fraction = requestResult;
         pTrace->fractionleftsolid = -requestResult + 1;
         //console->Print("nice >:] %f %f\n");
+        return 0;
     }
-
-    return result;
+    else {
+        auto result = Engine::TraceRay(thisptr, ray, fMask, pTraceFilter, pTrace);
+        return result;
+    }
 }
-
 
 
 Variable sv_cheats;
@@ -75,6 +74,7 @@ bool Engine::Init()
         && this->ClientCommand
         && !!sv_cheats;
 }
+
 void Engine::Shutdown()
 {
     if (this->s_CommandBuffer) {

@@ -27,6 +27,7 @@ SMSM::SMSM()
     , cheats(new Cheats())
     , clients()
     , mode(0)
+    , modeParams()
 {
 
 }

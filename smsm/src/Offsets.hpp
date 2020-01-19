@@ -43,4 +43,5 @@ extern int s_CommandBuffer;
 extern int CCommandBufferSize;
 extern int GetHud;
 extern int FindElement;
+extern int ProcessMovement;
 }

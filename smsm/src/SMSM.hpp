@@ -84,4 +84,15 @@ namespace ScriptAccessKey {
 };
 
 
+enum SMSMParam {
+    DialogueOff = 0,
+
+    PlayerAnglePitch = 1000,
+    PlayerAngleYaw = 1001,
+    PlayerMoveForward = 1002,
+    PlayerMoveSide = 1003,
+    DashRequest = 500
+};
+
+
 extern SMSM smsm;
