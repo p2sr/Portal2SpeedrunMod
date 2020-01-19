@@ -32,6 +32,9 @@ extern int m_bWaitEnabled;
 // IEngineTrace
 extern int TraceRay;
 
+// CBaseEntity
+extern int m_fFlags;
+
 // Others
 extern int GetClientStateFunction;
 extern int cl;

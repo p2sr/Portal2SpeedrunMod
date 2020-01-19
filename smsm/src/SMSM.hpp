@@ -13,7 +13,7 @@
 #include "Plugin.hpp"
 #include "Utils/SDK.hpp"
 
-#define SMSM_VERSION "1.0"
+#define SMSM_VERSION "1.2"
 #define SMSM_BUILD __TIME__ " " __DATE__
 #define SMSM_WEB "https://github.com/Krzyhau/Portal2SpeedrunMod"
 
@@ -91,6 +91,7 @@ enum SMSMParam {
     PlayerAngleYaw = 1001,
     PlayerMoveForward = 1002,
     PlayerMoveSide = 1003,
+    PlayerGrounded = 1004,
     DashRequest = 500
 };
 

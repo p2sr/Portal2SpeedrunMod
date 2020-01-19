@@ -40,6 +40,17 @@ SCRIPT_ACCESS_KEY_LOOP <- 999999.75
 
 
 //transform values between SMSM and script system
+SMSMParam <- {
+  DialogueOff = 0,
+
+  PlayerAnglePitch = 1000,
+  PlayerAngleYaw = 1001,
+  PlayerMoveForward = 1002,
+  PlayerMoveSide = 1003,
+  PlayerGrounded = 1004,
+  DashRequest = 500
+}
+
 function GetSMSMVariable(id,isInt=false){
   local p = TraceLine(Vector(SCRIPT_ACCESS_KEY_READ,id,0),Vector(0,0,0),null)
   if(isInt)return RandomInt(p,p) //temporary workaround for float->int conversion
@@ -80,10 +91,17 @@ function AddModeFunctions(modeName, postSpawnFunc, mapSpawnFunc, updateFunc){
 SPEEDRUN_MODES <- {};
 SPEEDRUN_MODES[0] <- ["default"];
 SPEEDRUN_MODES[1] <- ["default", "fog_percent"];
+SPEEDRUN_MODES[2] <- ["default", "celeste"];
 
 //all scripts
-DoIncludeScript("modes/default", self.GetScriptScope())
-DoIncludeScript("modes/fog", self.GetScriptScope())
+DoIncludeScript("modes/default", self.GetScriptScope());
+switch(GetModeID()){
+  case 1: DoIncludeScript("modes/fog", self.GetScriptScope()); break;
+  case 2: DoIncludeScript("modes/celeste", self.GetScriptScope()); break;
+}
+
+
+
 
 
 
@@ -131,9 +149,15 @@ function OnMapSpawn(){
   }
 }
 
+
+OLD_TIME <- 0
+NEW_TIME <- 0
+
 function SpeedrunModThink(){
-  //apparently, when not in maploop, Think function is used only once, so that's pretty convenient for me
   if ( initialized ){
+    OLD_TIME = OLD_TIME==0 ? Time() : NEW_TIME;
+    NEW_TIME = Time();  //TICKING AWAY THE MOMENTS THAT MAKE UP A DULL DAY
+
     local mode = SPEEDRUN_MODES[GetModeID()]
     foreach (id, modename in mode){
       local func = UPDATE_FUNCTIONS[modename]
@@ -141,7 +165,12 @@ function SpeedrunModThink(){
     }
     return 0.001;
   }else{
+    //apparently, when not in maploop, Think function is used only once, so that's pretty convenient for me
     TransitionThink()
   }
+}
+
+function DeltaTime(){
+  return NEW_TIME-OLD_TIME
 }
 

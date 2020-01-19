@@ -30,6 +30,7 @@ void Portal2::LoadOffsets()
     ClientCommand = 39; // CVEngineServer
     TraceRay = 5; // IEngineTrace
     ProcessMovement = 1; // CGameMovement
+    m_fFlags = 204; // CBaseEntity
 
     // client.dll
 

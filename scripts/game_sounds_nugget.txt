@@ -19,3 +19,8 @@
 		}
 	}
 }
+
+"dash"
+{
+	"wave"			"dash.wav"
+}

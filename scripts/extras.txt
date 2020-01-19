@@ -21,6 +21,13 @@
 		"pic"		"srmod/menu_modes/fog"
 		"command"	"sm_mode 1;map sp_a1_intro1"
 	}
+	"celeste"
+	{
+		"title"		"Celeste% (alpha)"
+		"subtitle"	"???"
+		"pic"		"srmod/menu_modes/normal"
+		"command"	"sm_mode 2;map sp_a1_intro1"
+	}
 	"separator"
 	{
 		"title"		"=========================="
