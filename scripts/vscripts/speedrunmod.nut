@@ -48,6 +48,8 @@ SMSMParam <- {
   PlayerMoveForward = 1002,
   PlayerMoveSide = 1003,
   PlayerGrounded = 1004,
+  PlayerJumped = 1005,
+  PlayerUsed = 1006,
   DashRequest = 500
 }
 

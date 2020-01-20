@@ -17,30 +17,31 @@ function CelesteLoad(){
     SetSMSMVariable(SMSMParam.DashRequest, 0)
 }
 
-DASHING_SPEED <- 350.0
-DASHING_INIT_BOOST <- 300.0
+DASHING_SPEED <- 300.0
+DASHING_INIT_BOOST <- 350.0
 DASHING_DURATION <- 0.2
 DASHING_COOLDOWN <- 0.4
-DASHING_OLDPOS <- Vector(0,0,0)
+DASHING_OLDVEL_MULT <- 0.1
+MAX_DASHES <- 1
 
-
+dashingOldPos <- Vector(0,0,0)
 dashingVec <- Vector(0,0,0)
 dashing <- 0
 dashingCooldown <- 0
-canDash <- false
+dashesLeft <- MAX_DASHES
 
 function CelesteUpdate(){
-
-    //refresh dashing if on ground
     local grounded = GetSMSMVariable(SMSMParam.PlayerGrounded)>0
-    if(grounded && !canDash && dashing<DASHING_DURATION){
-        canDash = true
+    
+    //refresh dashing if on ground
+    if(grounded && dashing<DASHING_DURATION){
+        dashesLeft = MAX_DASHES
     }
 
     //check for dashing
     local dashRequested = GetSMSMVariable(SMSMParam.DashRequest)>0
     if(dashRequested){
-        if(canDash && !dashing && !dashingCooldown && GetPlayer().GetHealth()>0){
+        if(dashesLeft && !dashing && !dashingCooldown && GetPlayer().GetHealth()>0){
             //modlog("DASHED!!!!!")
 
             //getting values from SMSM script interface
@@ -68,16 +69,28 @@ function CelesteUpdate(){
             newDir.z *= DASHING_SPEED
 
             //fix dash when grounded and aiming down
-            if(grounded && newDir.z<120){
-                newDir.z=120
-                newDir.x*=0.8
-                newDir.y*=0.8
+            if(grounded && newDir.z<60){
+                newDir.z=60
+                //newDir.x*=0.8
+                //newDir.y*=0.8
             }
 
-            dashingVec = newDir
-            GetPlayer().SetVelocity(dashingVec)
+            //add little bit of current player vector on top of the dash
+            local pv = GetPlayer().GetVelocity()
+            newDir.x += pv.x*DASHING_OLDVEL_MULT
+            newDir.y += pv.y*DASHING_OLDVEL_MULT
+            newDir.z += pv.z*DASHING_OLDVEL_MULT
 
-            canDash = false
+            //set new dashing velocity
+            dashingVec = newDir
+            if(grounded && newDir.z<300){
+                GetPlayer().SetVelocity(Vector(newDir.x,newDir.y,300))
+            }else{
+                GetPlayer().SetVelocity(dashingVec)
+            }
+            dashingOldPos = GetPlayer().GetOrigin()
+
+            dashesLeft--;
             dashing = DASHING_DURATION
             dashingCooldown = DASHING_COOLDOWN
 
@@ -87,30 +100,44 @@ function CelesteUpdate(){
     }
 
     if(dashing>0){
-        
+        //check if player used portals by comparing old and new position
+        local pp = GetPlayer().GetOrigin()
+        local distance = Vector(dashingOldPos.x-pp.x,dashingOldPos.y-pp.y,dashingOldPos.z-pp.z).Length()
+        if(distance>32){
+            //change dash vector to aim correct direction
+            local pv = GetPlayer().GetVelocity();
+            local m = DASHING_SPEED/pv.Length()
+            pv.x *= m; pv.y *= m; pv.z *= m;
+            dashingVec = pv
+        }
+        dashingOldPos=pp
+
         local pv = GetPlayer().GetVelocity();
         //hyperdashing
         if(dashingVec.z<0 && pv.z>=0){
-            pv.x *= 0.5-dashingVec.z/DASHING_SPEED;
-            pv.y *= 0.5-dashingVec.z/DASHING_SPEED;
+            pv.x *= 0.7-dashingVec.z/DASHING_SPEED;
+            pv.y *= 0.7-dashingVec.z/DASHING_SPEED;
             GetPlayer().SetVelocity(pv)
             dashing=0
         }
         //initial dash speed management
-        else{
+        else if(dashing<DASHING_DURATION){
             local d = (dashing/DASHING_DURATION)
             local m = (DASHING_SPEED + DASHING_INIT_BOOST*d*d)/DASHING_SPEED
             local vec = Vector(dashingVec.x*m,dashingVec.y*m,dashingVec.z*m)
             GetPlayer().SetVelocity(vec)
-            dashing -= DeltaTime()
-            if(dashing<0)dashing=0
         }
+        dashing -= DeltaTime()
+        if(dashing<0)dashing=0
     }
 
     if(dashingCooldown>0){
         dashingCooldown -= DeltaTime()
         if(dashingCooldown<0)dashingCooldown=0
     }
+
+    local noUse = GetSMSMVariable(SMSMParam.PlayerUsed)==0
+    if(!noUse)modlog("USED!!!!")
 }
 
 AddModeFunctions("celeste", CelestePostSpawn, CelesteLoad, CelesteUpdate)
