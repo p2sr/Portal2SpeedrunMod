@@ -23,6 +23,8 @@
         ptr = nullptr;   \
     }
 
+#define SMSM_SCRIPT_PARAM_COUNT 1024
+
 class SMSM : public IServerPluginCallbacks {
 public:
     Game* game;
@@ -33,7 +35,7 @@ public:
     std::vector<void*> clients;
     
     int mode;
-    float modeParams[1024];
+    float modeParams[SMSM_SCRIPT_PARAM_COUNT];
 public:
     SMSM();
 
@@ -86,13 +88,8 @@ namespace ScriptAccessKey {
 
 enum SMSMParam {
     DialogueOff = 0,
-
-    PlayerAnglePitch = 1000,
-    PlayerAngleYaw = 1001,
-    PlayerMoveForward = 1002,
-    PlayerMoveSide = 1003,
-    PlayerGrounded = 1004,
-    DashRequest = 500
+    CelesteMode = 100,
+    DashRequested = 101
 };
 
 

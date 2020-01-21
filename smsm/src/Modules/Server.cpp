@@ -7,24 +7,15 @@
 
 #include "Console.hpp"
 #include "SMSM.hpp"
+#include "CelesteMoveset.hpp"
+
 
 // CGameMovement::ProcessMovement
 REDECL(Server::ProcessMovement);
 DETOUR(Server::ProcessMovement, void* pPlayer, CMoveData* pMove) {
     auto result = Server::ProcessMovement(thisptr, pPlayer, pMove);
-    smsm.modeParams[PlayerAnglePitch] = pMove->m_vecViewAngles.x;
-    smsm.modeParams[PlayerAngleYaw] = pMove->m_vecViewAngles.y;
-    smsm.modeParams[PlayerMoveForward] = pMove->m_flForwardMove;
-    smsm.modeParams[PlayerMoveSide] = pMove->m_flSideMove;
 
-    //make sure the script can read this value properly
-    auto m_fFlags = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_fFlags);
-    if (m_fFlags & FL_ONGROUND) {
-        smsm.modeParams[PlayerGrounded] = 2;
-    }
-    else if (smsm.modeParams[PlayerGrounded] == 2) {
-        smsm.modeParams[PlayerGrounded] = 1;
-    }else smsm.modeParams[PlayerGrounded] = 0;
+    celesteMoveset.ProcessMovement(pPlayer, pMove);
 
     return result;
 }

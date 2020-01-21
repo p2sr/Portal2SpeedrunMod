@@ -34,6 +34,7 @@ int TraceRay;
 
 // CBaseEntity
 int m_fFlags;
+int m_nTickBase;
 
 // Others
 int GetClientStateFunction;

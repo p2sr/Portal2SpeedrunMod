@@ -42,15 +42,8 @@ SCRIPT_ACCESS_KEY_LOOP <- 999999.75
 //transform values between SMSM and script system
 SMSMParam <- {
   DialogueOff = 0,
-
-  PlayerAnglePitch = 1000,
-  PlayerAngleYaw = 1001,
-  PlayerMoveForward = 1002,
-  PlayerMoveSide = 1003,
-  PlayerGrounded = 1004,
-  PlayerJumped = 1005,
-  PlayerUsed = 1006,
-  DashRequest = 500
+  CelesteMode = 100,
+  DashRequested = 101
 }
 
 function GetSMSMVariable(id,isInt=false){

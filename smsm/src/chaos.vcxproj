@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CelesteMoveset.cpp" />
     <ClCompile Include="Modules\Server.cpp" />
     <ClCompile Include="SMSM.cpp" />
     <ClCompile Include="Cheats.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="Variable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CelesteMoveset.hpp" />
     <ClInclude Include="Modules\Server.hpp" />
     <ClInclude Include="SMSM.hpp" />
     <ClInclude Include="Cheats.hpp" />

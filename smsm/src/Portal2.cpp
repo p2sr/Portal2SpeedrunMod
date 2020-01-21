@@ -31,6 +31,7 @@ void Portal2::LoadOffsets()
     TraceRay = 5; // IEngineTrace
     ProcessMovement = 1; // CGameMovement
     m_fFlags = 204; // CBaseEntity
+    m_nTickBase = 3792; // CBaseEntity, m_nTickBase -> 3792
 
     // client.dll
 

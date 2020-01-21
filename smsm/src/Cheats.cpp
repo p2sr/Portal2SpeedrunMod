@@ -48,6 +48,7 @@ CON_COMMAND(sm_mode, "Variable used by Speedrun Mod to determine currently playe
     }
     auto mode = std::atoi(args[1]);
     smsm.mode = mode;
+    std::fill_n(smsm.modeParams, SMSM_SCRIPT_PARAM_COUNT, 0);
 }
 
 CON_COMMAND(sm_param, "Variable used by Speedrun Mod to determine the state of currently played mode.\n") {
