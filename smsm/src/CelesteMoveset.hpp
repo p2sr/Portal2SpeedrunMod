@@ -11,8 +11,11 @@ public:
     CelesteMoveset();
     void ProcessMovement(void* pPlayer, CMoveData* pMove);
     void ProcessMovementDashing(void* pPlayer, CMoveData* pMove, float dt);
+    void ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, float dt);
 
     void Dash() { dashRequested = true; }
+
+    bool IsPlaceSuitableForWallgrab(Vector pos, float angle);
 
     float dashingSpeed;
     float dashingInitBoost;
@@ -28,6 +31,8 @@ private:
     short dashesLeft = 0;
     int lastTickBase = 0;
     bool dashRequested = false;
+
+    bool holdingUse = false;
 };
 
 extern CelesteMoveset celesteMoveset;

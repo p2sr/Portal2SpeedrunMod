@@ -101,7 +101,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(ProjectDir)</AdditionalLibraryDirectories>
     </Link>
     <Link>
-      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Link>
       <GenerateMapFile>true</GenerateMapFile>
