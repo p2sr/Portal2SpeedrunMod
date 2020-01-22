@@ -117,10 +117,10 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
         }
         dashingOldPos = pp;
 
-        Vector pv = pMove->m_vecVelocity * 1;
+        Vector pv = pMove->m_vecVelocity;
         //hyperdashing
         if (dashingDir.z < 0 && pv.z >= 0) {
-            pv = pv * (float)(0.7 - dashingDir.z / dashingSpeed);
+            pMove->m_vecVelocity = pv * (float)(0.7 - dashingDir.z / dashingSpeed);
             dashing = 0;
         }
         //initial dash speed management
@@ -145,7 +145,7 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(Vector pos, float angle) {
 
     Ray_t ray;
     ray.m_IsRay = true; ray.m_IsSwept = true;
-    CTraceFilterWorldAndPropsOnly filter;
+    CTraceFilterWorldOnly filter;
     CGameTrace tr;
     for (int a = 0; a < 2; a++) {
         float angRad = DEG2RAD(minAngle+90*a);
@@ -159,9 +159,10 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(Vector pos, float angle) {
 
         ray.m_Start.x = pos.x + bbx;
         ray.m_Start.y = pos.y + bby;
-        ray.m_Start.z = pos.z + 64;
+        ray.m_Start.z = pos.z + 64.0f;
+        console->Print("start1: %f , %f , %f \n", ray.m_Start.x, ray.m_Start.y, ray.m_Start.z);
         engine->TraceRay(engine->engineTrace->ThisPtr(), ray, MASK_PLAYERSOLID, &filter, &tr);
-        console->Print("start: %f,%f,%f\n", tr.startpos.x, tr.startpos.y, tr.startpos.z);
+        console->Print("start2: %f , %f , %f \n", tr.startpos.x, tr.startpos.y, tr.startpos.z);
         console->Print("angle: %f,fraction: %f, fractionleftsolid: %f, surface: %f,%f,%f\n", minAngle+90*a, tr.fraction, tr.fractionleftsolid, tr.plane.normal.x, tr.plane.normal.y, tr.plane.normal.z);
         //if (tr.fraction < 1)return true;
     }
