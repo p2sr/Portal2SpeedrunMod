@@ -31,6 +31,7 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 - **Tag%** - Complete the game with paintgun instead of portal gun.
 - **Mirror%** - Normal game, but mirrored.
 - **Bingo** - ???
+- **Glitchless** - all glitches patched.
 
 ## Credits:
 - Blenderiste 09 - Chapter 9 scripting.

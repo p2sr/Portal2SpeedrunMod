@@ -19,8 +19,6 @@ public:
     bool isRegistered;
     bool isReference;
 
-    static std::vector<Variable*> list;
-
 public:
     Variable();
     ~Variable();
@@ -62,6 +60,7 @@ public:
 
     bool operator!();
 
+    static std::vector<Variable*>& GetList();
     static int RegisterAll();
     static void UnregisterAll();
     static Variable* Find(const char* name);

@@ -19,7 +19,7 @@ CelesteMoveset::CelesteMoveset()
 
 void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
 
-    //if (!smsm.modeParams[CelesteMode])return;
+    if (!smsm.modeParams[CelesteMode])return;
 
     //just in case, use tickbase counter within player entity to make proper logic loop
     int tickBase = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_nTickBase);
@@ -141,15 +141,18 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
 
 
 bool CelesteMoveset::IsPlaceSuitableForWallgrab(Vector pos, float angle) {
+    float alignedAng = DEG2RAD(std::floor((angle) / 90.0) * 90.0);
+
     CGameTrace tr;
+    bool collidingWithSurface = false;
 
-    float minAngle = std::floor((angle + 45) / 90.0) * 90.0 - 45.0;
+    //cast four corners of a player wall where collision could happen
+    for(int y=0;y<2;y++) for(int a = -1; a <= 1; a+=2) {
 
-    for (int a = 0; a < 2; a++) {
-        float angRad = DEG2RAD(minAngle+90*a);
-
-        float bbx = (cos(angRad) < 0 ? -1 : 1) * 16.01f;
-        float bby = (sin(angRad) < 0 ? -1 : 1) * 16.01f;
+        float bboxSize = 15.0f;
+        float cosAng = cos(alignedAng), sinAng = sin(alignedAng);
+        float bbx = (abs(cosAng) < 0.1 ? a : cosAng) * bboxSize;
+        float bby = (abs(sinAng) < 0.1 ? a : sinAng) * bboxSize;
 
         Ray_t ray;
         ray.m_IsRay = true; ray.m_IsSwept = true;
@@ -157,19 +160,44 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(Vector pos, float angle) {
         CTraceFilterSimple filter;
 
         float d = 2;
-        ray.m_Delta = VectorAligned(cos(angRad) * d, sin(angRad) * d, 0);
-        ray.m_Start = VectorAligned(pos.x + bbx, pos.y + bby, pos.z + 64.0f);
+        ray.m_Delta = VectorAligned(cosAng * d+0.01, sinAng * d + 0.01, 0.01);
+        ray.m_Start = VectorAligned(pos.x + bbx, pos.y + bby, pos.z + y*72.0f);
         ray.m_StartOffset = VectorAligned();
         ray.m_Extents = VectorAligned();
 
-        console->Print("start1: %f , %f ,  %f \n", ray.m_Start.x, ray.m_Start.y, ray.m_Start.z);
         engine->TraceRay(engine->engineTrace->ThisPtr(), ray, MASK_PLAYERSOLID, &filter, &tr);
-        console->Print("start2: %f , %f , %f; %f\n", tr.startpos.x, tr.startpos.y, tr.startpos.z, ray.m_Start.x);
-        console->Print("angle: %f,fraction: %f, fractionleftsolid: %f, surface: %f,%f,%f\n", minAngle+90*a, tr.fraction, tr.fractionleftsolid, tr.plane.normal.x, tr.plane.normal.y, tr.plane.normal.z);
-        if (tr.fraction < 1)return true;
+        
+        /*
+        That m_Start.x condition is literally pointless, but if it's gone then
+        it would seem like TraceRay sets it to 0. It makes no fucking sense
+        and I gave up on trying to find out why it's happening, so I'm just leaving it here.
+        Fuck.
+        */
+        if (ray.m_Start.x==pos.x + bbx && tr.plane.normal.Length() > 0.9) {
+            collidingWithSurface = true;
+            break;
+        }
     }
 
-    return false;
+    if (!collidingWithSurface) return false;
+
+    Vector pn = tr.plane.normal; //plane normal
+
+    if (pn.z > 0.1 || pn.z < -0.71) return false;
+
+    Vector posMid(pos.x, pos.y, pos.z + 36.0f); //player's middle point (TODO: what if player crouches???)
+    
+    float t0 = -(pn.x * posMid.x + pn.y * posMid.y + pn.z * posMid.z - tr.plane.dist);
+    //position projection on plane
+    Vector posProj(posMid.x + pn.x * t0, posMid.y + pn.y * t0, posMid.z + pn.z * t0);
+
+    console->Print("grab pos: %f %f %f\n", posProj.x, posProj.y, posProj.z);
+
+    char buf[1024];
+    sprintf(buf, "drawcross %f %f %f", posProj.x, posProj.y, posProj.z);
+    smsm.ServerCommand(buf);
+
+    return true;
 }
 
 

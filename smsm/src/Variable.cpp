@@ -70,7 +70,7 @@ void Variable::Create(const char* name, const char* value, int flags, const char
     this->ptr->m_bHasMax = hasmax;
     this->ptr->m_fMaxVal = max;
 
-    Variable::list.push_back(this);
+    Variable::GetList().push_back(this);
 }
 void Variable::PostInit()
 {
@@ -159,7 +159,7 @@ void Variable::Modify(int flagsToRemove, int flagsToAdd)
 
         // Save references in list to restore them later
         if (this->isReference) {
-            Variable::list.push_back(this);
+            Variable::GetList().push_back(this);
         }
     }
 }
@@ -220,10 +220,14 @@ bool Variable::operator!()
 {
     return this->ptr == nullptr;
 }
+std::vector<Variable*>& Variable::GetList() {
+    static std::vector<Variable*> list;
+    return list;
+}
 int Variable::RegisterAll()
 {
     auto result = 0;
-    for (const auto& var : Variable::list) {
+    for (const auto& var : Variable::GetList()) {
         if (var->version != SourceGame_Unknown && !(var->version & smsm.game->version)) {
             continue;
         }
@@ -234,18 +238,16 @@ int Variable::RegisterAll()
 }
 void Variable::UnregisterAll()
 {
-    for (const auto& var : Variable::list) {
+    for (const auto& var : Variable::GetList()) {
         var->Unregister();
     }
 }
 Variable* Variable::Find(const char* name)
 {
-    for (const auto& var : Variable::list) {
+    for (const auto& var : Variable::GetList()) {
         if (!std::strcmp(var->ThisPtr()->m_pszName, name)) {
             return var;
         }
     }
     return nullptr;
 }
-
-std::vector<Variable*> Variable::list;

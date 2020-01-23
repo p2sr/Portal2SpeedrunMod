@@ -13,8 +13,6 @@ public:
     bool isRegistered;
     bool isReference;
 
-    static std::vector<Command*> list;
-
 public:
     Command();
     ~Command();
@@ -30,6 +28,7 @@ public:
 
     bool operator!();
 
+    static std::vector<Command*>& GetList();
     static int RegisterAll();
     static void UnregisterAll();
     static Command* Find(const char* name);

@@ -38,7 +38,7 @@ Command::Command(const char* pName, _CommandCallback callback, const char* pHelp
     this->ptr->m_bHasCompletionCallback = completionFunc != nullptr;
     this->ptr->m_bUsingNewCommandCallback = true;
 
-    Command::list.push_back(this);
+    Command::GetList().push_back(this);
 }
 ConCommand* Command::ThisPtr()
 {
@@ -68,10 +68,14 @@ bool Command::operator!()
 {
     return this->ptr == nullptr;
 }
+std::vector<Command*>& Command::GetList() {
+    static std::vector<Command*> list;
+    return list;
+}
 int Command::RegisterAll()
 {
     auto result = 0;
-    for (const auto& command : Command::list) {
+    for (const auto& command : Command::GetList()) {
         if (command->version != SourceGame_Unknown && !(command->version & smsm.game->version)) {
             continue;
         }
@@ -82,21 +86,19 @@ int Command::RegisterAll()
 }
 void Command::UnregisterAll()
 {
-    for (const auto& command : Command::list) {
+    for (const auto& command : Command::GetList()) {
         command->Unregister();
     }
 }
 Command* Command::Find(const char* name)
 {
-    for (const auto& command : Command::list) {
+    for (const auto& command : Command::GetList()) {
         if (!std::strcmp(command->ThisPtr()->m_pszName, name)) {
             return command;
         }
     }
     return nullptr;
 }
-
-std::vector<Command*> Command::list;
 
 bool Command::Hook(const char* name, _CommandCallback detour, _CommandCallback& original)
 {
