@@ -9,6 +9,8 @@
 
 struct Vector {
     float x, y, z;
+    Vector() : x(0), y(0), z(0) {};
+    Vector(float x, float y, float z) { this->x = x; this->y = y;  this->z = z; };
     inline float Length()
     {
         return std::sqrt(x * x + y * y + z * z);
@@ -685,7 +687,9 @@ struct CGameTrace : public CBaseTrace {
     int hitbox;
 };
 
-struct VectorAligned : public Vector {
+struct __declspec(align(16)) VectorAligned : public Vector {
+    VectorAligned() : Vector(), w(0) {};
+    VectorAligned(float x, float y, float z) : Vector(x, y, z) , w(0) {}
     float w;
 };
 
@@ -756,6 +760,22 @@ public:
     virtual bool ShouldHitEntity(void* pServerEntity, int contentsMask) {
         return true;
     }
+};
+
+class CTraceFilterSimple : public CTraceFilter {
+public:
+    virtual void SetPassEntity(const void* pPassEntity) { m_pPassEnt = pPassEntity; }
+    virtual void SetCollisionGroup(int iCollisionGroup) { m_collisionGroup = iCollisionGroup; }
+
+    const void* GetPassEntity(void) { return m_pPassEnt; }
+
+    virtual bool ShouldHitEntity(void* pServerEntity, int contentsMask) {
+        return pServerEntity != m_pPassEnt;
+    }
+
+private:
+    const void* m_pPassEnt;
+    int m_collisionGroup;
 };
 
 

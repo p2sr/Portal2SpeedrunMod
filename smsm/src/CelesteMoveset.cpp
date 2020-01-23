@@ -19,7 +19,7 @@ CelesteMoveset::CelesteMoveset()
 
 void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
 
-    if (!smsm.modeParams[CelesteMode])return;
+    //if (!smsm.modeParams[CelesteMode])return;
 
     //just in case, use tickbase counter within player entity to make proper logic loop
     int tickBase = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_nTickBase);
@@ -120,7 +120,7 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
         Vector pv = pMove->m_vecVelocity;
         //hyperdashing
         if (dashingDir.z < 0 && pv.z >= 0) {
-            pMove->m_vecVelocity = pv * (float)(0.7 - dashingDir.z / dashingSpeed);
+            pMove->m_vecVelocity = pv * (float)(0.5 - dashingDir.z / dashingSpeed);
             dashing = 0;
         }
         //initial dash speed management
@@ -141,30 +141,32 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
 
 
 bool CelesteMoveset::IsPlaceSuitableForWallgrab(Vector pos, float angle) {
+    CGameTrace tr;
+
     float minAngle = std::floor((angle + 45) / 90.0) * 90.0 - 45.0;
 
-    Ray_t ray;
-    ray.m_IsRay = true; ray.m_IsSwept = true;
-    CTraceFilterWorldOnly filter;
-    CGameTrace tr;
     for (int a = 0; a < 2; a++) {
         float angRad = DEG2RAD(minAngle+90*a);
 
         float bbx = (cos(angRad) < 0 ? -1 : 1) * 16.01f;
         float bby = (sin(angRad) < 0 ? -1 : 1) * 16.01f;
 
-        float d = 2;
-        ray.m_Delta.x = cos(angRad) * d; 
-        ray.m_Delta.y = sin(angRad) * d;
+        Ray_t ray;
+        ray.m_IsRay = true; ray.m_IsSwept = true;
+        
+        CTraceFilterSimple filter;
 
-        ray.m_Start.x = pos.x + bbx;
-        ray.m_Start.y = pos.y + bby;
-        ray.m_Start.z = pos.z + 64.0f;
-        console->Print("start1: %f , %f , %f \n", ray.m_Start.x, ray.m_Start.y, ray.m_Start.z);
+        float d = 2;
+        ray.m_Delta = VectorAligned(cos(angRad) * d, sin(angRad) * d, 0);
+        ray.m_Start = VectorAligned(pos.x + bbx, pos.y + bby, pos.z + 64.0f);
+        ray.m_StartOffset = VectorAligned();
+        ray.m_Extents = VectorAligned();
+
+        console->Print("start1: %f , %f ,  %f \n", ray.m_Start.x, ray.m_Start.y, ray.m_Start.z);
         engine->TraceRay(engine->engineTrace->ThisPtr(), ray, MASK_PLAYERSOLID, &filter, &tr);
-        console->Print("start2: %f , %f , %f \n", tr.startpos.x, tr.startpos.y, tr.startpos.z);
+        console->Print("start2: %f , %f , %f; %f\n", tr.startpos.x, tr.startpos.y, tr.startpos.z, ray.m_Start.x);
         console->Print("angle: %f,fraction: %f, fractionleftsolid: %f, surface: %f,%f,%f\n", minAngle+90*a, tr.fraction, tr.fractionleftsolid, tr.plane.normal.x, tr.plane.normal.y, tr.plane.normal.z);
-        //if (tr.fraction < 1)return true;
+        if (tr.fraction < 1)return true;
     }
 
     return false;
