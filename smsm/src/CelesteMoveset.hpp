@@ -15,13 +15,19 @@ public:
 
     void Dash() { dashRequested = true; }
 
-    bool IsPlaceSuitableForWallgrab(Vector pos, float angle);
+    bool IsPlaceSuitableForWallgrab(void * player, Vector pos, float angle, Vector * placeNormal = nullptr);
 
     float dashingSpeed;
     float dashingInitBoost;
     float dashingDuration;
     float dashingCooldownDuration;
     float dashingOriginalVelMult;
+
+    float wallSlidingSpeedVertical;
+    float wallSlidingSpeedHorizontal;
+    float wallSlidingSpeedSpeed; //SPEEEEEED
+    float wallJumpForce;
+
     int maxDashes;
 private:
     Vector dashingOldPos;

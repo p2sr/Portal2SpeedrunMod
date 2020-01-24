@@ -770,7 +770,8 @@ public:
     const void* GetPassEntity(void) { return m_pPassEnt; }
 
     virtual bool ShouldHitEntity(void* pServerEntity, int contentsMask) {
-        return pServerEntity != m_pPassEnt;
+        return false;
+        //return pServerEntity != m_pPassEnt;
     }
 
 private:

@@ -13,6 +13,11 @@ CelesteMoveset::CelesteMoveset()
     , dashingCooldownDuration(0.4)
     , dashingOriginalVelMult(0.1)
     , maxDashes(1)
+
+    , wallSlidingSpeedVertical(75.0)
+    , wallSlidingSpeedHorizontal(50.0)
+    , wallSlidingSpeedSpeed(20.0)
+    , wallJumpForce(250.0)
 {
 
 }
@@ -140,19 +145,21 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
 }
 
 
-bool CelesteMoveset::IsPlaceSuitableForWallgrab(Vector pos, float angle) {
-    float alignedAng = DEG2RAD(std::floor((angle) / 90.0) * 90.0);
+bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float angle, Vector * placeNormal) {
+    float alignedAng = DEG2RAD(std::floor((angle+45.0) / 90.0) * 90.0);
 
     CGameTrace tr;
     bool collidingWithSurface = false;
+    Vector pn;
 
     //cast four corners of a player wall where collision could happen
     for(int y=0;y<2;y++) for(int a = -1; a <= 1; a+=2) {
 
-        float bboxSize = 15.0f;
         float cosAng = cos(alignedAng), sinAng = sin(alignedAng);
-        float bbx = (abs(cosAng) < 0.1 ? a : cosAng) * bboxSize;
-        float bby = (abs(sinAng) < 0.1 ? a : sinAng) * bboxSize;
+        
+        float bbsize = 16;
+        float bbx = (abs(cosAng) < 0.1 ? a: cosAng) * 15;
+        float bby = (abs(sinAng) < 0.1 ? a: sinAng) * 15;
 
         Ray_t ray;
         ray.m_IsRay = true; ray.m_IsSwept = true;
@@ -160,30 +167,39 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(Vector pos, float angle) {
         CTraceFilterSimple filter;
 
         float d = 2;
-        ray.m_Delta = VectorAligned(cosAng * d+0.01, sinAng * d + 0.01, 0.01);
+        ray.m_Delta = VectorAligned(cosAng * d + 0.001, sinAng * d+0.001, 0.001);
         ray.m_Start = VectorAligned(pos.x + bbx, pos.y + bby, pos.z + y*72.0f);
         ray.m_StartOffset = VectorAligned();
         ray.m_Extents = VectorAligned();
 
+        //console->Print("m_start: %f", ray.m_Start.x);
         engine->TraceRay(engine->engineTrace->ThisPtr(), ray, MASK_PLAYERSOLID, &filter, &tr);
-        
+        //console->Print(", %f\n", ray.m_Start.x);
+
         /*
         That m_Start.x condition is literally pointless, but if it's gone then
         it would seem like TraceRay sets it to 0. It makes no fucking sense
         and I gave up on trying to find out why it's happening, so I'm just leaving it here.
         Fuck.
         */
-        if (ray.m_Start.x==pos.x + bbx && tr.plane.normal.Length() > 0.9) {
+        if (ray.m_Start.x == pos.x + bbx && tr.plane.normal.Length() > 0.9) {
             collidingWithSurface = true;
-            break;
+            pn = tr.plane.normal;
         }
     }
 
+    //not colliding with any surface
     if (!collidingWithSurface) return false;
 
-    Vector pn = tr.plane.normal; //plane normal
+    //surface is too steep or too plain
+    if (pn.z > 0.2 || pn.z < -0.71) return false;
 
-    if (pn.z > 0.1 || pn.z < -0.71) return false;
+    float surfAngle = RAD2DEG(atan2f(-pn.y, -pn.x));
+    const float range = 45;
+    float dist = abs(surfAngle - angle);
+    if (dist > 180)dist = 360 - dist;
+    //surface angle is not within specified range
+    if (dist > range) return false;
 
     Vector posMid(pos.x, pos.y, pos.z + 36.0f); //player's middle point (TODO: what if player crouches???)
     
@@ -191,21 +207,72 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(Vector pos, float angle) {
     //position projection on plane
     Vector posProj(posMid.x + pn.x * t0, posMid.y + pn.y * t0, posMid.z + pn.z * t0);
 
-    console->Print("grab pos: %f %f %f\n", posProj.x, posProj.y, posProj.z);
+    //console->Print("grab pos: %f %f %f\n", posProj.x, posProj.y, posProj.z);
 
-    char buf[1024];
-    sprintf(buf, "drawcross %f %f %f", posProj.x, posProj.y, posProj.z);
-    smsm.ServerCommand(buf);
+    //char buf[1024];
+    //sprintf(buf, "drawcross %f %f %f", posProj.x, posProj.y, posProj.z);
+    //smsm.ServerCommand(buf);
+
+    if (placeNormal != nullptr) {
+        placeNormal->x = pn.x;
+        placeNormal->y = pn.y;
+        placeNormal->z = pn.z;
+    }
 
     return true;
 }
 
 
 void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, float dt) {
+
+    //walljumping
+    if (pMove->m_outWishVel.Length2D() > 0.1 && pMove->m_vecVelocity.z < 0) {
+        float wishVelAng = RAD2DEG(atan2f(pMove->m_outWishVel.y, pMove->m_outWishVel.x));
+        Vector wallNormal;
+        if (IsPlaceSuitableForWallgrab(pPlayer, pMove->m_vecAbsOrigin, wishVelAng, &wallNormal)) {
+            bool pressingJump = (pMove->m_nButtons & 0x02);
+            if (pressingJump) {
+                
+                //calculate jumping vector
+                float wall2dNormLen = wallNormal.Length2D();
+                Vector wall2dNormal(wallNormal.x / wall2dNormLen, wallNormal.y / wall2dNormLen, 0);
+                
+                float jumpAng = asin(wallNormal.z) + 0.8f;
+                
+                Vector jumpNorm = wall2dNormal * cos(jumpAng);
+                jumpNorm.z = sin(jumpAng);
+                
+                Vector jumpVec = jumpNorm * wallJumpForce;
+                
+                //apply old horizontal velocity on top of that.
+                pMove->m_vecVelocity.x += jumpVec.x;
+                pMove->m_vecVelocity.y += jumpVec.y;
+                pMove->m_vecVelocity.z = jumpVec.z;
+                
+            }
+            else {
+                if (pMove->m_vecVelocity.z < -wallSlidingSpeedVertical) {
+                    float stepZ = pMove->m_vecVelocity.z + wallSlidingSpeedSpeed;
+                    float newZ = (stepZ > wallSlidingSpeedVertical) ? wallSlidingSpeedVertical : stepZ;
+                    pMove->m_vecVelocity.z = newZ;
+                }
+                float len = pMove->m_vecVelocity.Length2D();
+                if (len > wallSlidingSpeedHorizontal) {
+                    float stepSpeed = len - wallSlidingSpeedSpeed;
+                    float newSpeed = (stepSpeed > wallSlidingSpeedHorizontal) ? wallSlidingSpeedHorizontal : stepSpeed;
+                    Vector newVel = pMove->m_vecVelocity * (stepSpeed / len);
+                    newVel.z = pMove->m_vecVelocity.z;
+                    pMove->m_vecVelocity = newVel;
+                }
+            }
+        }
+    }
+    
+
     bool pressingUse = (pMove->m_nButtons & 0x20);
     if (pressingUse && !holdingUse) {
         console->Print("Pressed E!!!\n");
-        if (IsPlaceSuitableForWallgrab(pMove->m_vecAbsOrigin, pMove->m_vecViewAngles.y))console->Print("Grab!!!!\n");
+        if (IsPlaceSuitableForWallgrab(pPlayer, pMove->m_vecAbsOrigin, pMove->m_vecViewAngles.y))console->Print("Grab!!!!\n");
         holdingUse = true;
     }
     else if (!pressingUse && holdingUse) {

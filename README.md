@@ -15,10 +15,15 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 - Most of cutscenes were removed or shortened (like Tube Ride, Core etc.)
 - A full list of every change can be found [here](https://github.com/Krzyhau/Portal2SpeedrunMod/tree/master/doc/normalpercentlist.md).
 
-### Fog% (currently in development)
-- Everything from Normal%
+### Fog% (in beta testing)
+- Everything from Normal%.
 - Dense fog makes you unable to see further than 128 units.
 - If you don't move for 20 seconds, you can see through fog until you move again.
+
+### Celeste 2 (currently in development)
+- Everything from Normal%.
+- Celeste-like movement added on top of current one (dash, wave dash and wall climb).
+- Red berries added and placed all around the facility. Collect all of them to unlock special ending.
 
 ## Modes planned for the future:
 - **100 Portals Run** - complete the game with less than 100 portals.
@@ -26,12 +31,12 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 - **Randomized Map Order** - randomized map order.
 - **Fat Run** - complete the game while being 1,875x larger.
 - **Potato Challenge** - A copy of SMO's Baloon World.
-- **Celeste%** - Celeste moveset implemented into P2.
 - **Minecraft%** - You are able to place and break blocks.
 - **Tag%** - Complete the game with paintgun instead of portal gun.
 - **Mirror%** - Normal game, but mirrored.
 - **Bingo** - ???
 - **Glitchless** - all glitches patched.
+- **Singleplayer co-op** - Co-op but your partner went to the toilet and never came back.
 
 ## Credits:
 - Blenderiste 09 - Chapter 9 scripting.
