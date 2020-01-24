@@ -33,7 +33,9 @@ bool Server::Init() {
     return this->hasLoaded = this->GameMovement;
 }
 void Server::Shutdown() {
-
+    if (this->GameMovement) {
+        Interface::Delete(this->GameMovement);
+    }
 }
 
 Server* server;
