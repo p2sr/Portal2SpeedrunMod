@@ -45,6 +45,10 @@ void Portal2::LoadOffsets()
     UnregisterConCommand = 10; // CCvar
     FindCommandBase = 13; // CCVar
     m_pConCommandList = 48; // CCvar
+
+    // vscript.dll
+
+    CreateVM = 8;
 }
 const char* Portal2::Version()
 {

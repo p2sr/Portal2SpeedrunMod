@@ -4,5 +4,6 @@ TODO LIST.txt
 smsm/.vs
 smsm/bin
 smsm/src/Debug
+smsm/src/Release
 gameinfo.txt
 RUN.bat
