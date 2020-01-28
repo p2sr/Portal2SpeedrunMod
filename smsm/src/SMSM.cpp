@@ -11,6 +11,7 @@
 #include "Modules/Engine.hpp"
 #include "Modules/Module.hpp"
 #include "Modules/Tier1.hpp"
+#include "Modules/VScript.hpp"
 
 #include "Command.hpp"
 #include "Game.hpp"
@@ -19,6 +20,10 @@
 
 SMSM smsm;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(SMSM, IServerPluginCallbacks, INTERFACEVERSION_ISERVERPLUGINCALLBACKS, smsm);
+
+BEGIN_SCRIPTDESC_ROOT(SMSM, "The SMSM instance.")
+DEFINE_SCRIPTFUNC(GetMode, "Returns current mode.")
+END_SCRIPTDESC()
 
 SMSM::SMSM()
     : game(Game::CreateNew())
@@ -50,6 +55,7 @@ bool SMSM::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServer
             this->modules->AddModule<Engine>(&engine);
             this->modules->AddModule<Client>(&client);
             this->modules->AddModule<Server>(&server);
+            this->modules->AddModule<VScript>(&vscript);
             this->modules->InitAll();
 
             if (engine && client && engine->hasLoaded && client->hasLoaded && server->hasLoaded) {

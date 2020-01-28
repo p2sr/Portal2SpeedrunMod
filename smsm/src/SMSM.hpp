@@ -72,6 +72,7 @@ public:
 
     void ForceAct5MenuBackground();
     bool ProcessScriptRequest(float accessType, int id, float value, float* result);
+    int GetMode() { return this->mode; }
 
 private:
     void StartMainThread();

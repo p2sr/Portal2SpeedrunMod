@@ -36,6 +36,9 @@ int TraceRay;
 int m_fFlags;
 int m_nTickBase;
 
+// CScriptManager
+int CreateVM;
+
 // Others
 int GetClientStateFunction;
 int cl;
