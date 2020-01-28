@@ -15,10 +15,12 @@ public:
     using _GetActiveSplitScreenPlayerSlot = int (*)(void* thisptr);
 #endif
     using _ClientCommand = int(*)(void* thisptr, void* pEdict, const char* szFmt, ...);
+    using _TraceRay = void(__func*)(void* thisptr, const Ray_t& ray, unsigned int fMask, ITraceFilter* pTraceFilter, CGameTrace* pTrace);
 
     _GetActiveSplitScreenPlayerSlot GetActiveSplitScreenPlayerSlot = nullptr;
     _Cbuf_AddText Cbuf_AddText = nullptr;
     _ClientCommand ClientCommand = nullptr;
+    _TraceRay TraceRay = nullptr;
 
     void* s_CommandBuffer = nullptr;
 
@@ -26,9 +28,6 @@ public:
     bool Init() override;
     void Shutdown() override;
     const char* Name() override { return MODULE("engine"); }
-
-    // IEngineTrace::TraceRay
-    DECL_DETOUR(TraceRay, const Ray_t& ray, unsigned int fMask, ITraceFilter* pTraceFilter, CGameTrace* pTrace);
 };
 
 extern Engine* engine;

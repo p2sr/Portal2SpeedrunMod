@@ -49,21 +49,5 @@ CON_COMMAND(sm_mode, "Variable used by Speedrun Mod to determine currently playe
     auto mode = std::atoi(args[1]);
     smsm.mode = mode;
     //reset param table when switching modes
-    for (int i = 0; i < SMSM_SCRIPT_PARAM_COUNT; i++)smsm.modeParams[i] = 0;
-}
-
-CON_COMMAND(sm_param, "Variable used by Speedrun Mod to determine the state of currently played mode.\n") {
-    if (args.ArgC() == 2 || args.ArgC() == 3) {
-        int param = std::min(std::max(std::atoi(args[1]),0),1023);
-        if (args.ArgC() == 3) {
-            float value = (float)std::atof(args[2]);
-            smsm.modeParams[param] = value;
-        }
-        else {
-            return console->Print("Current Speedrun Mod param %d: %f\n", param, smsm.modeParams[param]);
-        }
-    }
-    else {
-        return console->Print("Incorrect syntax. Use: sm_param [id] [value]");
-    }
+    smsm.ResetModeVariables();
 }

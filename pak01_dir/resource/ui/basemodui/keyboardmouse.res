@@ -68,7 +68,7 @@
 		"visible"				"1"
 		"enabled"				"1"
 		"tabPosition"			"0"
-		"minValue"				"0.0f"
+		"minValue"				"1.0f"
 		"maxValue"				"10.0f"
 		"stepSize"				"1.0"
 		"navUp"					"DrpMouseYInvert"

@@ -23,8 +23,6 @@
         ptr = nullptr;   \
     }
 
-#define SMSM_SCRIPT_PARAM_COUNT 1024
-
 class SMSM : public IServerPluginCallbacks {
 public:
     Game* game;
@@ -35,7 +33,6 @@ public:
     std::vector<void*> clients;
     
     int mode;
-    float modeParams[SMSM_SCRIPT_PARAM_COUNT];
 public:
     SMSM();
 
@@ -71,8 +68,9 @@ public:
     void Cleanup();
 
     void ForceAct5MenuBackground();
-    bool ProcessScriptRequest(float accessType, int id, float value, float* result);
     int GetMode() { return this->mode; }
+    bool IsDialogueEnabled();
+    void ResetModeVariables();
 
 private:
     void StartMainThread();
@@ -80,18 +78,10 @@ private:
 };
 
 
-namespace ScriptAccessKey {
-    const float READ = 999999.25f;
-    const float WRITE = 999999.50f;
-    const float LOOP = 999999.75f;
+enum SMModes {
+    Normal = 0,
+    Fog = 1,
+    Celeste = 2
 };
-
-
-enum SMSMParam {
-    DialogueOff = 0,
-    CelesteMode = 100,
-    DashRequested = 101
-};
-
 
 extern SMSM smsm;

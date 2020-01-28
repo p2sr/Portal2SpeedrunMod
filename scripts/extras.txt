@@ -7,13 +7,6 @@
 		"pic"		"srmod/menu_modes/normal"
 		"command"	"sm_mode 0;map sp_a1_intro1"
 	}
-	"speedrunmode_dialogue"
-	{
-		"title"		"Normal% (no dialogue)"
-		"subtitle"	"Original mode, but without dialogue."
-		"pic"		"srmod/menu_modes/normal_muted"
-		"command"	"sm_mode 0;sm_param 0 1;map sp_a1_intro1"
-	}
 	"fog_percent"
 	{
 		"title"		"Fog% (beta)"

@@ -52,21 +52,8 @@ function GetSMSMVariable(id,isInt=false){
   else return p
 }
 
-function SetSMSMVariable(id,value){
-  local result = TraceLine(Vector(SCRIPT_ACCESS_KEY_WRITE,id,value),Vector(0,0,0),null)
-  return result==1
-}
-
 function IsSMSMActive(){
-  local verificationKey = 69 //nice
-  local result = TraceLine(Vector(SCRIPT_ACCESS_KEY_LOOP,0,verificationKey),Vector(0,0,0),null)
-  return result==verificationKey
-}
-
-
-//-1 is mode number
-function GetModeID(){
-  return GetSMSMVariable(-1,true)
+  return ("smsm" in this);
 }
 
 
@@ -88,12 +75,15 @@ SPEEDRUN_MODES[0] <- ["default"];
 SPEEDRUN_MODES[1] <- ["default", "fog_percent"];
 SPEEDRUN_MODES[2] <- ["default", "celeste"];
 
-//all scripts
-DoIncludeScript("modes/default", self.GetScriptScope());
-switch(GetModeID()){
-  case 1: DoIncludeScript("modes/fog", self.GetScriptScope()); break;
-  case 2: DoIncludeScript("modes/celeste", self.GetScriptScope()); break;
+//import proper scripts
+if(IsSMSMActive()){
+  DoIncludeScript("modes/default", self.GetScriptScope());
+  switch(smsm.GetMode()){
+    case 1: DoIncludeScript("modes/fog", self.GetScriptScope()); break;
+    case 2: DoIncludeScript("modes/celeste", self.GetScriptScope()); break;
+  }
 }
+
 
 
 
@@ -104,9 +94,8 @@ function OnPostSpawn(){
     EntFire("@command", "Command", "disconnect", 1)
   }else{
     //debug mode info
-    local mode = GetModeID()
-    local firstParam = GetSMSMVariable(0)
-    printl("### SPEEDRUN MOD ###: Preparing the mod in mode "+mode+" (first param:"+firstParam+")")
+    local mode = smsm.GetMode()
+    printl("### SPEEDRUN MOD ###: Preparing the mod in mode "+mode)
 
     local auto = GetEntity("logic_auto")
     if(!auto){
@@ -130,7 +119,7 @@ function OnPostSpawn(){
 
 
 function OnMapSpawn(){
-  local mode = SPEEDRUN_MODES[GetModeID()]
+  local mode = SPEEDRUN_MODES[smsm.GetMode()]
   foreach (id, modename in mode){
     modlog("Loading OnMapSpawn function for "+modename+".")
     local func = MAP_SPAWN_FUNCTIONS[modename]
@@ -147,7 +136,7 @@ function SpeedrunModThink(){
     OLD_TIME = OLD_TIME==0 ? Time() : NEW_TIME;
     NEW_TIME = Time();  //TICKING AWAY THE MOMENTS THAT MAKE UP A DULL DAY
 
-    local mode = SPEEDRUN_MODES[GetModeID()]
+    local mode = SPEEDRUN_MODES[smsm.GetMode()]
     foreach (id, modename in mode){
       local func = UPDATE_FUNCTIONS[modename]
       func()

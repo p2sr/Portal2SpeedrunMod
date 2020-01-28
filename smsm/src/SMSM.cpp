@@ -23,6 +23,7 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(SMSM, IServerPluginCallbacks, INTERFACEVERSION
 
 BEGIN_SCRIPTDESC_ROOT(SMSM, "The SMSM instance.")
 DEFINE_SCRIPTFUNC(GetMode, "Returns current mode.")
+DEFINE_SCRIPTFUNC(IsDialogueEnabled, "Is dialogue enabled in audio settings?")
 END_SCRIPTDESC()
 
 SMSM::SMSM()
@@ -32,7 +33,6 @@ SMSM::SMSM()
     , cheats(new Cheats())
     , clients()
     , mode(0)
-    , modeParams()
 {
 
 }
@@ -179,34 +179,15 @@ void SMSM::ForceAct5MenuBackground() {
     Memory::CloseModuleHandle(clientHandle);
 }
 
-bool SMSM::ProcessScriptRequest(float accessType, int id, float value, float* result) {
-    if (accessType == ScriptAccessKey::READ) {
-        if (id == -1) {
-            *result = (float)mode;
-        }
-        else if (id >= 0 && id < 1024) {
-            *result = modeParams[id];
-        }
-        return true;
-    }
-    else if (accessType == ScriptAccessKey::WRITE) {
-        if (id == -1) {
-            mode = (int)value;
-            *result = 1;
-        }
-        else if(id>=0 && id<1024){
-            modeParams[id] = value;
-            *result = 1;
-        }
-        return true;
-    }
-    else if (accessType == ScriptAccessKey::LOOP) {
-        *result = value;
-        return true;
-    }
-    return false;
+
+
+void SMSM::ResetModeVariables() {
+
 }
 
+bool SMSM::IsDialogueEnabled() {
+    return true;
+}
 
 void SMSM::StartMainThread() {
     this->ForceAct5MenuBackground();

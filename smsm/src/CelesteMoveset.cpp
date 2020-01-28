@@ -24,7 +24,7 @@ CelesteMoveset::CelesteMoveset()
 
 void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
 
-    if (!smsm.modeParams[CelesteMode])return;
+    if (smsm.GetMode() != Celeste) return;
 
     //just in case, use tickbase counter within player entity to make proper logic loop
     int tickBase = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_nTickBase);
@@ -104,7 +104,8 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
             dashingCooldown = dashingCooldownDuration;
 
             // GetPlayer().EmitSound("player/windgust.wav")
-            smsm.modeParams[DashRequested] = true;
+            //smsm.modeParams[DashRequested] = true;
+            //TODO: find a way to play sound
         }
         dashRequested = false;
     }
@@ -284,7 +285,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
 
 
 void IN_DashDown(const CCommand& args) {
-    if(smsm.modeParams[CelesteMode])celesteMoveset.Dash();
+    if(smsm.GetMode()==Celeste)celesteMoveset.Dash();
 }
 
 void IN_DashUp(const CCommand& args) {
