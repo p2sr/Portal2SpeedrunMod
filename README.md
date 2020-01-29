@@ -41,6 +41,6 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 ## Credits:
 - Blenderiste 09 - Chapter 9 scripting.
 - Big D - constantly motivating me to finish this mod.
-- NeKz - creator of [Chaos plugin](https://github.com/NeKzor/chaos/) that I used for creating Speedrun Mod Simple Modifier.
+- NeKz - **HUGE** help with Speedrun Mod Simple Modifier plugin.
 - Betsruner, Can't Even, Rex, Spidda and many others - beta testing.
 - Valve - not creating Portal 3, damnit

@@ -32,6 +32,7 @@ void Portal2::LoadOffsets()
     ProcessMovement = 1; // CGameMovement
     m_fFlags = 204; // CBaseEntity
     m_nTickBase = 3792; // CBaseEntity, m_nTickBase -> 3792
+    m_bDucking = 2272; // CBaseEntity
 
     // client.dll
 

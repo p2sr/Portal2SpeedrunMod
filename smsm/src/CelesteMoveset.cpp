@@ -16,7 +16,8 @@ CelesteMoveset::CelesteMoveset()
 
     , wallSlidingSpeedVertical(75.0)
     , wallSlidingSpeedHorizontal(50.0)
-    , wallSlidingSpeedSpeed(20.0)
+    , wallSlidingSpeedVerticalSpeed(20.0)
+    , wallSlidingSpeedHorizontalSpeed(5.0)
     , wallJumpForce(250.0)
 {
 
@@ -151,7 +152,8 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
 
     CGameTrace tr;
     bool collidingWithSurface = false;
-    Vector pn;
+    Vector pn; float planeDist;
+    CTraceFilterSimple filter;
 
     //cast four corners of a player wall where collision could happen
     for(int y=0;y<2;y++) for(int a = -1; a <= 1; a+=2) {
@@ -165,9 +167,9 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
         Ray_t ray;
         ray.m_IsRay = true; ray.m_IsSwept = true;
         
-        CTraceFilterSimple filter;
+        
 
-        float d = 2;
+        float d = 2.5;
         ray.m_Delta = VectorAligned(cosAng * d + 0.001, sinAng * d+0.001, 0.001);
         ray.m_Start = VectorAligned(pos.x + bbx, pos.y + bby, pos.z + y*72.0f);
         ray.m_StartOffset = VectorAligned();
@@ -186,6 +188,7 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
         if (ray.m_Start.x == pos.x + bbx && tr.plane.normal.Length() > 0.9) {
             collidingWithSurface = true;
             pn = tr.plane.normal;
+            planeDist = tr.plane.dist;
         }
     }
 
@@ -201,19 +204,30 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
     if (dist > 180)dist = 360 - dist;
     //surface angle is not within specified range
     if (dist > range) return false;
-
-    Vector posMid(pos.x, pos.y, pos.z + 36.0f); //player's middle point (TODO: what if player crouches???)
+    bool ducking = *reinterpret_cast<bool*>((uintptr_t)player + Offsets::m_bDucking);
+    Vector posMid(pos.x, pos.y, pos.z + (ducking ? 18.0f : 36.0f));
     
-    float t0 = -(pn.x * posMid.x + pn.y * posMid.y + pn.z * posMid.z - tr.plane.dist);
+    float d = -(posMid.x*pn.x + posMid.y*pn.y + posMid.z*pn.z - planeDist);
     //position projection on plane
-    Vector posProj(posMid.x + pn.x * t0, posMid.y + pn.y * t0, posMid.z + pn.z * t0);
+    Vector posProj(posMid.x + pn.x * d, posMid.y + pn.y * d, posMid.z + pn.z * d);
 
-    //console->Print("grab pos: %f %f %f\n", posProj.x, posProj.y, posProj.z);
+    Vector pnUp = (pn ^ Vector(0, 0, 1)) ^ pn;
+    Vector pnSide = (pn ^ Vector(1, 0, 0)) ^ pn;
 
-    //char buf[1024];
-    //sprintf(buf, "drawcross %f %f %f", posProj.x, posProj.y, posProj.z);
-    //smsm.ServerCommand(buf);
+    if (holdingUse) {
+        char buf[1024];
+        sprintf(buf, "drawline %f %f %f %f %f %f", posProj.x, posProj.y, posProj.z, posProj.x + pn.x * 3, posProj.y + pn.y * 3, posProj.z + pn.z * 3);
+        smsm.ServerCommand(buf);
+        sprintf(buf, "drawline %f %f %f %f %f %f", posProj.x, posProj.y, posProj.z, posProj.x + pnSide.x * 3, posProj.y + pnSide.y * 3, posProj.z + pnSide.z * 3);
+        smsm.ServerCommand(buf);
+        sprintf(buf, "drawline %f %f %f %f %f %f", posProj.x, posProj.y, posProj.z, posProj.x + pnUp.x * 3, posProj.y + pnUp.y * 3, posProj.z + pnUp.z * 3);
+        smsm.ServerCommand(buf);
+    }
+    
 
+   //
+
+    //passing a wall normal to the reference
     if (placeNormal != nullptr) {
         placeNormal->x = pn.x;
         placeNormal->y = pn.y;
@@ -253,13 +267,13 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
             }
             else {
                 if (pMove->m_vecVelocity.z < -wallSlidingSpeedVertical) {
-                    float stepZ = pMove->m_vecVelocity.z + wallSlidingSpeedSpeed;
+                    float stepZ = pMove->m_vecVelocity.z + wallSlidingSpeedVerticalSpeed;
                     float newZ = (stepZ > wallSlidingSpeedVertical) ? wallSlidingSpeedVertical : stepZ;
                     pMove->m_vecVelocity.z = newZ;
                 }
                 float len = pMove->m_vecVelocity.Length2D();
                 if (len > wallSlidingSpeedHorizontal) {
-                    float stepSpeed = len - wallSlidingSpeedSpeed;
+                    float stepSpeed = len - wallSlidingSpeedHorizontalSpeed;
                     float newSpeed = (stepSpeed > wallSlidingSpeedHorizontal) ? wallSlidingSpeedHorizontal : stepSpeed;
                     Vector newVel = pMove->m_vecVelocity * (stepSpeed / len);
                     newVel.z = pMove->m_vecVelocity.z;

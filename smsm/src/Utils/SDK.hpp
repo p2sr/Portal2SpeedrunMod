@@ -44,6 +44,18 @@ struct Vector {
     {
         return ((float*)this)[i];
     }
+    inline float operator*(Vector vec) 
+    {
+        return x*vec.x + y*vec.y + z*vec.z;
+    }
+    inline Vector operator^(Vector vec) 
+    {
+        Vector res;
+        res.x = y * vec.z - z * vec.y;
+        res.y = z * vec.x - x * vec.z;
+        res.z = x * vec.y - y * vec.x;
+        return res;
+    }
 };
 
 struct QAngle {

@@ -35,6 +35,7 @@ int TraceRay;
 // CBaseEntity
 int m_fFlags;
 int m_nTickBase;
+int m_bDucking;
 
 // CScriptManager
 int CreateVM;

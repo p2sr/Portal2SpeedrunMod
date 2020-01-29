@@ -17,16 +17,24 @@ public:
 
     bool IsPlaceSuitableForWallgrab(void * player, Vector pos, float angle, Vector * placeNormal = nullptr);
 
-    float dashingSpeed;
-    float dashingInitBoost;
-    float dashingDuration;
-    float dashingCooldownDuration;
-    float dashingOriginalVelMult;
+    float dashingSpeed; // speed that player will have at the end of a dash
+    float dashingInitBoost; // speed that player will have at the beginning of a dash
+    float dashingDuration; // how long will player be in dash
+    float dashingCooldownDuration; // how long until the next dash
+    float dashingOriginalVelMult; // how much of a original speed to keep
 
-    float wallSlidingSpeedVertical;
-    float wallSlidingSpeedHorizontal;
-    float wallSlidingSpeedSpeed; //SPEEEEEED
-    float wallJumpForce;
+    float wallSlidingSpeedVertical; // how fast can player slide vertically on a wall
+    float wallSlidingSpeedHorizontal; // how fast can player slide horizontally on a wall
+    float wallSlidingSpeedVerticalSpeed; // how much should vertical speed be enforced to sliding speed
+    float wallSlidingSpeedHorizontalSpeed; // how much should horizontal speed be enforced to sliding speed
+    float wallJumpForce; //how much should player be pushed away from a wall when jumping on it
+    float wallJumpAngle; //what angle should be used to calculate wall jump direction (NOT IMPLEMENTED YET)
+
+    float wallClimbStamina; //how many units can you travel before stamina runs out (NOT IMPLEMENTED YET)
+    float wallClimbJumpHeight; //how high can player jump when wallclimbing (NOT IMPLEMENTED YET)
+    float wallClimbJumpDuration; //how long should that jump take (NOT IMPLEMENTED YET)
+    float wallClimbMovementSpeed; // speed in which player can move on a wall (NOT IMPLEMENTED YET)
+    float wallClimbHoldFatigue; // how much to take from stamina if not moving (NOT IMPLEMENTED YET)
 
     int maxDashes;
 private:
@@ -39,6 +47,10 @@ private:
     bool dashRequested = false;
 
     bool holdingUse = false;
+    bool isClimbing = false;
+    Vector climbedWallNorm;
+    float climbJumping = 0;
+    float climbStamina = 0;
 };
 
 extern CelesteMoveset celesteMoveset;

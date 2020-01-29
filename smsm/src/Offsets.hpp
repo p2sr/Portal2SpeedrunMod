@@ -35,6 +35,7 @@ extern int TraceRay;
 // CBaseEntity
 extern int m_fFlags;
 extern int m_nTickBase;
+extern int m_bDucking;
 
 // CScriptManager
 extern int CreateVM;
