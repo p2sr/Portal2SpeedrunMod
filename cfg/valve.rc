@@ -6,3 +6,5 @@ exec autoexec.cfg
 stuffcmds
 
 startupmenu
+
+alias celeste_test "sm_mode 2;developer 1;map sp_a1_intro6"

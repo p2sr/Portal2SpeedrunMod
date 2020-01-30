@@ -9,6 +9,7 @@ extern Command in_dashup;
 class CelesteMoveset {
 public:
     CelesteMoveset();
+    void PreProcessMovement(void* pPlayer, CMoveData* pMove);
     void ProcessMovement(void* pPlayer, CMoveData* pMove);
     void ProcessMovementDashing(void* pPlayer, CMoveData* pMove, float dt);
     void ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, float dt);
@@ -30,7 +31,7 @@ public:
     float wallJumpForce; //how much should player be pushed away from a wall when jumping on it
     float wallJumpAngle; //what angle should be used to calculate wall jump direction (NOT IMPLEMENTED YET)
 
-    float wallClimbStamina; //how many units can you travel before stamina runs out (NOT IMPLEMENTED YET)
+    float wallClimbMaxStamina; //how many units can you travel before stamina runs out (NOT IMPLEMENTED YET)
     float wallClimbJumpHeight; //how high can player jump when wallclimbing (NOT IMPLEMENTED YET)
     float wallClimbJumpDuration; //how long should that jump take (NOT IMPLEMENTED YET)
     float wallClimbMovementSpeed; // speed in which player can move on a wall (NOT IMPLEMENTED YET)
@@ -46,11 +47,13 @@ private:
     int lastTickBase = 0;
     bool dashRequested = false;
 
-    bool holdingUse = false;
-    bool isClimbing = false;
+    bool holdingWall = false;
+    float holdingWallAngle = 0;
     Vector climbedWallNorm;
     float climbJumping = 0;
     float climbStamina = 0;
+    Vector playerWishVel;
+    float playerForwardMove = 0;
 };
 
 extern CelesteMoveset celesteMoveset;
