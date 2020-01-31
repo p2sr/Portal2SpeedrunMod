@@ -54,6 +54,9 @@ private:
     float climbStamina = 0;
     Vector playerWishVel;
     float playerForwardMove = 0;
+
+    bool holdingJump = false;
+    bool pressedJump = false;
 };
 
 extern CelesteMoveset celesteMoveset;

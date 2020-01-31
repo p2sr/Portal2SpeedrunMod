@@ -11,7 +11,7 @@ CelesteMoveset::CelesteMoveset()
     , dashingInitBoost(350.0)
     , dashingDuration(0.2)
     , dashingCooldownDuration(0.4)
-    , dashingOriginalVelMult(0.1)
+    , dashingOriginalVelMult(0.25)
     , maxDashes(1)
 
     , wallSlidingSpeedVertical(75.0)
@@ -22,7 +22,7 @@ CelesteMoveset::CelesteMoveset()
 
     , wallClimbMaxStamina(200)
     , wallClimbJumpHeight(45)
-    , wallClimbJumpDuration(20)
+    , wallClimbJumpDuration(0.4)
     , wallClimbMovementSpeed(75)
     , wallClimbHoldFatigue(20)
 {
@@ -31,7 +31,7 @@ CelesteMoveset::CelesteMoveset()
 
 void CelesteMoveset::PreProcessMovement(void* pPlayer, CMoveData* pMove) {
     if (holdingWall) {
-        //block original movement, but still have forwardmove and sidemove readable
+        //block original movement, but store wish vel somewhere
         if (pMove->m_flForwardMove != 0 || pMove->m_flSideMove != 0) {
             float moveAng = atan2f(-pMove->m_flSideMove, pMove->m_flForwardMove) + DEG2RAD(pMove->m_vecViewAngles.y);
             playerWishVel.x = cos(moveAng);
@@ -51,6 +51,17 @@ void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
 
     if (smsm.GetMode() != Celeste) return;
 
+    //process jump input
+    bool holdingSpace = (pMove->m_nButtons & 0x2);
+    bool ducking = *reinterpret_cast<bool*>((uintptr_t)pPlayer + Offsets::m_bDucking);
+    if (holdingSpace && !ducking) {
+        pressedJump = !holdingJump;
+        holdingJump = true;
+    } else {
+        holdingJump = false;
+        pressedJump = false;
+    }
+
     //just in case, use tickbase counter within player entity to make proper logic loop
     int tickBase = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_nTickBase);
     if (tickBase > lastTickBase) {
@@ -62,9 +73,12 @@ void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
     lastTickBase = tickBase;
 
     
-    bool holdingUse = (pMove->m_nButtons & 0x02);
-    bool holdingSpace = (pMove->m_nButtons & 0x20);
+    
+
 }
+
+
+
 
 
 void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, float dt) {
@@ -110,9 +124,15 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
 
             //add little bit of current player vector on top of the dash
             Vector pv = pMove->m_vecVelocity;
-            newDir.x += pv.x * dashingOriginalVelMult;
-            newDir.y += pv.y * dashingOriginalVelMult;
-            newDir.z += pv.z * dashingOriginalVelMult;
+
+            Vector pvn = pv * (1 / pv.Length());
+            Vector newDirN = newDir * (1 / newDir.Length());
+            float vd = pvn * newDirN;
+            if (vd < 0)vd = 0;
+
+            newDir.x += pv.x * dashingOriginalVelMult * vd;
+            newDir.y += pv.y * dashingOriginalVelMult * vd;
+            newDir.z += pv.z * dashingOriginalVelMult * vd;
 
             //set new dashing velocity
             dashingDir = newDir;
@@ -169,6 +189,10 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
         if (dashingCooldown < 0)dashingCooldown = 0;
     }
 }
+
+
+
+
 
 
 bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float angle, Vector * placeNormal) {
@@ -278,6 +302,10 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
 }
 
 
+
+
+
+
 void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, float dt) {
     auto m_fFlags = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_fFlags);
     bool grounded = (m_fFlags & FL_ONGROUND);
@@ -297,9 +325,20 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
             grabAng = RAD2DEG(atan2f(pMove->m_outWishVel.y, pMove->m_outWishVel.x));
         }
         Vector wallNormal;
+        //change climb jumping duration in a separate place to allow wall jump spam
+        if(climbJumping > 0)climbJumping -= dt;
         //during climb jump, ignore that player is not next to the wall, they'll come back there (hopefully)
         if (climbJumping > 0) { 
+            float cjState = climbJumping / wallClimbJumpDuration;
+            float horizontalMov = 16 * (cjState-0.5);
+            float verticalMov = (2 * wallClimbJumpHeight / wallClimbJumpDuration) * cjState;
+            Vector climbVec = (climbedWallNorm ^ Vector(0, 0, 1)) ^ climbedWallNorm;
+            climbVec = climbVec * verticalMov + climbedWallNorm*horizontalMov;
 
+            climbVec.z += 5.0f;
+
+            pMove->m_vecVelocity = climbVec;
+            climbStamina -= verticalMov*dt;
         }
         //during wallclimbing, make sure player is still next to the same wall.
         else if (IsPlaceSuitableForWallgrab(pPlayer, pMove->m_vecAbsOrigin, grabAng, &wallNormal)) {
@@ -309,19 +348,19 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                 holdingWall = true;
             }
                 
-            Vector newVel = Vector(-climbedWallNorm.x, -climbedWallNorm.y, 5.0f);
+            Vector newVel = Vector(-climbedWallNorm.x, -climbedWallNorm.y, 0);
+
+            float relMovAng = atan2f(playerWishVel.y, playerWishVel.x) - DEG2RAD(holdingWallAngle);
 
             //moving on a wall
             if (playerWishVel.Length() > 0) {
                 Vector wnUp = (climbedWallNorm ^ Vector(0, 0, 1)) ^ climbedWallNorm;
                 Vector wnSide(cos(DEG2RAD(holdingWallAngle + 90)), sin(DEG2RAD(holdingWallAngle + 90)), 0);
 
-                float relMovAng = atan2f(playerWishVel.y, playerWishVel.x) - DEG2RAD(holdingWallAngle);
-
                 //really funky way of making vertical movement out of horizontal movement and looking dir
                 //hopefully it will feel natural and somewhat playable lmao
                 
-                float upMove = cosf(relMovAng);
+                float upMove = fmaxf(cosf(relMovAng), 0);
                 float sideMove = sinf(relMovAng);
                 if (playerForwardMove != 0) {
                     float pitch = DEG2RAD(pMove->m_vecViewAngles.x);
@@ -335,12 +374,19 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                 newVel = newVel + (wnSide * (sideMove * wallClimbMovementSpeed));
 
                 climbStamina -= wallClimbMovementSpeed * dt;
-            }
-            else {
+            } else {
                 climbStamina -= wallClimbHoldFatigue * dt;
             }
 
+            if (!IsPlaceSuitableForWallgrab(pPlayer, pMove->m_vecAbsOrigin + (newVel * dt), grabAng)) {
+                newVel = Vector(0, 0, 0);
+            }
+            newVel.z += 5.0f;
             pMove->m_vecVelocity = newVel;
+
+            if (pressedJump && (playerWishVel.Length() == 0 || cosf(relMovAng)>0)) {
+                climbJumping = wallClimbJumpDuration;
+            }
         }
         else {
             holdingWall = false;
@@ -355,14 +401,12 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
 
 
     //walljumping
-    if ((pMove->m_outWishVel.Length2D() > 0.1 && pMove->m_vecVelocity.z < 0) || holdingWall) {
+    if ((pMove->m_outWishVel.Length2D() > 0.1 && pMove->m_vecVelocity.z < 0) || (holdingWall && climbJumping<=0)) {
         float wishVelAng = RAD2DEG(atan2f(pMove->m_outWishVel.y, pMove->m_outWishVel.x));
         if (holdingWall)wishVelAng = holdingWallAngle;
         Vector wallNormal;
         if (IsPlaceSuitableForWallgrab(pPlayer, pMove->m_vecAbsOrigin, wishVelAng, &wallNormal)) {
-            bool pressingJump = (pMove->m_nButtons & 0x02);
-            if (pressingJump) {
-
+            if (pressedJump) {
                 //calculate jumping vector
                 float wall2dNormLen = wallNormal.Length2D();
                 Vector wall2dNormal(wallNormal.x / wall2dNormLen, wallNormal.y / wall2dNormLen, 0);
