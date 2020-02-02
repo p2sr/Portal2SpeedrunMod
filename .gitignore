@@ -7,3 +7,4 @@ smsm/src/Debug
 smsm/src/Release
 gameinfo.txt
 RUN.bat
+.gitconfig
