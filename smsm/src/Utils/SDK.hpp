@@ -913,6 +913,67 @@ private:
 // UNDONE: This is untested, any moving water
 #define MASK_CURRENT				(CONTENTS_CURRENT_0|CONTENTS_CURRENT_90|CONTENTS_CURRENT_180|CONTENTS_CURRENT_270|CONTENTS_CURRENT_UP|CONTENTS_CURRENT_DOWN)
 
+class CViewSetup {
+public:
+    int			x;
+    int			y;
+    int			width;
+    int			height;
+    bool		m_bOrtho;
+    float		m_OrthoLeft;
+    float		m_OrthoTop;
+    float		m_OrthoRight;
+    float		m_OrthoBottom;
+    bool		m_bCustomViewMatrix;
+    matrix3x4_t	m_matCustomViewMatrix;
+
+    float		fov;
+    float		fovViewmodel;
+
+    Vector		origin;
+
+    QAngle		angles;
+    float		zNear;
+    float		zFar;
+
+    float		zNearViewmodel;
+    float		zFarViewmodel;
+    float		m_flAspectRatio;
+    float		m_flNearBlurDepth;
+    float		m_flNearFocusDepth;
+    float		m_flFarFocusDepth;
+    float		m_flFarBlurDepth;
+    float		m_flNearBlurRadius;
+    float		m_flFarBlurRadius;
+    int			m_nDoFQuality;
+    int	m_nMotionBlurMode;
+    float	m_flShutterTime;				
+    Vector	m_vShutterOpenPosition;	
+    QAngle	m_shutterOpenAngles;	
+    Vector	m_vShutterClosePosition;
+    QAngle	m_shutterCloseAngles;
+
+    float		m_flOffCenterTop;
+    float		m_flOffCenterBottom;
+    float		m_flOffCenterLeft;
+    float		m_flOffCenterRight;
+    bool		m_bOffCenter : 1;
+
+    bool		m_bRenderToSubrectOfLargerScreen : 1;
+
+    bool		m_bDoBloomAndToneMapping : 1;
+    bool		m_bDoDepthOfField : 1;
+    bool		m_bHDRTarget : 1;
+    bool		m_bDrawWorldNormal : 1;
+    bool		m_bCullFrontFaces : 1;
+
+    bool		m_bCacheFullSceneState : 1;
+
+    bool		m_bRenderFlashlightDepthTranslucents : 1;
+};
+
+
+
 #pragma region vscript
 
 #define Q_ARRAYSIZE(p) (sizeof(p)/sizeof(p[0]))
@@ -3552,7 +3613,7 @@ public:
 
 
 
-
+//Particle system stuff
 
 template<class T> class CUtlReference {
     CUtlReference* m_pNext;
@@ -3617,119 +3678,4 @@ public:
 struct CParticleCPInfo {
     CParticleControlPoint m_ControlPoint;
     CModelHitBoxesInfo m_CPHitBox;
-};
-
-
-struct CParticleAttributeAddressTable {
-    float* m_pAttributes[24];
-    size_t m_nFloatStrides[24];
-};
-
-struct KillListItem_t {
-    unsigned int nIndex : 24;
-    unsigned int nFlags : (32 - 24);
-};
-
-class CParticleCollection {
-public:
-    CUtlReference< CSheet > m_Sheet;
-    fltx4 m_fl4CurTime;
-    int m_nPaddedActiveParticles;
-    float m_flCurTime;
-    float m_flPrevSimTime;
-    float m_flTargetDrawTime;
-    float m_flUnknown;
-    int m_nActiveParticles;
-    float m_flDt;
-    float m_flPreviousDt;
-    float m_flNextSleepTime;
-    int m_nUnknown;
-    CUtlReference< void > m_pDef;
-    int m_nAllocatedParticles;
-    int m_nMaxAllowedParticles;
-    bool m_bDormant;
-    bool m_bEmissionStopped;
-    bool m_bPendingRestart;
-    bool m_bQueuedStartEmission;
-    bool m_bFrozen;
-    bool m_bInEndCap;
-
-    int m_LocalLightingCP;
-    Color m_LocalLighting;
-
-    int m_nNumControlPointsAllocated;
-    CParticleCPInfo * m_pCPInfo;
-
-    unsigned char * m_pOperatorContextData;
-    CParticleCollection * m_pNext;
-    CParticleCollection * m_pPrev;
-
-    struct CWorldCollideContextData* m_pCollisionCacheData[4];
-
-    CParticleCollection * m_pParent;
-
-    CUtlIntrusiveDList<CParticleCollection>  m_Children;
-    Vector m_Center;
-    void* m_pRenderable;
-
-    bool m_bBoundsValid;
-    Vector m_MinBounds;
-    Vector m_MaxBounds;
-    int m_nHighestCP;
-
-    int m_nAttributeMemorySize;
-    unsigned char* m_pParticleMemory;
-    unsigned char* m_pParticleInitialMemory;
-    unsigned char* m_pConstantMemory;
-    unsigned char * m_pPreviousAttributeMemory;
-
-    int m_nPerParticleInitializedAttributeMask;
-    int m_nPerParticleUpdatedAttributeMask;
-    int m_nPerParticleReadInitialAttributeMask;
-
-    CParticleAttributeAddressTable m_ParticleAttributes;
-    CParticleAttributeAddressTable m_ParticleInitialAttributes;
-    CParticleAttributeAddressTable m_PreviousFrameAttributes;
-
-    float* m_pConstantAttributes;
-
-    unsigned long m_nControlPointReadMask;
-    unsigned long m_nControlPointNonPositionalMask;
-    int m_nParticleFlags;
-    bool m_bIsScrubbable : 1;
-    bool m_bIsRunningInitializers : 1;
-    bool m_bIsRunningOperators : 1;
-    bool m_bIsTranslucent : 1;
-    bool m_bIsTwoPass : 1;
-    bool m_bAnyUsesPowerOfTwoFrameBufferTexture : 1;
-    bool m_bAnyUsesFullFrameBufferTexture : 1;
-    bool m_bIsBatchable : 1;
-    bool m_bIsOrderImportant : 1;
-    bool m_bRunForParentApplyKillList : 1;
-
-    bool m_bUsesPowerOfTwoFrameBufferTexture;
-    bool m_bUsesFullFrameBufferTexture;
-
-    int m_nDrawnFrames;
-
-    int m_nUniqueParticleId;
-
-    int m_nRandomQueryCount;
-    int m_nRandomSeed;
-    int m_nOperatorRandomSampleOffset;
-
-    float m_flMinDistSqr;
-    float m_flMaxDistSqr;
-    float m_flOOMaxDistSqr;
-    Vector m_vecLastCameraPos;
-    float m_flLastMinDistSqr;
-    float m_flLastMaxDistSqr;
-
-    int m_nNumParticlesToKill;
-    KillListItem_t * m_pParticleKillList;
-
-    CParticleCollection * m_pNextDef;
-    CParticleCollection * m_pPrevDef;
-
-    void * m_pRenderOp;
 };

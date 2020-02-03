@@ -53,31 +53,3 @@ CON_COMMAND(sm_mode, "Variable used by Speedrun Mod to determine currently playe
     //reset param table when switching modes
     smsm.ResetModeVariables();
 }
-
-CON_COMMAND(sm_test, "test.\n") {
-    if (args.ArgC() != 2) {
-        return console->Print("AAAAAAAAAAAAAAAA!\n");
-    }
-    int cpId = std::atoi(args[1]);
-    CParticleCollection* particleSystem = nullptr;
-    int particleCount = 0;
-    while (particleSystem = client->GetParticleSystem(particleSystem)) {
-        int pointer = reinterpret_cast<int>(particleSystem);
-        if (particleCount == cpId) {
-            console->Print("====PARTICLE %d:====", particleCount);
-            for (int i = 0; i < 1024; i++) {
-                Vector *v = *reinterpret_cast<Vector**>(particleSystem + i);
-                int n_v = reinterpret_cast<int>(v);
-                if (v == nullptr || v == NULL || n_v < pointer-1000000 || n_v > pointer + 10000000) continue;
-                console->Print("%d = (%f, %f, %f)\n",i, v->x, v->y, v->z);
-            }
-        }
-        //CParticleControlPoint controlPoint = particleSystem->m_pCPInfo[0].m_ControlPoint;
-        
-        //Vector controlPoint = particleSystem->m_ControlPoints[cpId].m_Position;
-        //console->Print("particle pointer: %d, (%f, %f, %f)\n", pointer, controlPoint.x, controlPoint.y, controlPoint.z);
-        particleCount++;
-        if (particleCount > 1024)break;
-    }
-    console->Print("Number of particles: %d\n", particleCount);
-}

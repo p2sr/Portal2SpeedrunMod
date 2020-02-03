@@ -11,6 +11,8 @@ extern int m_pConCommandList;
 // CEngineClient
 extern int ClientCmd;
 extern int GetActiveSplitScreenPlayerSlot;
+extern int RenderView;
+extern int HudUpdate;
 
 // ConVar
 extern int InternalSetValue;

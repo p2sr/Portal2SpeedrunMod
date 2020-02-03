@@ -40,6 +40,8 @@ void Portal2::LoadOffsets()
     GetHud = 125; // cc_leaderboard_enable
     FindElement = 135; // cc_leaderboard_enable
     ChatPrintf = 22; // CBaseHudChat
+    RenderView = 26;
+    HudUpdate = 11;
 
     // vstdlib.dll
 

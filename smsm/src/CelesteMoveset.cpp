@@ -5,6 +5,7 @@
 
 #include "Modules/Console.hpp"
 #include "Modules/Engine.hpp"
+#include "Modules/Client.hpp"
 
 CelesteMoveset::CelesteMoveset()
     : dashingSpeed(300.0)
@@ -30,6 +31,9 @@ CelesteMoveset::CelesteMoveset()
 }
 
 void CelesteMoveset::PreProcessMovement(void* pPlayer, CMoveData* pMove) {
+
+    client->SetPortalGunIndicatorColor(Vector(0,255,0));
+
     if (holdingWall) {
         //block original movement, but store wish vel somewhere
         if (pMove->m_flForwardMove != 0 || pMove->m_flSideMove != 0) {
