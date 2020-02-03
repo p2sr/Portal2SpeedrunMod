@@ -29,6 +29,7 @@ void Portal2::LoadOffsets()
     AutoCompletionFunc = 66; // listdemo_CompletionFunc
     ClientCommand = 39; // CVEngineServer
     TraceRay = 5; // IEngineTrace
+    NextParticleSystem = 54; //IClientTools
     ProcessMovement = 1; // CGameMovement
     m_fFlags = 204; // CBaseEntity
     m_nTickBase = 3792; // CBaseEntity, m_nTickBase -> 3792

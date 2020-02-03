@@ -32,6 +32,9 @@ extern int m_bWaitEnabled;
 // IEngineTrace
 extern int TraceRay;
 
+// CClientTools
+extern int NextParticleSystem;
+
 // CBaseEntity
 extern int m_fFlags;
 extern int m_nTickBase;

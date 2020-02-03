@@ -5,6 +5,10 @@
 #include "Offsets.hpp"
 #include "Utils.hpp"
 
+CParticleCollection* Client::GetParticleSystem(CParticleCollection* prev) {
+    return reinterpret_cast<CParticleCollection*>(this->NextParticleSystem(this->ClientTools->ThisPtr(), prev));
+}
+
 Client::Client()
     : Module()
 {
@@ -26,11 +30,18 @@ bool Client::Init()
         }
     }
 
-    return this->hasLoaded = this->ChatPrintf;
+    this->ClientTools = Interface::Create(this->Name(), "VCLIENTTOOLS001", false);
+
+    if (this->ClientTools) {
+        this->NextParticleSystem = this->ClientTools->Original<_NextParticleSystem>(Offsets::NextParticleSystem);
+    }
+
+    return this->hasLoaded = this->ChatPrintf && this->ClientTools;
 }
 void Client::Shutdown()
 {
     Interface::Delete(this->g_HudChat);
+    Interface::Delete(this->ClientTools);
 }
 
 Client* client;

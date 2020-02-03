@@ -3549,3 +3549,187 @@ public:
     }
 };
 #pragma endregion
+
+
+
+
+
+template<class T> class CUtlReference {
+    CUtlReference* m_pNext;
+    CUtlReference* m_pPrev;
+    T* m_pObject;
+};
+template<class T> class CUtlIntrusiveList {
+    T* m_pHead;
+};
+template<class T> class CUtlIntrusiveDList : public CUtlIntrusiveList<T> {};
+template<class T> class CUtlReferenceList : public CUtlIntrusiveDList< CUtlReference<T> > {};
+
+class CSheet {
+public:
+    CUtlReferenceList<CSheet> m_References;
+
+    struct SheetInfo_t {
+        void* m_pSamples;
+        unsigned char m_SeqFlags;
+        bool m_bSequenceIsCopyOfAnotherSequence;
+        unsigned short m_nNumFrames;
+        float m_flFrameSpan;
+    };
+
+    CUtlVector< SheetInfo_t > m_SheetInfo;
+};
+
+typedef union {
+    float  m128_f32[4];
+    unsigned int m128_u32[4];
+} fltx4;
+
+struct CParticleControlPoint {
+    Vector m_Position;
+    Vector m_PrevPosition;
+
+    // orientation
+    Vector m_ForwardVector;
+    Vector m_UpVector;
+    Vector m_RightVector;
+
+    // reference to entity or whatever this control point comes from
+    void* m_pObject;
+
+    // parent for hierarchies
+    int m_nParent;
+
+    // CParticleSnapshot which particles can read data from or write data to:
+    void* m_pSnapshot;
+};
+
+class CModelHitBoxesInfo {
+public:
+    float m_flLastUpdateTime;
+    float m_flPrevLastUpdateTime;
+    int m_nNumHitBoxes;
+    int m_nNumPrevHitBoxes;
+    void* m_pHitBoxes;
+    void* m_pPrevBoxes;
+};
+
+struct CParticleCPInfo {
+    CParticleControlPoint m_ControlPoint;
+    CModelHitBoxesInfo m_CPHitBox;
+};
+
+
+struct CParticleAttributeAddressTable {
+    float* m_pAttributes[24];
+    size_t m_nFloatStrides[24];
+};
+
+struct KillListItem_t {
+    unsigned int nIndex : 24;
+    unsigned int nFlags : (32 - 24);
+};
+
+class CParticleCollection {
+public:
+    CUtlReference< CSheet > m_Sheet;
+    fltx4 m_fl4CurTime;
+    int m_nPaddedActiveParticles;
+    float m_flCurTime;
+    float m_flPrevSimTime;
+    float m_flTargetDrawTime;
+    float m_flUnknown;
+    int m_nActiveParticles;
+    float m_flDt;
+    float m_flPreviousDt;
+    float m_flNextSleepTime;
+    int m_nUnknown;
+    CUtlReference< void > m_pDef;
+    int m_nAllocatedParticles;
+    int m_nMaxAllowedParticles;
+    bool m_bDormant;
+    bool m_bEmissionStopped;
+    bool m_bPendingRestart;
+    bool m_bQueuedStartEmission;
+    bool m_bFrozen;
+    bool m_bInEndCap;
+
+    int m_LocalLightingCP;
+    Color m_LocalLighting;
+
+    int m_nNumControlPointsAllocated;
+    CParticleCPInfo * m_pCPInfo;
+
+    unsigned char * m_pOperatorContextData;
+    CParticleCollection * m_pNext;
+    CParticleCollection * m_pPrev;
+
+    struct CWorldCollideContextData* m_pCollisionCacheData[4];
+
+    CParticleCollection * m_pParent;
+
+    CUtlIntrusiveDList<CParticleCollection>  m_Children;
+    Vector m_Center;
+    void* m_pRenderable;
+
+    bool m_bBoundsValid;
+    Vector m_MinBounds;
+    Vector m_MaxBounds;
+    int m_nHighestCP;
+
+    int m_nAttributeMemorySize;
+    unsigned char* m_pParticleMemory;
+    unsigned char* m_pParticleInitialMemory;
+    unsigned char* m_pConstantMemory;
+    unsigned char * m_pPreviousAttributeMemory;
+
+    int m_nPerParticleInitializedAttributeMask;
+    int m_nPerParticleUpdatedAttributeMask;
+    int m_nPerParticleReadInitialAttributeMask;
+
+    CParticleAttributeAddressTable m_ParticleAttributes;
+    CParticleAttributeAddressTable m_ParticleInitialAttributes;
+    CParticleAttributeAddressTable m_PreviousFrameAttributes;
+
+    float* m_pConstantAttributes;
+
+    unsigned long m_nControlPointReadMask;
+    unsigned long m_nControlPointNonPositionalMask;
+    int m_nParticleFlags;
+    bool m_bIsScrubbable : 1;
+    bool m_bIsRunningInitializers : 1;
+    bool m_bIsRunningOperators : 1;
+    bool m_bIsTranslucent : 1;
+    bool m_bIsTwoPass : 1;
+    bool m_bAnyUsesPowerOfTwoFrameBufferTexture : 1;
+    bool m_bAnyUsesFullFrameBufferTexture : 1;
+    bool m_bIsBatchable : 1;
+    bool m_bIsOrderImportant : 1;
+    bool m_bRunForParentApplyKillList : 1;
+
+    bool m_bUsesPowerOfTwoFrameBufferTexture;
+    bool m_bUsesFullFrameBufferTexture;
+
+    int m_nDrawnFrames;
+
+    int m_nUniqueParticleId;
+
+    int m_nRandomQueryCount;
+    int m_nRandomSeed;
+    int m_nOperatorRandomSampleOffset;
+
+    float m_flMinDistSqr;
+    float m_flMaxDistSqr;
+    float m_flOOMaxDistSqr;
+    Vector m_vecLastCameraPos;
+    float m_flLastMinDistSqr;
+    float m_flLastMaxDistSqr;
+
+    int m_nNumParticlesToKill;
+    KillListItem_t * m_pParticleKillList;
+
+    CParticleCollection * m_pNextDef;
+    CParticleCollection * m_pPrevDef;
+
+    void * m_pRenderOp;
+};

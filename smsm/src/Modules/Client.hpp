@@ -6,9 +6,15 @@
 class Client : public Module {
 public:
     Interface* g_HudChat;
+    Interface* ClientTools;
 
     using _ChatPrintf = void(*)(void* thisptr, int iPlayerIndex, int iFilter, const char* fmt, ...);
     _ChatPrintf ChatPrintf = nullptr;
+
+    using _NextParticleSystem = void*(__func*)(void* thisptr, void* searchResult);
+    _NextParticleSystem NextParticleSystem = nullptr;
+
+    CParticleCollection* GetParticleSystem(CParticleCollection* prev);
 
 public:
     Client();
