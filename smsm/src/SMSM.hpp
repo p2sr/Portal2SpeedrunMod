@@ -69,6 +69,7 @@ public:
 
     void ForceAct5MenuBackground();
     int GetMode() { return this->mode; }
+    void SetPortalGunIndicatorColor(Vector color);
     bool IsDialogueEnabled();
     void ResetModeVariables();
 

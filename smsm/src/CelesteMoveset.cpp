@@ -32,7 +32,7 @@ CelesteMoveset::CelesteMoveset()
 
 void CelesteMoveset::PreProcessMovement(void* pPlayer, CMoveData* pMove) {
 
-    client->SetPortalGunIndicatorColor(Vector(0,255,0));
+    if (smsm.GetMode() != Celeste) return;
 
     if (holdingWall) {
         //block original movement, but store wish vel somewhere
@@ -129,15 +129,17 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
             //add little bit of current player vector on top of the dash
             Vector pv = pMove->m_vecVelocity;
 
-            Vector pvn = pv * (1 / pv.Length());
-            Vector newDirN = newDir * (1 / newDir.Length());
-            float vd = pvn * newDirN;
-            if (vd < 0)vd = 0;
+            if (pv.Length() > 1) {
+                Vector pvn = pv * (1 / pv.Length());
+                Vector newDirN = newDir * (1 / newDir.Length());
+                float vd = pvn * newDirN;
+                if (vd < 0)vd = 0;
 
-            newDir.x += pv.x * dashingOriginalVelMult * vd;
-            newDir.y += pv.y * dashingOriginalVelMult * vd;
-            newDir.z += pv.z * dashingOriginalVelMult * vd;
-
+                newDir.x += pv.x * dashingOriginalVelMult * vd;
+                newDir.y += pv.y * dashingOriginalVelMult * vd;
+                newDir.z += pv.z * dashingOriginalVelMult * vd;
+            }
+            
             //set new dashing velocity
             dashingDir = newDir;
             if (grounded && newDir.z < 300) {
@@ -167,8 +169,14 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
         if (distance > 32) {
             //change dash vector to aim correct direction
             Vector pv = pMove->m_vecVelocity;
-            float m = dashingSpeed / pv.Length();
-            dashingDir = pv * m;
+            if(pv.Length()<1){
+                //something fucked up and i dont even know what, lets just cancel dashing.
+                dashing = 0;
+            }else {
+                float m = dashingSpeed / pv.Length();
+                dashingDir = pv * m;
+            }
+            
         }
         dashingOldPos = pp;
 

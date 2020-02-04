@@ -15,7 +15,7 @@ public:
     using _NextParticleSystem = void*(__func*)(void* thisptr, void* searchResult);
     _NextParticleSystem NextParticleSystem = nullptr;
 
-    void* GetParticleSystem(void* prev);
+    ParticleSystemSearchResult* GetParticleSystem(ParticleSystemSearchResult* prev);
     inline Vector GetPortalGunIndicatorColor() const { return this->portalGunIndicatorColor; }
     void SetPortalGunIndicatorColor(Vector v);
     void UpdatePortalGunIndicatorColor();
@@ -23,7 +23,7 @@ public:
 
 
     DECL_DETOUR(RenderView, const CViewSetup& view, int nClearFlags, int whatToDraw);
-    DECL_DETOUR(HudUpdate, unsigned int a2);
+    //DECL_DETOUR(HudUpdate, unsigned int a2);
 public:
     Client();
     bool Init() override;

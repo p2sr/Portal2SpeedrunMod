@@ -915,10 +915,9 @@ private:
 
 class CViewSetup {
 public:
-    int			x;
-    int			y;
-    int			width;
-    int			height;
+    int x, y, width, height;
+    //TODO: all of the stuff below is most likely wrong.
+    //find a way to properly use it. It might be useful for future mirror% mode.
     bool		m_bOrtho;
     float		m_OrthoLeft;
     float		m_OrthoTop;
@@ -926,16 +925,12 @@ public:
     float		m_OrthoBottom;
     bool		m_bCustomViewMatrix;
     matrix3x4_t	m_matCustomViewMatrix;
-
     float		fov;
     float		fovViewmodel;
-
     Vector		origin;
-
     QAngle		angles;
     float		zNear;
     float		zFar;
-
     float		zNearViewmodel;
     float		zFarViewmodel;
     float		m_flAspectRatio;
@@ -947,32 +942,25 @@ public:
     float		m_flFarBlurRadius;
     int			m_nDoFQuality;
     int	m_nMotionBlurMode;
-    float	m_flShutterTime;				
-    Vector	m_vShutterOpenPosition;	
-    QAngle	m_shutterOpenAngles;	
+    float	m_flShutterTime;
+    Vector	m_vShutterOpenPosition;
+    QAngle	m_shutterOpenAngles;
     Vector	m_vShutterClosePosition;
     QAngle	m_shutterCloseAngles;
-
     float		m_flOffCenterTop;
     float		m_flOffCenterBottom;
     float		m_flOffCenterLeft;
     float		m_flOffCenterRight;
     bool		m_bOffCenter : 1;
-
     bool		m_bRenderToSubrectOfLargerScreen : 1;
-
     bool		m_bDoBloomAndToneMapping : 1;
     bool		m_bDoDepthOfField : 1;
     bool		m_bHDRTarget : 1;
     bool		m_bDrawWorldNormal : 1;
     bool		m_bCullFrontFaces : 1;
-
     bool		m_bCacheFullSceneState : 1;
-
     bool		m_bRenderFlashlightDepthTranslucents : 1;
 };
-
-
 
 #pragma region vscript
 
@@ -3615,31 +3603,16 @@ public:
 
 //Particle system stuff
 
-template<class T> class CUtlReference {
+template<class T> struct CUtlReference {
     CUtlReference* m_pNext;
     CUtlReference* m_pPrev;
     T* m_pObject;
 };
-template<class T> class CUtlIntrusiveList {
+template<class T> struct CUtlIntrusiveList {
     T* m_pHead;
 };
-template<class T> class CUtlIntrusiveDList : public CUtlIntrusiveList<T> {};
-template<class T> class CUtlReferenceList : public CUtlIntrusiveDList< CUtlReference<T> > {};
-
-class CSheet {
-public:
-    CUtlReferenceList<CSheet> m_References;
-
-    struct SheetInfo_t {
-        void* m_pSamples;
-        unsigned char m_SeqFlags;
-        bool m_bSequenceIsCopyOfAnotherSequence;
-        unsigned short m_nNumFrames;
-        float m_flFrameSpan;
-    };
-
-    CUtlVector< SheetInfo_t > m_SheetInfo;
-};
+template<class T> struct CUtlIntrusiveDList : public CUtlIntrusiveList<T> {};
+template<class T> struct CUtlReferenceList : public CUtlIntrusiveDList< CUtlReference<T> > {};
 
 typedef union {
     float  m128_f32[4];
@@ -3665,8 +3638,7 @@ struct CParticleControlPoint {
     void* m_pSnapshot;
 };
 
-class CModelHitBoxesInfo {
-public:
+struct CModelHitBoxesInfo {
     float m_flLastUpdateTime;
     float m_flPrevLastUpdateTime;
     int m_nNumHitBoxes;
@@ -3678,4 +3650,126 @@ public:
 struct CParticleCPInfo {
     CParticleControlPoint m_ControlPoint;
     CModelHitBoxesInfo m_CPHitBox;
+};
+
+struct CParticleAttributeAddressTable {
+    float* m_pAttributes[24];
+    size_t m_nFloatStrides[24];
+};
+
+class VMatrix { float m[4][4];};
+struct Particle {
+    Particle* m_pPrev, * m_pNext;
+    void* m_pSubTexture;
+    Vector m_Pos;
+};
+
+class IParticleEffect{
+public:
+    virtual			~IParticleEffect() {}
+    virtual void	Update(float fTimeDelta) {}
+    virtual void	StartRender(VMatrix & effectMatrix) {}
+    virtual bool	ShouldSimulate() const = 0;
+    virtual void	SetShouldSimulate(bool bSim) = 0;
+    virtual void	SimulateParticles(void* pIterator) = 0;
+    virtual void	RenderParticles(void* pIterator) = 0;
+    virtual void	NotifyRemove() {}
+    virtual void	NotifyDestroyParticle(Particle* pParticle) {}
+    virtual const Vector& GetSortOrigin() = 0;
+    virtual const Vector* GetParticlePosition(Particle* pParticle) { return &pParticle->m_Pos; }
+    virtual const char* GetEffectName() { return "???"; }
+};
+
+// Alien Swarm SDK definition is used, but it doesn't work properly
+// TODO: figure out all members of this struct
+
+class CParticleCollection {
+public:
+    //CUtlReference< void > m_Sheet; // CSheet
+    //fltx4 m_fl4CurTime;
+    //int m_nPaddedActiveParticles;
+    //float m_flCurTime;
+    //float m_flPrevSimTime;
+    //float m_flTargetDrawTime;
+    //int m_nActiveParticles;
+    //float m_flDt;
+    //float m_flPreviousDt;
+    //float m_flNextSleepTime;
+    //CUtlReference< void > m_pDef; //CParticleSystemDefinition
+    //int m_nAllocatedParticles;
+    //int m_nMaxAllowedParticles;
+    //bool m_bDormant;
+    //bool m_bEmissionStopped;
+    //bool m_bPendingRestart;
+    //bool m_bQueuedStartEmission;
+    //bool m_bFrozen;
+    //bool m_bInEndCap;
+    //int m_LocalLightingCP;
+    //Color m_LocalLighting;
+    unsigned char unknown001[100];
+
+    int m_nNumControlPointsAllocated;
+    CParticleCPInfo* m_pCPInfo;
+    unsigned char* m_pOperatorContextData;
+    CParticleCollection* m_pNext;
+    CParticleCollection* m_pPrev;
+    struct CWorldCollideContextData* m_pCollisionCacheData[4];
+    CParticleCollection* m_pParent;
+    CUtlIntrusiveDList<CParticleCollection>  m_Children;
+    Vector m_Center;
+    void* m_pRenderable;
+    bool m_bBoundsValid;
+    Vector m_MinBounds;
+    Vector m_MaxBounds;
+    int m_nHighestCP;
+    //int m_nAttributeMemorySize;
+    //unsigned char* m_pParticleMemory;
+    //unsigned char* m_pParticleInitialMemory;
+    //unsigned char* m_pConstantMemory;
+    //unsigned char* m_pPreviousAttributeMemory;
+    //int m_nPerParticleInitializedAttributeMask;
+    //int m_nPerParticleUpdatedAttributeMask;
+    //int m_nPerParticleReadInitialAttributeMask;
+    //CParticleAttributeAddressTable m_ParticleAttributes;
+    //CParticleAttributeAddressTable m_ParticleInitialAttributes;
+    //CParticleAttributeAddressTable m_PreviousFrameAttributes;
+    //float* m_pConstantAttributes;
+    //unsigned long long m_nControlPointReadMask;
+    //unsigned long long m_nControlPointNonPositionalMask;
+    //int m_nParticleFlags;
+    //bool m_bIsScrubbable : 1;
+    //bool m_bIsRunningInitializers : 1;
+    //bool m_bIsRunningOperators : 1;
+    //bool m_bIsTranslucent : 1;
+    //bool m_bIsTwoPass : 1;
+    //bool m_bAnyUsesPowerOfTwoFrameBufferTexture : 1;
+    //bool m_bAnyUsesFullFrameBufferTexture : 1;
+    //bool m_bIsBatchable : 1;
+    //bool m_bIsOrderImportant : 1;
+    //bool m_bRunForParentApplyKillList : 1;
+    //bool m_bUsesPowerOfTwoFrameBufferTexture;
+    //bool m_bUsesFullFrameBufferTexture;
+    //int m_nDrawnFrames;
+    //int m_nUniqueParticleId;
+    //int m_nRandomQueryCount;
+    //int m_nRandomSeed;
+    //int m_nOperatorRandomSampleOffset;
+    //float m_flMinDistSqr;
+    //float m_flMaxDistSqr;
+    //float m_flOOMaxDistSqr;
+    //Vector m_vecLastCameraPos;
+    //float m_flLastMinDistSqr;
+    //float m_flLastMaxDistSqr;
+    //int m_nNumParticlesToKill;
+    //void* m_pParticleKillList; // KillListItem_t
+    //CParticleCollection* m_pNextDef;
+    //CParticleCollection* m_pPrevDef;
+    //void* m_pRenderOp; //CParticleOperatorInstance
+};
+
+class CNewParticleEffect : public IParticleEffect, public CParticleCollection{};
+
+struct ParticleSystemSearchResult {
+    void* valveYouAbsoluteDumbFucksIWishYouAllGetHitByAnIcecreamTruck[4];
+    CParticleCollection collection;
 };

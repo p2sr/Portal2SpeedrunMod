@@ -5,51 +5,54 @@
 #include "Offsets.hpp"
 #include "Utils.hpp"
 
+
+//REDECL(Client::HudUpdate);
+//DETOUR(Client::HudUpdate, unsigned int a2) {
+//    client->UpdatePortalGunIndicatorColor(nullptr);
+//    return client->HudUpdate(thisptr, a2);
+//}
+//
 REDECL(Client::RenderView);
 DETOUR(Client::RenderView, const CViewSetup& view, int nClearFlags, int whatToDraw) {
     client->UpdatePortalGunIndicatorColor();
-    auto result = Client::RenderView(thisptr, view, nClearFlags, whatToDraw);
-    client->UpdatePortalGunIndicatorColor();
-    return result;
+    return client->RenderView(thisptr, view, nClearFlags, whatToDraw);
 }
 
-REDECL(Client::HudUpdate);
-DETOUR(Client::HudUpdate, unsigned int a2) {
-    client->UpdatePortalGunIndicatorColor();
-    auto result = Client::HudUpdate(thisptr, a2);
-    client->UpdatePortalGunIndicatorColor();
-    return result;
-}
-
-
-void* Client::GetParticleSystem(void* prev) {
-    return reinterpret_cast<void*>(this->NextParticleSystem(this->ClientTools->ThisPtr(), prev));
+ParticleSystemSearchResult* Client::GetParticleSystem(ParticleSystemSearchResult* prev) {
+    void *next = this->NextParticleSystem(this->ClientTools->ThisPtr(), prev);
+    return reinterpret_cast<ParticleSystemSearchResult*>(next);
 }
 
 void Client::SetPortalGunIndicatorColor(Vector v) {
     portalGunIndicatorColor = v;
 }
 
-void Client::UpdatePortalGunIndicatorColor() {
-    if (portalGunIndicatorColor.Length() > 0) {
-        //TODO: find a way to verify what particle is for portal gun. for now changing control point for last two ones.
-        void* particleSystem = nullptr;
-        int particleCount = 0;
-        CParticleCPInfo controlPoints[2];
-        while (particleSystem = client->GetParticleSystem(particleSystem)) {
-            int pointer = reinterpret_cast<int>(particleSystem);
-            uintptr_t m_pCPInfo_ptr = *reinterpret_cast<uintptr_t*>((uintptr_t)particleSystem + 0x78);
-            CParticleCPInfo * m_pCPInfo = reinterpret_cast<CParticleCPInfo*>(m_pCPInfo_ptr);
-            controlPoints[1] = controlPoints[0];
-            controlPoints[0] = m_pCPInfo[1];
-            particleCount++;
-            if (particleCount > 1024)break; //in case something fucks up
-        }
 
-        if(particleCount>=2) for (int i = 0; i < 2; i++) {
-            controlPoints[i].m_ControlPoint.m_Position = portalGunIndicatorColor;
-            controlPoints[i].m_ControlPoint.m_PrevPosition = portalGunIndicatorColor;
+#define PORTAL_GUN_CUSTOM_INDICATOR_CP_ID 24
+
+void Client::UpdatePortalGunIndicatorColor() {
+    ParticleSystemSearchResult* particleSystem = nullptr;
+    int particleCount = 0;
+    while (particleSystem = client->GetParticleSystem(particleSystem)) {
+        CParticleCollection particleCollection = particleSystem->collection;
+        int pointer = reinterpret_cast<int>(particleSystem);
+        int controlPointCount = particleCollection.m_nNumControlPointsAllocated;
+        //TODO: find a proper way to verify what particle is for portal gun.
+        if (controlPointCount > PORTAL_GUN_CUSTOM_INDICATOR_CP_ID && particleCollection.m_Center.Length() == 0) {
+            CParticleCPInfo* m_pCPInfo = particleCollection.m_pCPInfo;
+
+            //use default color if no custom color is set
+            Vector newColor = portalGunIndicatorColor;
+            if (newColor.Length() == 0) newColor = m_pCPInfo[1].m_ControlPoint.m_Position;
+
+            //requires custom particle system to work!
+            m_pCPInfo[PORTAL_GUN_CUSTOM_INDICATOR_CP_ID].m_ControlPoint.m_Position = newColor;
+            for (CParticleCollection* i = particleCollection.m_Children.m_pHead; i; i = i->m_pNext) {
+                i->m_pCPInfo[PORTAL_GUN_CUSTOM_INDICATOR_CP_ID].m_ControlPoint.m_Position = newColor;
+            }
         }
+        particleCount++;
+        if (particleCount > 1024)break; //in case something fucks up
     }
 }
 
@@ -63,7 +66,7 @@ bool Client::Init()
     this->g_ClientDLL = Interface::Create(this->Name(), "VClient0");
     if (this->g_ClientDLL) {
         this->g_ClientDLL->Hook(Client::RenderView_Hook, Client::RenderView, Offsets::RenderView);
-        this->g_ClientDLL->Hook(Client::HudUpdate_Hook, Client::HudUpdate, Offsets::HudUpdate);
+        //this->g_ClientDLL->Hook(Client::HudUpdate_Hook, Client::HudUpdate, Offsets::HudUpdate);
     }
 
     auto leaderboard = Command("+leaderboard");

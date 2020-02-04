@@ -24,6 +24,7 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(SMSM, IServerPluginCallbacks, INTERFACEVERSION
 BEGIN_SCRIPTDESC_ROOT(SMSM, "The SMSM instance.")
 DEFINE_SCRIPTFUNC(GetMode, "Returns current mode.")
 DEFINE_SCRIPTFUNC(IsDialogueEnabled, "Is dialogue enabled in audio settings?")
+DEFINE_SCRIPTFUNC(SetPortalGunIndicatorColor, "Sets the color of portal gun indicator. Set to 0,0,0 to use default.")
 END_SCRIPTDESC()
 
 SMSM::SMSM()
@@ -92,6 +93,7 @@ void SMSM::LevelShutdown() {
 
 void SMSM::ClientActive(void* pEntity) {
     console->DevMsg("SMSM::ClientActive -> pEntity: %p\n", pEntity);
+    client->SetPortalGunIndicatorColor(Vector(0, 0, 0));
 
     if (!this->clients.empty() && this->clients.at(0) == pEntity) {
 
@@ -183,6 +185,10 @@ void SMSM::ForceAct5MenuBackground() {
 
 void SMSM::ResetModeVariables() {
 
+}
+
+void SMSM::SetPortalGunIndicatorColor(Vector color) {
+    client->SetPortalGunIndicatorColor(color);
 }
 
 bool SMSM::IsDialogueEnabled() {
