@@ -19,6 +19,19 @@ extern int InternalSetValue;
 extern int InternalSetFloatValue;
 extern int InternalSetIntValue;
 
+// CMatSystemSurface
+extern int DrawSetColor;
+extern int DrawFilledRect;
+extern int DrawLine;
+extern int DrawSetTextFont;
+extern int DrawSetTextColor;
+extern int GetFontTall;
+extern int PaintTraverseEx;
+extern int DrawColoredText;
+extern int DrawTextLen;
+extern int StartDrawing;
+extern int FinishDrawing;
+
 // CClientState
 extern int SetSignonState;
 
@@ -41,9 +54,20 @@ extern int NextParticleSystem;
 extern int m_fFlags;
 extern int m_nTickBase;
 extern int m_bDucking;
+extern int m_hActiveWeapon;
+extern int m_bCanFirePortal1;
+
+// CServerGameDLL
+extern int Think;
 
 // CScriptManager
 extern int CreateVM;
+
+// IParticleEffect
+extern int RenderParticles;
+
+// IEngineVGuiInternal
+extern int Paint;
 
 // Others
 extern int GetClientStateFunction;
@@ -57,4 +81,5 @@ extern int CCommandBufferSize;
 extern int GetHud;
 extern int FindElement;
 extern int ProcessMovement;
+extern int UTIL_PlayerByIndex;
 }

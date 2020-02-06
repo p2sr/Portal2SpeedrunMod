@@ -5,6 +5,7 @@
 #include "Offsets.hpp"
 #include "Utils.hpp"
 
+#include "Modules/Console.hpp"
 
 //REDECL(Client::HudUpdate);
 //DETOUR(Client::HudUpdate, unsigned int a2) {
@@ -18,9 +19,9 @@ DETOUR(Client::RenderView, const CViewSetup& view, int nClearFlags, int whatToDr
     return client->RenderView(thisptr, view, nClearFlags, whatToDraw);
 }
 
-ParticleSystemSearchResult* Client::GetParticleSystem(ParticleSystemSearchResult* prev) {
-    void *next = this->NextParticleSystem(this->ClientTools->ThisPtr(), prev);
-    return reinterpret_cast<ParticleSystemSearchResult*>(next);
+CNewParticleEffect* Client::GetParticleSystem(CNewParticleEffect* prev) {
+    void *next = this->NextParticleSystem(this->g_ClientTools->ThisPtr(), prev);
+    return reinterpret_cast<CNewParticleEffect*>(next);
 }
 
 void Client::SetPortalGunIndicatorColor(Vector v) {
@@ -31,14 +32,15 @@ void Client::SetPortalGunIndicatorColor(Vector v) {
 #define PORTAL_GUN_CUSTOM_INDICATOR_CP_ID 24
 
 void Client::UpdatePortalGunIndicatorColor() {
-    ParticleSystemSearchResult* particleSystem = nullptr;
+    CNewParticleEffect* particleSystem = nullptr;
     int particleCount = 0;
     while (particleSystem = client->GetParticleSystem(particleSystem)) {
         CParticleCollection particleCollection = particleSystem->collection;
         int pointer = reinterpret_cast<int>(particleSystem);
         int controlPointCount = particleCollection.m_nNumControlPointsAllocated;
         //TODO: find a proper way to verify what particle is for portal gun.
-        if (controlPointCount > PORTAL_GUN_CUSTOM_INDICATOR_CP_ID && particleCollection.m_Center.Length() == 0) {
+        //for now this should do it
+        if (controlPointCount == PORTAL_GUN_CUSTOM_INDICATOR_CP_ID+2 && particleCollection.m_Center.Length() == 0) {
             CParticleCPInfo* m_pCPInfo = particleCollection.m_pCPInfo;
 
             //use default color if no custom color is set
@@ -84,19 +86,21 @@ bool Client::Init()
         }
     }
 
-    this->ClientTools = Interface::Create(this->Name(), "VCLIENTTOOLS001", false);
+    this->g_ClientTools = Interface::Create(this->Name(), "VCLIENTTOOLS001", false);
 
-    if (this->ClientTools) {
-        this->NextParticleSystem = this->ClientTools->Original<_NextParticleSystem>(Offsets::NextParticleSystem);
+    if (this->g_ClientTools) {
+        this->NextParticleSystem = this->g_ClientTools->Original<_NextParticleSystem>(Offsets::NextParticleSystem);
     }
 
-    return this->hasLoaded = this->ChatPrintf && this->ClientTools;
+    return this->hasLoaded = this->ChatPrintf 
+        && this->g_ClientTools;
 }
 void Client::Shutdown()
 {
     Interface::Delete(this->g_HudChat);
-    Interface::Delete(this->ClientTools);
+    Interface::Delete(this->g_ClientTools);
     Interface::Delete(this->g_ClientDLL);
+    
 }
 
 Client* client;

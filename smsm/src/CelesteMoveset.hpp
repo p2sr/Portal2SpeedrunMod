@@ -15,6 +15,7 @@ public:
     void ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, float dt);
 
     void Dash() { dashRequested = true; }
+    void UpdateModeParams();
 
     bool IsPlaceSuitableForWallgrab(void * player, Vector pos, float angle, Vector * placeNormal = nullptr);
 
@@ -31,11 +32,11 @@ public:
     float wallJumpForce; //how much should player be pushed away from a wall when jumping on it
     float wallJumpAngle; //what angle should be used to calculate wall jump direction (NOT IMPLEMENTED YET)
 
-    float wallClimbMaxStamina; //how many units can you travel before stamina runs out (NOT IMPLEMENTED YET)
-    float wallClimbJumpHeight; //how high can player jump when wallclimbing (NOT IMPLEMENTED YET)
-    float wallClimbJumpDuration; //how long should that jump take (NOT IMPLEMENTED YET)
-    float wallClimbMovementSpeed; // speed in which player can move on a wall (NOT IMPLEMENTED YET)
-    float wallClimbHoldFatigue; // how much to take from stamina if not moving (NOT IMPLEMENTED YET)
+    float wallClimbMaxStamina; //how many units can you travel before stamina runs out
+    float wallClimbJumpHeight; //how high can player jump when wallclimbing
+    float wallClimbJumpDuration; //how long should that jump take
+    float wallClimbMovementSpeed; // speed in which player can move on a wall
+    float wallClimbHoldFatigue; // how much to take from stamina if not moving
 
     int maxDashes;
 private:
@@ -57,6 +58,16 @@ private:
 
     bool holdingJump = false;
     bool pressedJump = false;
+
+public:
+    const enum ModeParams {
+        InitialValue = 0,
+        MaxDashes = 1,
+        MaxStamina = 2,
+        DashesLeft = 3,
+        StaminaLeft = 4,
+        BerriesOffset = 100,
+    };
 };
 
 extern CelesteMoveset celesteMoveset;

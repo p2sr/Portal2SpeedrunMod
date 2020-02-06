@@ -3600,7 +3600,6 @@ public:
 #pragma endregion
 
 
-
 //Particle system stuff
 
 template<class T> struct CUtlReference {
@@ -3655,29 +3654,6 @@ struct CParticleCPInfo {
 struct CParticleAttributeAddressTable {
     float* m_pAttributes[24];
     size_t m_nFloatStrides[24];
-};
-
-class VMatrix { float m[4][4];};
-struct Particle {
-    Particle* m_pPrev, * m_pNext;
-    void* m_pSubTexture;
-    Vector m_Pos;
-};
-
-class IParticleEffect{
-public:
-    virtual			~IParticleEffect() {}
-    virtual void	Update(float fTimeDelta) {}
-    virtual void	StartRender(VMatrix & effectMatrix) {}
-    virtual bool	ShouldSimulate() const = 0;
-    virtual void	SetShouldSimulate(bool bSim) = 0;
-    virtual void	SimulateParticles(void* pIterator) = 0;
-    virtual void	RenderParticles(void* pIterator) = 0;
-    virtual void	NotifyRemove() {}
-    virtual void	NotifyDestroyParticle(Particle* pParticle) {}
-    virtual const Vector& GetSortOrigin() = 0;
-    virtual const Vector* GetParticlePosition(Particle* pParticle) { return &pParticle->m_Pos; }
-    virtual const char* GetEffectName() { return "???"; }
 };
 
 // Alien Swarm SDK definition is used, but it doesn't work properly
@@ -3767,9 +3743,7 @@ public:
     //void* m_pRenderOp; //CParticleOperatorInstance
 };
 
-class CNewParticleEffect : public IParticleEffect, public CParticleCollection{};
-
-struct ParticleSystemSearchResult {
+struct CNewParticleEffect {
     void* valveYouAbsoluteDumbFucksIWishYouAllGetHitByAnIcecreamTruck[4];
     CParticleCollection collection;
 };

@@ -5,7 +5,8 @@
 
 class Server : public Module {
 public:
-    Interface* GameMovement = nullptr;
+    Interface* g_GameMovement = nullptr;
+    Interface* g_ServerGameDLL = nullptr;
 public:
     Server();
     bool Init() override;
@@ -14,6 +15,11 @@ public:
 
     //CGameMovement::ProcessMovement
     DECL_DETOUR(ProcessMovement, void* pPlayer, CMoveData* pMove);
+
+    using _UTIL_PlayerByIndex = void* (__cdecl*)(int index);
+    _UTIL_PlayerByIndex UTIL_PlayerByIndex = nullptr;
+
+    void* GetPlayer(int index);
 };
 
 extern Server* server;

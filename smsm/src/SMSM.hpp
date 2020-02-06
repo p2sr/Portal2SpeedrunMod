@@ -23,6 +23,8 @@
         ptr = nullptr;   \
     }
 
+#define MAX_MODE_PARAMETERS 1024
+
 class SMSM : public IServerPluginCallbacks {
 public:
     Game* game;
@@ -33,6 +35,7 @@ public:
     std::vector<void*> clients;
     
     int mode;
+    float modeParams[MAX_MODE_PARAMETERS];
 public:
     SMSM();
 
@@ -62,14 +65,15 @@ public:
     const char* Build() { return SMSM_BUILD; }
     const char* Website() { return SMSM_WEB; }
 
-    void ServerCommand(const char* fmt, ...);
-    void ClientCommand(const char* fmt, ...);
-    void Chat(const char* fmt, ...);
     void Cleanup();
 
     void ForceAct5MenuBackground();
     int GetMode() { return this->mode; }
+    void SetMode(int id);
+    float GetModeParam(int id);
+    bool SetModeParam(int id, float value);
     void SetPortalGunIndicatorColor(Vector color);
+    void SetScreenCoverColor(int r, int g, int b, int a);
     bool IsDialogueEnabled();
     void ResetModeVariables();
 

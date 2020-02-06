@@ -6,7 +6,7 @@
 class Client : public Module {
 public:
     Interface* g_HudChat;
-    Interface* ClientTools;
+    Interface* g_ClientTools;
     Interface* g_ClientDLL;
 
     using _ChatPrintf = void(*)(void* thisptr, int iPlayerIndex, int iFilter, const char* fmt, ...);
@@ -15,7 +15,7 @@ public:
     using _NextParticleSystem = void*(__func*)(void* thisptr, void* searchResult);
     _NextParticleSystem NextParticleSystem = nullptr;
 
-    ParticleSystemSearchResult* GetParticleSystem(ParticleSystemSearchResult* prev);
+    CNewParticleEffect* GetParticleSystem(CNewParticleEffect* prev);
     inline Vector GetPortalGunIndicatorColor() const { return this->portalGunIndicatorColor; }
     void SetPortalGunIndicatorColor(Vector v);
     void UpdatePortalGunIndicatorColor();

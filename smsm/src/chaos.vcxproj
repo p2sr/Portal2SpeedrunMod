@@ -173,6 +173,8 @@
   <ItemGroup>
     <ClCompile Include="CelesteMoveset.cpp" />
     <ClCompile Include="Modules\Server.cpp" />
+    <ClCompile Include="Modules\Surface.cpp" />
+    <ClCompile Include="Modules\VGui.cpp" />
     <ClCompile Include="Modules\VScript.cpp" />
     <ClCompile Include="SMSM.cpp" />
     <ClCompile Include="Cheats.cpp" />
@@ -194,6 +196,8 @@
   <ItemGroup>
     <ClInclude Include="CelesteMoveset.hpp" />
     <ClInclude Include="Modules\Server.hpp" />
+    <ClInclude Include="Modules\Surface.hpp" />
+    <ClInclude Include="Modules\VGui.hpp" />
     <ClInclude Include="Modules\VScript.hpp" />
     <ClInclude Include="SMSM.hpp" />
     <ClInclude Include="Cheats.hpp" />

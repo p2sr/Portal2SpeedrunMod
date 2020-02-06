@@ -12,7 +12,10 @@
 #include "Modules/Module.hpp"
 #include "Modules/Tier1.hpp"
 #include "Modules/VScript.hpp"
+#include "Modules/VGui.hpp"
+#include "Modules/Surface.hpp"
 
+#include "Offsets.hpp"
 #include "Command.hpp"
 #include "Game.hpp"
 #include "Utils.hpp"
@@ -23,8 +26,12 @@ EXPOSE_SINGLE_INTERFACE_GLOBALVAR(SMSM, IServerPluginCallbacks, INTERFACEVERSION
 
 BEGIN_SCRIPTDESC_ROOT(SMSM, "The SMSM instance.")
 DEFINE_SCRIPTFUNC(GetMode, "Returns current mode.")
+DEFINE_SCRIPTFUNC(SetMode, "Sets the mod mode.")
+DEFINE_SCRIPTFUNC(GetModeParam, "Returns mod-specific param with given ID.")
+DEFINE_SCRIPTFUNC(SetModeParam, "Sets mod specific param if it's not read-only (i.e. not constantly updated).")
 DEFINE_SCRIPTFUNC(IsDialogueEnabled, "Is dialogue enabled in audio settings?")
 DEFINE_SCRIPTFUNC(SetPortalGunIndicatorColor, "Sets the color of portal gun indicator. Set to 0,0,0 to use default.")
+DEFINE_SCRIPTFUNC(SetScreenCoverColor, "Sets color that covers the whole screen.")
 END_SCRIPTDESC()
 
 SMSM::SMSM()
@@ -57,6 +64,8 @@ bool SMSM::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServer
             this->modules->AddModule<Client>(&client);
             this->modules->AddModule<Server>(&server);
             this->modules->AddModule<VScript>(&vscript);
+            this->modules->AddModule<Surface>(&surface);
+            this->modules->AddModule<VGui>(&vgui);
             this->modules->InitAll();
 
             if (engine && client && engine->hasLoaded && client->hasLoaded && server->hasLoaded) {
@@ -87,6 +96,8 @@ const char* SMSM::GetPluginDescription() {
 void SMSM::LevelShutdown() {
     console->DevMsg("SMSM::LevelShutdown\n");
 
+    vgui->SetCoverColor(Color(0, 0, 0, 0));
+
     // Make sure to clear the list after sending any client-side shutdown commands
     this->clients.clear();
 }
@@ -105,54 +116,6 @@ void SMSM::ClientFullyConnect(void* pEdict) {
     this->clients.push_back(pEdict);
 }
 
-// Utilities
-void SMSM::ServerCommand(const char* fmt, ...) {
-    va_list argptr;
-    va_start(argptr, fmt);
-    char data[1024];
-    vsnprintf(data, sizeof(data), fmt, argptr);
-    va_end(argptr);
-
-#ifdef _WIN32
-    auto slot = engine->GetActiveSplitScreenPlayerSlot();
-#else
-    auto slot = engine->GetActiveSplitScreenPlayerSlot(nullptr);
-#endif
-
-    if (!sv_cheats.GetBool()) {
-        sv_cheats.SetValue(1);
-    }
-
-    engine->Cbuf_AddText(slot, data, 0);
-}
-void SMSM::ClientCommand(const char* fmt, ...) {
-    va_list argptr;
-    va_start(argptr, fmt);
-    char data[1024];
-    vsnprintf(data, sizeof(data), fmt, argptr);
-    va_end(argptr);
-
-    if (!sv_cheats.GetBool()) {
-        sv_cheats.SetValue(1);
-    }
-
-    for (const auto& client : this->clients) {
-        engine->ClientCommand(nullptr, client, data);
-    }
-}
-void SMSM::Chat(const char* fmt, ...) {
-    va_list argptr;
-    va_start(argptr, fmt);
-    char data[1024];
-    vsnprintf(data, sizeof(data), fmt, argptr);
-    va_end(argptr);
-
-    if (this->clients.size() > 1) {
-        this->ServerCommand("say %s", data);
-    } else {
-        client->ChatPrintf(client->g_HudChat->ThisPtr(), 0, 0, "%c%s", TextColor::COLOR_LOCATION, data);
-    }
-}
 void SMSM::Cleanup() {
     if (console)
         console->Print("Speedrun Mod Simple Modifier disabled.\n");
@@ -182,13 +145,35 @@ void SMSM::ForceAct5MenuBackground() {
 }
 
 
+void SMSM::SetMode(int mode) {
+    this->mode = mode;
+    //reset param table and other stuff when switching modes
+    this->ResetModeVariables();
+}
 
 void SMSM::ResetModeVariables() {
+    for (int i = 0; i < MAX_MODE_PARAMETERS; i++) {
+        this->modeParams[i] = 0.0f;
+    }
+}
 
+float SMSM::GetModeParam(int id) {
+    if (id < 0 || id >= MAX_MODE_PARAMETERS)return -1.0f;
+    return this->modeParams[id];
+}
+
+bool SMSM::SetModeParam(int id, float value) {
+    if (id < 0 || id >= MAX_MODE_PARAMETERS)return false;
+    this->modeParams[id] = value;
+    return true;
 }
 
 void SMSM::SetPortalGunIndicatorColor(Vector color) {
     client->SetPortalGunIndicatorColor(color);
+}
+
+void SMSM::SetScreenCoverColor(int r, int g, int b, int a) {
+    vgui->SetCoverColor(Color(r, g, b, a));
 }
 
 bool SMSM::IsDialogueEnabled() {

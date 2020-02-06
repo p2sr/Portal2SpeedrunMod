@@ -46,10 +46,22 @@ void Cheats::Shutdown()
 
 CON_COMMAND(sm_mode, "Variable used by Speedrun Mod to determine currently played mode.\n") {
     if (args.ArgC() != 2) {
-        return console->Print("Current Speedrun Mod mode: %d\n", smsm.mode);
+        return console->Print("Current Speedrun Mod mode: %d\n", smsm.GetMode());
     }
     auto mode = std::atoi(args[1]);
     smsm.mode = mode;
-    //reset param table when switching modes
-    smsm.ResetModeVariables();
+    smsm.SetMode(mode);
+}
+
+CON_COMMAND(sm_param, "Allows to preview and manipulate mode-specific variables stored through the session.\n") {
+    if (args.ArgC() < 2 || args.ArgC() > 3) {
+        return console->Print("Incorrect command usage. Use syntax: sm_param [id] <value>");
+    }
+    auto paramId = std::atoi(args[1]);
+    if (args.ArgC() == 2) {
+        return console->Print("Mode-specific param id %d: %f\n", paramId, smsm.GetModeParam(paramId));
+    }
+    auto param = std::atof(args[2]);
+
+    smsm.SetModeParam(paramId, param);
 }

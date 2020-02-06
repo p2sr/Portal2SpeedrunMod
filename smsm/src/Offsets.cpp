@@ -19,6 +19,19 @@ int InternalSetValue;
 int InternalSetFloatValue;
 int InternalSetIntValue;
 
+// CMatSystemSurface
+int DrawSetColor;
+int DrawFilledRect;
+int DrawLine;
+int DrawSetTextFont;
+int DrawSetTextColor;
+int GetFontTall;
+int PaintTraverseEx;
+int DrawColoredText;
+int DrawTextLen;
+int StartDrawing;
+int FinishDrawing;
+
 // CClientState
 int SetSignonState;
 
@@ -41,9 +54,20 @@ int NextParticleSystem;
 int m_fFlags;
 int m_nTickBase;
 int m_bDucking;
+int m_hActiveWeapon;
+int m_bCanFirePortal1;
+
+// CServerGameDLL
+int Think;
 
 // CScriptManager
 int CreateVM;
+
+// IParticleEffect
+int RenderParticles;
+
+// IEngineVGuiInternal
+int Paint;
 
 // Others
 int GetClientStateFunction;
@@ -57,4 +81,5 @@ int CCommandBufferSize;
 int GetHud;
 int FindElement;
 int ProcessMovement;
+int UTIL_PlayerByIndex;
 }

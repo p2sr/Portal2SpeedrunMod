@@ -32,8 +32,9 @@ void Portal2::LoadOffsets()
     NextParticleSystem = 54; //IClientTools
     ProcessMovement = 1; // CGameMovement
     m_fFlags = 204; // CBaseEntity
-    m_nTickBase = 3792; // CBaseEntity, m_nTickBase -> 3792
+    m_nTickBase = 3792; // CBaseEntity
     m_bDucking = 2272; // CBaseEntity
+    
 
     // client.dll
 
@@ -42,6 +43,12 @@ void Portal2::LoadOffsets()
     ChatPrintf = 22; // CBaseHudChat
     RenderView = 26;
     HudUpdate = 11;
+
+    // server.dll
+    m_hActiveWeapon = 2140; // CBaseEntity
+    m_bCanFirePortal1 = 1500; // CBaseEntity
+    UTIL_PlayerByIndex = 39; // CServerGameDLL::Think
+    Think = 31; // CServerGameDLL
 
     // vstdlib.dll
 
@@ -53,6 +60,21 @@ void Portal2::LoadOffsets()
     // vscript.dll
 
     CreateVM = 8;
+
+    // vguimatsurface.dll
+
+    DrawSetColor = 14; // CMatSystemSurface
+    DrawFilledRect = 15; // CMatSystemSurface
+    DrawLine = 18; // CMatSystemSurface
+    DrawSetTextFont = 22; // CMatSystemSurface
+    DrawSetTextColor = 23; // CMatSystemSurface
+    GetFontTall = 72; // CMatSystemSurface
+    PaintTraverseEx = 117; // CMatSystemSurface
+    StartDrawing = 127; // CMatSystemSurface::PaintTraverseEx
+    FinishDrawing = 603; // CMatSystemSurface::PaintTraverseEx
+    DrawColoredText = 160; // CMatSystemSurface
+    DrawTextLen = 163; // CMatSystemSurface
+    Paint = 14; // CEngineVGui
 }
 const char* Portal2::Version()
 {

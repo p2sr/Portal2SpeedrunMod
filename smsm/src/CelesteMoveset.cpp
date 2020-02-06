@@ -51,9 +51,27 @@ void CelesteMoveset::PreProcessMovement(void* pPlayer, CMoveData* pMove) {
     }
 }
 
+void CelesteMoveset::UpdateModeParams() {
+    smsm.SetModeParam(DashesLeft, dashesLeft);
+    smsm.SetModeParam(StaminaLeft, climbStamina);
+    if (!smsm.GetModeParam(InitialValue)) {
+        smsm.SetModeParam(MaxDashes, maxDashes);
+        smsm.SetModeParam(MaxStamina, wallClimbMaxStamina);
+        smsm.SetModeParam(InitialValue, 1);
+    }
+    maxDashes = smsm.GetModeParam(MaxDashes);
+    wallClimbMaxStamina = smsm.GetModeParam(MaxStamina);
+}
+
 void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
 
+    //void** grabbed = reinterpret_cast<void**>((uintptr_t)pPlayer + 2960);
+    //*grabbed = pPlayer;
+    //console->Print("Grabbed entity: %X\n", grabbed);
+
     if (smsm.GetMode() != Celeste) return;
+
+    UpdateModeParams();
 
     //process jump input
     bool holdingSpace = (pMove->m_nButtons & 0x2);
@@ -220,13 +238,13 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
 
         float cosAng = cos(alignedAng), sinAng = sin(alignedAng);
         
-        float bbsize = 16;
-        float bbx = (abs(cosAng) < 0.1 ? a: cosAng) * 15;
-        float bby = (abs(sinAng) < 0.1 ? a: sinAng) * 15;
+        float bbsize = 15;
+        float bbx = (abs(cosAng) < 0.1 ? a: cosAng) * bbsize;
+        float bby = (abs(sinAng) < 0.1 ? a: sinAng) * bbsize;
 
         Ray_t ray;
         ray.m_IsRay = true; ray.m_IsSwept = true;
-        float d = 2.5;
+        float d = 5;
         ray.m_Delta = VectorAligned(cosAng * d + 0.001, sinAng * d+0.001, 0.001);
         ray.m_Start = VectorAligned(pos.x + bbx, pos.y + bby, pos.z + y*72.0f);
         ray.m_StartOffset = VectorAligned();
@@ -342,7 +360,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
         //during climb jump, ignore that player is not next to the wall, they'll come back there (hopefully)
         if (climbJumping > 0) { 
             float cjState = climbJumping / wallClimbJumpDuration;
-            float horizontalMov = 16 * (cjState-0.5);
+            float horizontalMov = 100 * (cjState-0.5);
             float verticalMov = (2 * wallClimbJumpHeight / wallClimbJumpDuration) * cjState;
             Vector climbVec = (climbedWallNorm ^ Vector(0, 0, 1)) ^ climbedWallNorm;
             climbVec = climbVec * verticalMov + climbedWallNorm*horizontalMov;
@@ -359,8 +377,9 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                 climbedWallNorm = wallNormal;
                 holdingWall = true;
             }
-                
-            Vector newVel = Vector(-climbedWallNorm.x, -climbedWallNorm.y, 0);
+            
+            float wallPullForce = 20;
+            Vector newVel = Vector(-climbedWallNorm.x * wallPullForce, -climbedWallNorm.y * wallPullForce, 0);
 
             float relMovAng = atan2f(playerWishVel.y, playerWishVel.x) - DEG2RAD(holdingWallAngle);
 
@@ -403,7 +422,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
         else {
             holdingWall = false;
         }
-        if(holdingWall)console->Print("stamina: %f\n", climbStamina);
+        //if(holdingWall)console->Print("stamina: %f\n", climbStamina);
     }
     else {
         climbJumping = 0;

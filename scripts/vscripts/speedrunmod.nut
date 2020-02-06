@@ -32,26 +32,6 @@ function modlog(msg){
   printl("### SPEEDRUN MOD ###: "+msg);
 }
 
-//Script access keys
-SCRIPT_ACCESS_KEY_READ <- 999999.25
-SCRIPT_ACCESS_KEY_WRITE <- 999999.50
-SCRIPT_ACCESS_KEY_LOOP <- 999999.75
-
-
-
-//transform values between SMSM and script system
-SMSMParam <- {
-  DialogueOff = 0,
-  CelesteMode = 100,
-  DashRequested = 101
-}
-
-function GetSMSMVariable(id,isInt=false){
-  local p = TraceLine(Vector(SCRIPT_ACCESS_KEY_READ,id,0),Vector(0,0,0),null)
-  if(isInt)return RandomInt(p,p) //temporary workaround for float->int conversion
-  else return p
-}
-
 function IsSMSMActive(){
   return ("smsm" in this);
 }
