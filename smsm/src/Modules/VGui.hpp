@@ -13,6 +13,7 @@ public:
 
     void SetCoverColor(Color c) {coverColor = c;};
 
+    bool canDrawThisFrame = true;
 private:
     Color coverColor;
 

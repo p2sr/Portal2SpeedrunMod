@@ -74,6 +74,7 @@ void Portal2::LoadOffsets()
     FinishDrawing = 603; // CMatSystemSurface::PaintTraverseEx
     DrawColoredText = 160; // CMatSystemSurface
     DrawTextLen = 163; // CMatSystemSurface
+    DisableClipping = 156; // CMatSystemSurface
     Paint = 14; // CEngineVGui
 }
 const char* Portal2::Version()

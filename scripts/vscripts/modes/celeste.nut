@@ -79,7 +79,7 @@ function CelesteUpdate(){
 
     local makeSound = previousDashCount>dashesLeft;
     if(makeSound){
-        GetPlayer().EmitSound("player/windgust.wav")
+        self.EmitSound("player/windgust.wav")
     } 
     previousDashCount=dashesLeft;
 }
@@ -90,14 +90,14 @@ function UpdateStaminaCover(){
     local stamina = smsm.GetModeParam(ModeParams.StaminaLeft);
     local colorAlpha = 0;
     if(stamina<50){
-        local animSpeed = 0.3
-        if(stamina<0)animSpeed=0.8;
+        local animSpeed = 0.4
+        if(stamina<=0) animSpeed = 1.2;
         staminaAnimTimer = staminaAnimTimer+animSpeed;
 
         colorAlpha = (50-stamina)*0.2 * ((cos(staminaAnimTimer)+1.0)/2.0)
     }
     smsm.SetScreenCoverColor(200,0,0,colorAlpha);
-    print("Stamina:"+stamina+"\n");
+    //print("Stamina:"+stamina+"\n");
 }
 
 function UpdateIndicatorDiode(){

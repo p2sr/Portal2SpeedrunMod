@@ -29,6 +29,7 @@ int GetFontTall;
 int PaintTraverseEx;
 int DrawColoredText;
 int DrawTextLen;
+int DisableClipping;
 int StartDrawing;
 int FinishDrawing;
 

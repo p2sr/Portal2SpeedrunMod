@@ -29,6 +29,7 @@ extern int GetFontTall;
 extern int PaintTraverseEx;
 extern int DrawColoredText;
 extern int DrawTextLen;
+extern int DisableClipping;
 extern int StartDrawing;
 extern int FinishDrawing;
 

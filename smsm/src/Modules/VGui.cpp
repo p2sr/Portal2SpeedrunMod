@@ -16,17 +16,26 @@ REDECL(VGui::Paint);
 // CEngineVGui::Paint
 DETOUR(VGui::Paint, int mode)
 {
-
-    //drawing covering color
-    if ((vgui->coverColor.r() || vgui->coverColor.g() || vgui->coverColor.b())) {
+    // drawing custom gui only once per frame
+    // flag is set by RenderView detour in client
+    if (vgui->canDrawThisFrame) { 
         surface->StartDrawing(surface->matsurface->ThisPtr());
-        surface->DrawRect(vgui->coverColor, 0, 0, 10000, 10000);
+        //currently drawn gui can have clipping enabled. disable that
+        surface->DisableClipping(surface->matsurface->ThisPtr(), true);
+    
+        //drawing covering color
+        if ((vgui->coverColor.r() || vgui->coverColor.g() || vgui->coverColor.b())) {
+            
+            surface->DrawRect(vgui->coverColor, 0, 0, 10000, 10000);
+            
+        }
+        surface->DisableClipping(surface->matsurface->ThisPtr(), false);
         surface->FinishDrawing();
     }
-    
 
     auto result = VGui::Paint(thisptr, mode);
 
+    vgui->canDrawThisFrame = false;
     return result;
 }
 

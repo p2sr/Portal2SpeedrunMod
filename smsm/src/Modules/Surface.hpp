@@ -25,6 +25,7 @@ public:
 #endif
     using _DrawColoredText = int(__cdecl*)(void* thisptr, HFont font, int x, int y, int r, int g, int b, int a, char* fmt, ...);
     using _DrawTextLen = int(__cdecl*)(void* thisptr, HFont font, char* fmt, ...);
+    using _DisableClipping = int(__cdecl*)(void* thisptr, bool disable);
     using _StartDrawing = int(__func*)(void* thisptr);
     using _FinishDrawing = int(__cdecl*)();
 
@@ -36,6 +37,7 @@ public:
     _DrawSetTextColor DrawSetTextColor = nullptr;
     _DrawColoredText DrawColoredText = nullptr;
     _DrawTextLen DrawTextLen = nullptr;
+    _DisableClipping DisableClipping = nullptr;
     _StartDrawing StartDrawing = nullptr;
     _FinishDrawing FinishDrawing = nullptr;
 

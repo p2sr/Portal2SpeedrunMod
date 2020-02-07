@@ -69,6 +69,7 @@ bool Surface::Init()
         this->DrawSetTextColor = matsurface->Original<_DrawSetTextColor>(Offsets::DrawSetTextColor);
         this->GetFontTall = matsurface->Original<_GetFontTall>(Offsets::GetFontTall);
         this->DrawColoredText = matsurface->Original<_DrawColoredText>(Offsets::DrawColoredText);
+        this->DisableClipping = matsurface->Original<_DisableClipping>(Offsets::DisableClipping);
         this->DrawTextLen = matsurface->Original<_DrawTextLen>(Offsets::DrawTextLen);
 
         auto PaintTraverseEx = matsurface->Original(Offsets::PaintTraverseEx);

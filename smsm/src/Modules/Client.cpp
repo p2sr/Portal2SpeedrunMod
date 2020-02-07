@@ -6,15 +6,17 @@
 #include "Utils.hpp"
 
 #include "Modules/Console.hpp"
+#include "Modules/VGui.hpp"
 
 //REDECL(Client::HudUpdate);
 //DETOUR(Client::HudUpdate, unsigned int a2) {
-//    client->UpdatePortalGunIndicatorColor(nullptr);
+//    
 //    return client->HudUpdate(thisptr, a2);
 //}
-//
+
 REDECL(Client::RenderView);
 DETOUR(Client::RenderView, const CViewSetup& view, int nClearFlags, int whatToDraw) {
+    vgui->canDrawThisFrame = true;
     client->UpdatePortalGunIndicatorColor();
     return client->RenderView(thisptr, view, nClearFlags, whatToDraw);
 }
