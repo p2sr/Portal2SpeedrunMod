@@ -377,6 +377,11 @@ function SpeedrunModeLoad(){
       EntFire("departure_elevator-elevator_turrets_02", "KillHierarchy")
       EntFire("departure_elevator-elevator_turrets_03", "KillHierarchy")
       EntFire("lift_gate_close_rl", "AddOutput", "OnTrigger lift_trigger:Enable::0.5:1", 0)
+
+      //fix the trigger
+      local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(1008, -704, -118), 100)
+      EntFireByHandle(trigger, "SetLocalOrigin", "884 -704 -116", 0, null, null)
+
       break
     case "sp_a2_laser_vs_turret":
       //make turrets explode faster if portals are in right position and laser is activated
