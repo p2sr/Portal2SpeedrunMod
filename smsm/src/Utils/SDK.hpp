@@ -666,132 +666,7 @@ static const char* EVENTS[] = {
     "player_spawn_orange"
 };
 
-struct csurface_t {
-    const char* name;
-    short surfaceProps;
-    unsigned short flags;
-};
-
-struct cplane_t {
-    Vector normal;
-    float dist;
-    unsigned char type;
-    unsigned char signbits;
-    unsigned char pad[2];
-};
-
-struct CBaseTrace {
-    Vector startpos;
-    Vector endpos;
-    cplane_t plane;
-    float fraction;
-    int contents;
-    unsigned short dispFlags;
-    bool allsolid;
-    bool startsolid;
-};
-
-struct CGameTrace : public CBaseTrace {
-    float fractionleftsolid;
-    csurface_t surface;
-    int hitgroup;
-    short physicsbone;
-    unsigned short worldSurfaceIndex;
-    int hitbox;
-};
-
-struct __declspec(align(16)) VectorAligned : public Vector {
-    VectorAligned() : Vector(), w(0) {};
-    VectorAligned(float x, float y, float z) : Vector(x, y, z) , w(0) {}
-    float w;
-};
-
-struct matrix3x4_t {
-    float m_flMatVal[3][4];
-};
-
-struct Ray_t {
-    VectorAligned m_Start; // starting point, centered within the extents
-    VectorAligned m_Delta; // direction + length of the ray
-    VectorAligned m_StartOffset; // Add this to m_Start to get the actual ray start
-    VectorAligned m_Extents; // Describes an axis aligned box extruded along a ray
-    const matrix3x4_t* m_pWorldAxisTransform = nullptr;
-    bool m_IsRay; // are there extents zero
-    bool m_IsSwept; // is delta != 0
-};
-
-enum TraceType_t {
-    TRACE_EVERYTHING = 0,
-    TRACE_WORLD_ONLY,
-    TRACE_ENTITIES_ONLY,
-    TRACE_EVERYTHING_FILTER_PROPS,
-};
-
-class ITraceFilter
-{
-public:
-    virtual bool ShouldHitEntity(void * pEntity, int contentsMask) = 0;
-    virtual TraceType_t	GetTraceType() const = 0;
-};
-
-class CTraceFilter : public ITraceFilter {
-public:
-    virtual TraceType_t	GetTraceType() const {
-        return TRACE_EVERYTHING;
-    }
-};
-
-class CTraceFilterEntitiesOnly : public ITraceFilter {
-public:
-    virtual TraceType_t	GetTraceType() const {
-        return TRACE_ENTITIES_ONLY;
-    }
-};
-
-class CTraceFilterWorldOnly : public ITraceFilter {
-public:
-    bool ShouldHitEntity(void* pServerEntity, int contentsMask) {
-        return false;
-    }
-    virtual TraceType_t	GetTraceType() const {
-        return TRACE_WORLD_ONLY;
-    }
-};
-
-class CTraceFilterWorldAndPropsOnly : public ITraceFilter {
-public:
-    bool ShouldHitEntity(void* pServerEntity, int contentsMask) {
-        return false;
-    }
-    virtual TraceType_t	GetTraceType() const {
-        return TRACE_EVERYTHING;
-    }
-};
-
-class CTraceFilterHitAll : public CTraceFilter {
-public:
-    virtual bool ShouldHitEntity(void* pServerEntity, int contentsMask) {
-        return true;
-    }
-};
-
-class CTraceFilterSimple : public CTraceFilter {
-public:
-    virtual void SetPassEntity(const void* pPassEntity) { m_pPassEnt = pPassEntity; }
-    virtual void SetCollisionGroup(int iCollisionGroup) { m_collisionGroup = iCollisionGroup; }
-
-    const void* GetPassEntity(void) { return m_pPassEnt; }
-
-    virtual bool ShouldHitEntity(void* pServerEntity, int contentsMask) {
-        return false;
-        //return pServerEntity != m_pPassEnt;
-    }
-
-private:
-    const void* m_pPassEnt;
-    int m_collisionGroup;
-};
-
+#pragma region RayTracing
 
 #define	CONTENTS_EMPTY			0		// No contents
 
@@ -912,6 +787,100 @@ private:
 #define MASK_SPLITAREAPORTAL		(CONTENTS_WATER|CONTENTS_SLIME)
 // UNDONE: This is untested, any moving water
 #define MASK_CURRENT				(CONTENTS_CURRENT_0|CONTENTS_CURRENT_90|CONTENTS_CURRENT_180|CONTENTS_CURRENT_270|CONTENTS_CURRENT_UP|CONTENTS_CURRENT_DOWN)
+
+
+
+struct csurface_t {
+    const char* name;
+    short surfaceProps;
+    unsigned short flags;
+};
+
+struct cplane_t {
+    Vector normal;
+    float dist;
+    unsigned char type;
+    unsigned char signbits;
+    unsigned char pad[2];
+};
+
+struct CBaseTrace {
+    Vector startpos;
+    Vector endpos;
+    cplane_t plane;
+    float fraction;
+    int contents;
+    unsigned short dispFlags;
+    bool allsolid;
+    bool startsolid;
+};
+
+struct CGameTrace : public CBaseTrace {
+    float fractionleftsolid;
+    csurface_t surface;
+    int hitgroup;
+    short physicsbone;
+    unsigned short worldSurfaceIndex;
+    int hitbox;
+};
+
+struct __declspec(align(16)) VectorAligned : public Vector {
+    VectorAligned() : Vector(), w(0) {};
+    VectorAligned(float x, float y, float z) : Vector(x, y, z) , w(0) {}
+    float w;
+};
+
+struct matrix3x4_t {
+    float m_flMatVal[3][4];
+};
+
+struct Ray_t {
+    VectorAligned m_Start; // starting point, centered within the extents
+    VectorAligned m_Delta; // direction + length of the ray
+    VectorAligned m_StartOffset; // Add this to m_Start to get the actual ray start
+    VectorAligned m_Extents; // Describes an axis aligned box extruded along a ray
+    const matrix3x4_t* m_pWorldAxisTransform = nullptr;
+    bool m_IsRay; // are there extents zero
+    bool m_IsSwept; // is delta != 0
+};
+
+enum TraceType_t {
+    TRACE_EVERYTHING = 0,
+    TRACE_WORLD_ONLY,
+    TRACE_ENTITIES_ONLY,
+    TRACE_EVERYTHING_FILTER_PROPS,
+};
+
+class ITraceFilter
+{
+public:
+    virtual bool ShouldHitEntity(void* pEntity, int contentsMask) = 0;
+    virtual TraceType_t	GetTraceType() const = 0;
+};
+
+class CTraceFilter : public ITraceFilter {
+public:
+    virtual TraceType_t	GetTraceType() const {
+        return TRACE_EVERYTHING;
+    }
+};
+
+class CTraceFilterSimple : public CTraceFilter {
+public:
+    virtual bool ShouldHitEntity(void* pHandleEntity, int contentsMask) {
+        return pHandleEntity != m_pPassEnt;
+        //return false;
+    };
+    virtual void SetPassEntity(const void* pPassEntity) { m_pPassEnt = pPassEntity; }
+    virtual void SetCollisionGroup(int iCollisionGroup) { m_collisionGroup = iCollisionGroup; }
+
+private:
+    const void* m_pPassEnt;
+    int m_collisionGroup;
+};
+
+#pragma endregion
+
 
 class CViewSetup {
 public:

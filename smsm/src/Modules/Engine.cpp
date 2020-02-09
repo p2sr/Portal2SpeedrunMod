@@ -8,7 +8,6 @@
 
 #include "SMSM.hpp"
 
-
 Variable sv_cheats;
 
 Engine::Engine()

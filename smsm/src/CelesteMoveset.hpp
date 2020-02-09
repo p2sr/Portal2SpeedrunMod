@@ -24,6 +24,7 @@ public:
     float dashingDuration; // how long will player be in dash
     float dashingCooldownDuration; // how long until the next dash
     float dashingOriginalVelMult; // how much of a original speed to keep
+    float wavedashRefreshTime;
 
     float wallSlidingSpeedVertical; // how fast can player slide vertically on a wall
     float wallSlidingSpeedHorizontal; // how fast can player slide horizontally on a wall
@@ -47,6 +48,7 @@ private:
     short dashesLeft = 0;
     int lastTickBase = 0;
     bool dashRequested = false;
+    bool dashedOnGround = false;
 
     bool holdingWall = false;
     float holdingWallAngle = 0;
@@ -58,7 +60,7 @@ private:
 
     bool holdingJump = false;
     bool pressedJump = false;
-
+    float walljumpCooldown = 0;
 public:
     const enum ModeParams {
         InitialValue = 0,

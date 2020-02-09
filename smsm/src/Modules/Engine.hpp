@@ -2,6 +2,7 @@
 #include "Module.hpp"
 #include "Utils.hpp"
 #include "Variable.hpp"
+#include "Command.hpp"
 
 class Engine : public Module {
 public:

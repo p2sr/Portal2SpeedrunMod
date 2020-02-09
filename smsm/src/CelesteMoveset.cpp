@@ -14,6 +14,7 @@ CelesteMoveset::CelesteMoveset()
     , dashingCooldownDuration(0.4)
     , dashingOriginalVelMult(0.25)
     , maxDashes(1)
+    , wavedashRefreshTime(0.085)
 
     , wallSlidingSpeedVertical(75.0)
     , wallSlidingSpeedHorizontal(50.0)
@@ -108,14 +109,17 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
     bool grounded = (m_fFlags & FL_ONGROUND);
 
     //refresh dashing if on ground
-    if (grounded && dashing < dashingDuration) {
+    bool canWaveJump = dashingCooldown < dashingCooldownDuration - wavedashRefreshTime;
+    if (grounded && ((!dashedOnGround && canWaveJump) || (dashedOnGround && dashingCooldown <=0))) {
         dashesLeft = maxDashes;
     }
 
     //check for dashing
     if (dashRequested) {
         int health = *reinterpret_cast<int*>((uintptr_t)pPlayer + 528);
-        if (dashesLeft>0 && dashing==0 && dashingCooldown==0 && health>0) { //TODO: add player health to conditions
+        if (dashesLeft>0 && dashing==0 && dashingCooldown==0 && health>0) {
+            if (grounded) dashedOnGround = true;
+            else dashedOnGround = false;
 
             //getting values I need for whole math
             float pitch = DEG2RAD(pMove->m_vecViewAngles.x);
@@ -136,13 +140,15 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
             //applying yaw rotation
             Vector newDir{ dir.x * cos(yaw) + dir.y * sin(yaw), -dir.y * cos(yaw) + dir.x * sin(yaw), dir.z };
 
+            //hyperdashing
+            //if (newDir.z < 0) {
+            //    newDir = newDir * (float)(1 - newDir.z);
+            //}
+
             //multiplying vector by dashing speed
             newDir = newDir * dashingSpeed;
 
-            //fix dash when grounded and aiming down
-            if (grounded && newDir.z < 60) {
-                newDir.z = 60; //newDir.x*=0.8; newDir.y*=0.8;
-            }
+
 
             //add little bit of current player vector on top of the dash
             Vector pv = pMove->m_vecVelocity;
@@ -160,12 +166,7 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
             
             //set new dashing velocity
             dashingDir = newDir;
-            if (grounded && newDir.z < 300) {
-                pMove->m_vecVelocity = Vector{ newDir.x, newDir.y, 300 };
-            }
-            else {
-                pMove->m_vecVelocity = dashingDir;
-            }
+            pMove->m_vecVelocity = dashingDir;
             dashingOldPos = *reinterpret_cast<Vector*>((uintptr_t)pPlayer + 700); //700
 
             dashesLeft--;
@@ -200,7 +201,7 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
 
         Vector pv = pMove->m_vecVelocity;
         //hyperdashing
-        if (dashingDir.z < 0 && pv.z >= 0) {
+        if (dashingDir.z < 0 && grounded && pressedJump) {
             pMove->m_vecVelocity = pv * (float)(0.5 - dashingDir.z / dashingSpeed);
             dashing = 0;
         }
@@ -231,7 +232,7 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
     CGameTrace tr;
     bool collidingWithSurface = false;
     Vector pn; float planeDist;
-    CTraceFilterSimple filter;
+    
 
     //cast four corners of a player wall where collision could happen
     for(int y=0;y<2;y++) for(int a = -1; a <= 1; a+=2) {
@@ -244,11 +245,13 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
 
         Ray_t ray;
         ray.m_IsRay = true; ray.m_IsSwept = true;
-        float d = 5;
+        float d = 8;
         ray.m_Delta = VectorAligned(cosAng * d + 0.001, sinAng * d+0.001, 0.001);
         ray.m_Start = VectorAligned(pos.x + bbx, pos.y + bby, pos.z + y*72.0f);
         ray.m_StartOffset = VectorAligned();
         ray.m_Extents = VectorAligned();
+        CTraceFilterSimple filter;
+        filter.SetPassEntity(player);
 
         //console->Print("m_start: %f", ray.m_Start.x);
         engine->TraceRay(engine->engineTrace->ThisPtr(), ray, MASK_PLAYERSOLID, &filter, &tr);
@@ -263,7 +266,10 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
         if (ray.m_Start.x == pos.x + bbx && tr.plane.normal.Length() > 0.9) {
             collidingWithSurface = true;
             pn = tr.plane.normal;
-            planeDist = tr.plane.dist;
+            //planeDist = tr.plane.dist;
+            //plane.dist is incorrect for static object for some reason
+            //use Ax + By + Cz = D to get it with MATH
+            planeDist = tr.plane.normal.x * tr.endpos.x + tr.plane.normal.y * tr.endpos.y + tr.plane.normal.z * tr.endpos.z;
         }
     }
 
@@ -271,7 +277,7 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
     if (!collidingWithSurface) return false;
 
     //surface is too steep or too plain
-    if (pn.z > 0.2 || pn.z < -0.71) return false;
+    if (pn.z > 0.3 || pn.z < -0.2) return false;
 
     float surfAngle = RAD2DEG(atan2f(-pn.y, -pn.x));
     const float range = 45;
@@ -299,9 +305,12 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
         ray.m_IsRay = true; ray.m_IsSwept = true;
 
         ray.m_Delta = VectorAligned(pn.x*-4,pn.y*-4,pn.z*-4);
-        ray.m_Start = VectorAligned(posProj.x + pnSide.x * x + pn.x*2, posProj.y + pnSide.y * x + pn.y * 2, posProj.z + pnSide.z * x + pn.z * 2);
+        ray.m_Start = VectorAligned(posProj.x + pnSide.x * x + pn.x, posProj.y + pnSide.y * x + pn.y, posProj.z + pnSide.z * x + pn.z);
         ray.m_StartOffset = VectorAligned();
         ray.m_Extents = VectorAligned();
+        CTraceFilterSimple filter;
+        filter.SetPassEntity(player);
+
         engine->TraceRay(engine->engineTrace->ThisPtr(), ray, MASK_PLAYERSOLID, &filter, &grabTr);
 
         if (grabTr.plane.normal.Length() > 0.9) {
@@ -333,20 +342,20 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
 
 
 
-
-
-
 void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, float dt) {
     auto m_fFlags = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_fFlags);
     bool grounded = (m_fFlags & FL_ONGROUND);
-    
+
+
+    auto m_hUseEntity = *reinterpret_cast<int*>((uintptr_t)pPlayer + 2960);
+    bool isHoldingSth = m_hUseEntity != 0xFFFFFFFF;
 
     //wallclimbing
-    bool holdingUse = (pMove->m_nButtons & 0x20);
+    bool holdingUse = pMove->m_nButtons & 0x20;
     if (grounded) {
         climbStamina = wallClimbMaxStamina;
     }
-    else if (holdingUse && climbStamina > 0) {
+    else if (holdingUse && climbStamina > 0 && !isHoldingSth) {
         //depending on a state of a wallclimb, different angle is used.
         float grabAng = pMove->m_vecViewAngles.y;
         if (holdingWall) {
@@ -378,7 +387,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                 holdingWall = true;
             }
             
-            float wallPullForce = 20;
+            float wallPullForce = 100;
             Vector newVel = Vector(-climbedWallNorm.x * wallPullForce, -climbedWallNorm.y * wallPullForce, 0);
 
             float relMovAng = atan2f(playerWishVel.y, playerWishVel.x) - DEG2RAD(holdingWallAngle);
@@ -401,6 +410,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                     sideMove = sideMove * cosf(pitch);
                 }
 
+                newVel = newVel * 0.2;
                 newVel = newVel + (wnUp * (upMove * wallClimbMovementSpeed));
                 newVel = newVel + (wnSide * (sideMove * wallClimbMovementSpeed));
 
@@ -427,17 +437,20 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     else {
         climbJumping = 0;
     }
-    if (holdingWall && !holdingUse)holdingWall = false;
+    if (holdingWall && (!holdingUse || isHoldingSth))holdingWall = false;
     
 
 
     //walljumping
-    if ((pMove->m_outWishVel.Length2D() > 0.1 && pMove->m_vecVelocity.z < 0) || (holdingWall && climbJumping<=0)) {
+    if (walljumpCooldown > 0)walljumpCooldown -= dt;
+    if (walljumpCooldown < 0)walljumpCooldown = 0;
+
+    if ((pMove->m_outWishVel.Length2D() > 0.01) || (holdingWall && climbJumping<=0)) {
         float wishVelAng = RAD2DEG(atan2f(pMove->m_outWishVel.y, pMove->m_outWishVel.x));
         if (holdingWall)wishVelAng = holdingWallAngle;
         Vector wallNormal;
         if (IsPlaceSuitableForWallgrab(pPlayer, pMove->m_vecAbsOrigin, wishVelAng, &wallNormal)) {
-            if (pressedJump) {
+            if (pressedJump && walljumpCooldown<=0) {
                 //calculate jumping vector
                 float wall2dNormLen = wallNormal.Length2D();
                 Vector wall2dNormal(wallNormal.x / wall2dNormLen, wallNormal.y / wall2dNormLen, 0);
@@ -452,10 +465,17 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                 //apply old horizontal velocity on top of that.
                 pMove->m_vecVelocity.x += jumpVec.x;
                 pMove->m_vecVelocity.y += jumpVec.y;
-                pMove->m_vecVelocity.z = jumpVec.z;
+                if (dashing > 0) {
+                    dashing = 0;
+                    pMove->m_vecVelocity.z += jumpVec.z;
+                }
+                else {
+                    pMove->m_vecVelocity.z = jumpVec.z;
+                }
                 holdingWall = false;
+                walljumpCooldown = 0.2;
             }
-            else if (!holdingWall) {
+            else if (!holdingWall && dashing <= 0) {
                 if (pMove->m_vecVelocity.z < -wallSlidingSpeedVertical) {
                     float stepZ = pMove->m_vecVelocity.z + wallSlidingSpeedVerticalSpeed;
                     float newZ = (stepZ > wallSlidingSpeedVertical) ? wallSlidingSpeedVertical : stepZ;
@@ -472,7 +492,6 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
             }
         }
     }
-
 }
 
 
