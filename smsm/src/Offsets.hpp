@@ -9,6 +9,7 @@ extern int FindCommandBase;
 extern int m_pConCommandList;
 
 // CEngineClient
+extern int GetScreenSize;
 extern int ClientCmd;
 extern int GetActiveSplitScreenPlayerSlot;
 extern int RenderView;
@@ -32,6 +33,16 @@ extern int DrawTextLen;
 extern int DisableClipping;
 extern int StartDrawing;
 extern int FinishDrawing;
+
+extern int DrawGetTextureId;
+extern int DrawGetTextureFile;
+extern int DrawSetTextureFile;
+extern int DrawSetTextureRGBA;
+extern int DrawSetTexture;
+extern int DrawGetTextureSize;
+extern int DrawTexturedRect;
+extern int IsTextureIDValid;
+extern int CreateNewTextureID;
 
 // CClientState
 extern int SetSignonState;

@@ -14,9 +14,10 @@ public:
     void SetCoverColor(Color c) {coverColor = c;};
 
     bool canDrawThisFrame = true;
+    
 private:
     Color coverColor;
-
+    int coverTexture = 0;
 public:
     // CEngineVGui::Paint
     DECL_DETOUR(Paint, int mode);

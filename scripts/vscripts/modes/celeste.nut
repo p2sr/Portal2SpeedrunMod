@@ -117,7 +117,7 @@ function UpdateStaminaCover(){
 
         colorAlpha = (50-stamina)/50 * 130 * ((cos(staminaAnimTimer)+1.0)/2.0)
     }
-    smsm.SetScreenCoverColor(50,0,0,colorAlpha);
+    smsm.SetScreenCoverColor(80,20,20,colorAlpha);
     //print("Stamina:"+stamina+"\n");
 }
 

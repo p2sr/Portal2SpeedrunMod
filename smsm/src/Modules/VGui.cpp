@@ -22,12 +22,35 @@ DETOUR(VGui::Paint, int mode)
         surface->StartDrawing(surface->matsurface->ThisPtr());
         //currently drawn gui can have clipping enabled. disable that
         surface->DisableClipping(surface->matsurface->ThisPtr(), true);
-    
+
+        //get width and height for gui drawing
+        int width, height;
+        engine->GetScreenSize(width, height);
+
         //drawing covering color
-        if ((vgui->coverColor.r() || vgui->coverColor.g() || vgui->coverColor.b())) {
-            
-            surface->DrawRect(vgui->coverColor, 0, 0, 10000, 10000);
-            
+        Color cColor = vgui->coverColor;
+        if ((cColor.r() || cColor.g() || cColor.b())) {
+            if (vgui->coverTexture == 0 || !surface->IsTextureIDValid(surface->matsurface->ThisPtr(), vgui->coverTexture)) {
+                //generate the cover texture
+                vgui->coverTexture = surface->CreateNewTextureID(surface->matsurface->ThisPtr(), true);
+                const int scale = 400;
+                const int fadeStart = 50;
+                unsigned char testData[scale*scale * 4];
+                for (int x = 0; x < 400; x++)for (int y = 0; y < 400; y++) {
+                    int sideX = scale - x, sideY = scale - y;
+                    int d = fmin(fmin(fmin(x, y),sideX),sideY);
+                    int alpha = fmax(0, (1.0 - d / (float)fadeStart)*255);
+                    int offset = (x * scale + y) * 4;
+                    testData[offset] = 255;
+                    testData[offset+1] = 255;
+                    testData[offset+2] = 255;
+                    testData[offset+3] = alpha;
+                }
+                surface->DrawSetTextureRGBA(surface->matsurface->ThisPtr(), vgui->coverTexture, testData, scale, scale);
+            }
+            surface->DrawSetColor(surface->matsurface->ThisPtr(), cColor.r(), cColor.g(), cColor.b(), cColor.a());
+            surface->DrawSetTexture(surface->matsurface->ThisPtr(), vgui->coverTexture);
+            surface->DrawTexturedRect(surface->matsurface->ThisPtr(), 0, 0, width, height);
         }
         surface->DisableClipping(surface->matsurface->ThisPtr(), false);
         surface->FinishDrawing();

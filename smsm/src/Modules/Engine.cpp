@@ -16,11 +16,14 @@ Engine::Engine()
 }
 bool Engine::Init()
 {
-    if (auto engine = Interface::Create(this->Name(), "VEngineClient0", false)) {
-        this->GetActiveSplitScreenPlayerSlot = engine->Original<_GetActiveSplitScreenPlayerSlot>(Offsets::GetActiveSplitScreenPlayerSlot);
+    this->engineClient = Interface::Create(this->Name(), "VEngineClient0", false);
+
+    if (this->engineClient) {
+        this->GetScreenSize = this->engineClient->Original<_GetScreenSize>(Offsets::GetScreenSize);
+        this->GetActiveSplitScreenPlayerSlot = this->engineClient->Original<_GetActiveSplitScreenPlayerSlot>(Offsets::GetActiveSplitScreenPlayerSlot);
 
         typedef void* (*_GetClientState)();
-        auto ClientCmd = engine->Original(Offsets::ClientCmd);
+        auto ClientCmd = this->engineClient->Original(Offsets::ClientCmd);
         auto GetClientState = Memory::Read<_GetClientState>(ClientCmd + Offsets::GetClientStateFunction);
         auto cl = Interface::Create(GetClientState(), false);
         if (cl) {
@@ -50,7 +53,8 @@ bool Engine::Init()
 
     sv_cheats = Variable("sv_cheats");
 
-    return this->hasLoaded = this->hoststate
+    return this->hasLoaded = this->engineClient
+        && this->hoststate
         && this->engineTrace
         && this->GetActiveSplitScreenPlayerSlot
         && this->Cbuf_AddText
@@ -65,6 +69,9 @@ void Engine::Shutdown()
         auto m_bWaitEnabled = reinterpret_cast<bool*>((uintptr_t)s_CommandBuffer + Offsets::m_bWaitEnabled);
         auto m_bWaitEnabled2 = reinterpret_cast<bool*>((uintptr_t)m_bWaitEnabled + Offsets::CCommandBufferSize);
         *m_bWaitEnabled = *m_bWaitEnabled2 = false;
+    }
+    if (this->engineClient) {
+        Interface::Delete(this->engineClient);
     }
     if (this->engineTrace) {
         Interface::Delete(this->engineTrace);

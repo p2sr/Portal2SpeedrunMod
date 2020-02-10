@@ -34,7 +34,7 @@ void Portal2::LoadOffsets()
     m_fFlags = 204; // CBaseEntity
     m_nTickBase = 3792; // CBaseEntity
     m_bDucking = 2272; // CBaseEntity
-    
+    GetScreenSize = 5; // CEngineClient
 
     // client.dll
 
@@ -76,6 +76,16 @@ void Portal2::LoadOffsets()
     DrawTextLen = 163; // CMatSystemSurface
     DisableClipping = 156; // CMatSystemSurface
     Paint = 14; // CEngineVGui
+
+    DrawGetTextureId = 33; // CMatSystemSurface
+    DrawGetTextureFile = 34; // CMatSystemSurface
+    DrawSetTextureFile = 35; // CMatSystemSurface
+    DrawSetTextureRGBA = 36; // CMatSystemSurface
+    DrawSetTexture = 37; // CMatSystemSurface
+    DrawGetTextureSize = 38; // CMatSystemSurface
+    DrawTexturedRect = 39; // CMatSystemSurface
+    IsTextureIDValid = 40; // CMatSystemSurface
+    CreateNewTextureID = 41; // CMatSystemSurface
 }
 const char* Portal2::Version()
 {
