@@ -36,10 +36,10 @@ DETOUR(VGui::Paint, int mode)
                 const int scale = 400;
                 const int fadeStart = 50;
                 unsigned char testData[scale*scale * 4];
-                for (int x = 0; x < 400; x++)for (int y = 0; y < 400; y++) {
+                for (int x = 0; x < scale; x++)for (int y = 0; y < scale; y++) {
                     int sideX = scale - x, sideY = scale - y;
                     int d = fmin(fmin(fmin(x, y),sideX),sideY);
-                    int alpha = fmax(0, (1.0 - d / (float)fadeStart)*255);
+                    int alpha = fmax(0, pow(1.0 - d / (float)fadeStart,3)*255);
                     int offset = (x * scale + y) * 4;
                     testData[offset] = 255;
                     testData[offset+1] = 255;

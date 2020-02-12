@@ -35,6 +35,7 @@ void Portal2::LoadOffsets()
     m_nTickBase = 3792; // CBaseEntity
     m_bDucking = 2272; // CBaseEntity
     GetScreenSize = 5; // CEngineClient
+    PrecacheModel = 62; // IEngineTool
 
     // client.dll
 

@@ -18,6 +18,7 @@ function CelestePostSpawn(){
 
 function Precache(){
     self.PrecacheSoundScript("player/windgust.wav")
+    smsm.PrecacheModel("models/srmod/hintplank.mdl", true)
 }
 
 FIRST_MAP_WITH_1_DASH <- "sp_a1_intro4"
@@ -43,6 +44,12 @@ function CelesteLoad(){
         local containerWall2 = Entities.FindByClassnameNearest("func_door", Vector(-5477, 1400, 285), 10)
         EntFireByHandle(containerWall2, "SetLocalOrigin", "-1210 4602 2745", 0, null, null)
         EntFireByHandle(containerWall2, "SetLocalAngles", "-15 0 5", 0, null, null)
+
+        local sign = Entities.CreateByClassname("prop_dynamic_override");
+        sign.SetModel("models/srmod/hintplank.mdl");
+        sign.SetOrigin(Vector(-1405, 4374, 2740));
+        sign.SetAngles(85,0,90)
+
         break;
     case "sp_a1_intro2":
         EntFire("block_boxes", "Kill")
@@ -65,6 +72,18 @@ function CelesteLoad(){
         EntFire("portal_orange_mtg", "Kill")
         EntFire("emitter_orange_mtg", "Kill")
         EntFire("prop_physics", "Kill")
+
+        local sign1 = Entities.CreateByClassname("prop_dynamic_override");
+        sign1.SetModel("models/srmod/hintplank.mdl");
+        sign1.SetOrigin(Vector(-131, 1995, -296));
+        sign1.SetAngles(79,338,24);
+        EntFireByHandle(sign1, "skin", "1", 0, null, null)
+
+        local sign2 = Entities.CreateByClassname("prop_dynamic_override");
+        sign2.SetModel("models/srmod/hintplank.mdl");
+        sign2.SetOrigin(Vector(-54, 2050, -368));
+        sign2.SetAngles(76,270,-43);
+        EntFireByHandle(sign2, "skin", "2", 0, null, null)
         break;
     case "sp_a1_intro4":
         EntFire("portal_emitter_a_lvl3", "Kill")

@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+$baseTexture "models/srmod/hintplank/hintplank_wood"
+$surfaceprop wood
+}

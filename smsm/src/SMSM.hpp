@@ -76,6 +76,7 @@ public:
     void SetScreenCoverColor(int r, int g, int b, int a);
     bool IsDialogueEnabled();
     void ResetModeVariables();
+    void PrecacheModel(const char* pName, bool bPreload);
 
 private:
     void StartMainThread();

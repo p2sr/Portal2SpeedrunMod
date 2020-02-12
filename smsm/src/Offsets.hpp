@@ -59,6 +59,9 @@ extern int m_bWaitEnabled;
 // IEngineTrace
 extern int TraceRay;
 
+// IEngineTool
+extern int PrecacheModel;
+
 // CClientTools
 extern int NextParticleSystem;
 

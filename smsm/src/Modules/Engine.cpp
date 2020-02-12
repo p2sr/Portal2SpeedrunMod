@@ -51,9 +51,14 @@ bool Engine::Init()
         this->ClientCommand = g_VEngineServer->Original<_ClientCommand>(Offsets::ClientCommand);
     }
 
+    if (this->engineTool = Interface::Create(this->Name(), "VENGINETOOL003", false)) {
+        this->PrecacheModel = this->engineTool->Original<_PrecacheModel>(Offsets::PrecacheModel);
+    }
+
     sv_cheats = Variable("sv_cheats");
 
     return this->hasLoaded = this->engineClient
+        && this->engineTool
         && this->hoststate
         && this->engineTrace
         && this->GetActiveSplitScreenPlayerSlot
@@ -70,12 +75,9 @@ void Engine::Shutdown()
         auto m_bWaitEnabled2 = reinterpret_cast<bool*>((uintptr_t)m_bWaitEnabled + Offsets::CCommandBufferSize);
         *m_bWaitEnabled = *m_bWaitEnabled2 = false;
     }
-    if (this->engineClient) {
-        Interface::Delete(this->engineClient);
-    }
-    if (this->engineTrace) {
-        Interface::Delete(this->engineTrace);
-    }
+    if (this->engineClient) Interface::Delete(this->engineClient);
+    if (this->engineTrace) Interface::Delete(this->engineTrace);
+    if (this->engineTool) Interface::Delete(this->engineTool);
 }
 
 Engine* engine;

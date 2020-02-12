@@ -32,6 +32,7 @@ DEFINE_SCRIPTFUNC(SetModeParam, "Sets mod specific param if it's not read-only (
 DEFINE_SCRIPTFUNC(IsDialogueEnabled, "Is dialogue enabled in audio settings?")
 DEFINE_SCRIPTFUNC(SetPortalGunIndicatorColor, "Sets the color of portal gun indicator. Set to 0,0,0 to use default.")
 DEFINE_SCRIPTFUNC(SetScreenCoverColor, "Sets color that covers the whole screen.")
+DEFINE_SCRIPTFUNC(PrecacheModel, "Precaches model")
 END_SCRIPTDESC()
 
 SMSM::SMSM()
@@ -155,6 +156,10 @@ void SMSM::ResetModeVariables() {
     for (int i = 0; i < MAX_MODE_PARAMETERS; i++) {
         this->modeParams[i] = 0.0f;
     }
+}
+
+void SMSM::PrecacheModel(const char* pName, bool bPreload) {
+    engine->PrecacheModel(pName, bPreload);
 }
 
 float SMSM::GetModeParam(int id) {
