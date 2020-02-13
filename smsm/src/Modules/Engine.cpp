@@ -8,8 +8,6 @@
 
 #include "SMSM.hpp"
 
-Variable sv_cheats;
-
 Engine::Engine()
     : Module()
 {
@@ -54,8 +52,6 @@ bool Engine::Init()
     if (this->engineTool = Interface::Create(this->Name(), "VENGINETOOL003", false)) {
         this->PrecacheModel = this->engineTool->Original<_PrecacheModel>(Offsets::PrecacheModel);
     }
-
-    sv_cheats = Variable("sv_cheats");
 
     return this->hasLoaded = this->engineClient
         && this->engineTool

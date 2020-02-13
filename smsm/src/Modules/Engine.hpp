@@ -42,4 +42,3 @@ public:
 
 extern Engine* engine;
 
-extern Variable sv_cheats;

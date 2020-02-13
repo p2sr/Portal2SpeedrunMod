@@ -71,6 +71,7 @@ int m_nTickBase;
 int m_bDucking;
 int m_hActiveWeapon;
 int m_bCanFirePortal1;
+int m_hUseEntity;
 
 // CServerGameDLL
 int Think;

@@ -34,6 +34,7 @@ void Portal2::LoadOffsets()
     m_fFlags = 204; // CBaseEntity
     m_nTickBase = 3792; // CBaseEntity
     m_bDucking = 2272; // CBaseEntity
+    m_hUseEntity = 2960; // CBaseEntity
     GetScreenSize = 5; // CEngineClient
     PrecacheModel = 62; // IEngineTool
 

@@ -14,6 +14,10 @@ Variable ui_loadingscreen_transition_time;
 Variable ui_loadingscreen_fadein_time;
 Variable ui_loadingscreen_mintransition_time;
 
+Variable sv_cheats;
+Variable crosshair;
+Variable viewmodel_offset_z;
+
 void Cheats::Init()
 {
     sv_transition_fade_time = Variable("sv_transition_fade_time");
@@ -33,6 +37,11 @@ void Cheats::Init()
     ui_loadingscreen_mintransition_time.Modify(FCVAR_DEVELOPMENTONLY, FCVAR_CHEAT | FCVAR_HIDDEN);
     ui_loadingscreen_mintransition_time.SetValue(0);
     ui_loadingscreen_mintransition_time.ThisPtr()->m_pszDefaultValue = "0";
+
+    sv_cheats = Variable("sv_cheats");
+    crosshair = Variable("crosshair");
+    viewmodel_offset_z = Variable("viewmodel_offset_z");
+
 
     Variable::RegisterAll();
     Command::RegisterAll();

@@ -232,7 +232,6 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
     CGameTrace tr;
     bool collidingWithSurface = false;
     Vector pn; float planeDist;
-    
 
     //cast four corners of a player wall where collision could happen
     for(int y=0;y<2;y++) for(int a = -1; a <= 1; a+=2) {
@@ -346,8 +345,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     auto m_fFlags = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_fFlags);
     bool grounded = (m_fFlags & FL_ONGROUND);
 
-
-    auto m_hUseEntity = *reinterpret_cast<int*>((uintptr_t)pPlayer + 2960);
+    auto m_hUseEntity = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_hUseEntity);
     bool isHoldingSth = m_hUseEntity != 0xFFFFFFFF;
 
     //wallclimbing
@@ -439,6 +437,23 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     }
     if (holdingWall && (!holdingUse || isHoldingSth))holdingWall = false;
     
+
+    //visually grab the wall by internally replacing convar variables
+    float originalVmOffset = std::stof(viewmodel_offset_z.ThisPtr()->m_pszString);
+    float currentVmOffset = viewmodel_offset_z.ThisPtr()->m_fValue;
+    if (holdingWall) {
+        crosshair.ThisPtr()->m_nValue = 0;
+        const float lowerEnd = -15;
+        if (currentVmOffset > lowerEnd)currentVmOffset -= 1.5;
+        if (currentVmOffset < lowerEnd)currentVmOffset = lowerEnd;
+        viewmodel_offset_z.ThisPtr()->m_fValue = currentVmOffset;
+    }else{
+        crosshair.ThisPtr()->m_nValue = (int)crosshair.ThisPtr()->m_fValue;
+        if (currentVmOffset < originalVmOffset)currentVmOffset += 2.5;
+        if (currentVmOffset > originalVmOffset)currentVmOffset = originalVmOffset;
+    }
+    viewmodel_offset_z.ThisPtr()->m_fValue = currentVmOffset;
+
 
 
     //walljumping
