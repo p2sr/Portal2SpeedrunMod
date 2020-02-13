@@ -49,7 +49,6 @@ CON_COMMAND(sm_mode, "Variable used by Speedrun Mod to determine currently playe
         return console->Print("Current Speedrun Mod mode: %d\n", smsm.GetMode());
     }
     auto mode = std::atoi(args[1]);
-    smsm.mode = mode;
     smsm.SetMode(mode);
 }
 

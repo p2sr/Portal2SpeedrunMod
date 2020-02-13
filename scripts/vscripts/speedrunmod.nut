@@ -64,8 +64,7 @@ if(IsSMSMActive()){
   }
 }
 
-
-
+DoIncludeScript("backup", self.GetScriptScope());
 
 function OnPostSpawn(){
 
@@ -113,6 +112,8 @@ NEW_TIME <- 0
 
 function SpeedrunModThink(){
   if ( initialized ){
+    SLBS_Check();
+    
     OLD_TIME = OLD_TIME==0 ? Time() : NEW_TIME;
     NEW_TIME = Time();  //TICKING AWAY THE MOMENTS THAT MAKE UP A DULL DAY
 
@@ -121,6 +122,7 @@ function SpeedrunModThink(){
       local func = UPDATE_FUNCTIONS[modename]
       func()
     }
+
     return 0.001;
   }else{
     //apparently, when not in maploop, Think function is used only once, so that's pretty convenient for me

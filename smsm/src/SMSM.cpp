@@ -33,6 +33,9 @@ DEFINE_SCRIPTFUNC(IsDialogueEnabled, "Is dialogue enabled in audio settings?")
 DEFINE_SCRIPTFUNC(SetPortalGunIndicatorColor, "Sets the color of portal gun indicator. Set to 0,0,0 to use default.")
 DEFINE_SCRIPTFUNC(SetScreenCoverColor, "Sets color that covers the whole screen.")
 DEFINE_SCRIPTFUNC(PrecacheModel, "Precaches model")
+DEFINE_SCRIPTFUNC(GetBackupKey, "Gets currently set key used by script to recover parameters.")
+DEFINE_SCRIPTFUNC(SetBackupKey, "Sets backup key used by script to recover parameters.")
+DEFINE_SCRIPTFUNC(GetModeParamsNumber, "Maximum number of parameters you can assign.")
 END_SCRIPTDESC()
 
 SMSM::SMSM()
@@ -98,6 +101,7 @@ void SMSM::LevelShutdown() {
     console->DevMsg("SMSM::LevelShutdown\n");
 
     vgui->SetCoverColor(Color(0, 0, 0, 0));
+    this->SetBackupKey("0");
 
     // Make sure to clear the list after sending any client-side shutdown commands
     this->clients.clear();
@@ -160,6 +164,14 @@ void SMSM::ResetModeVariables() {
 
 void SMSM::PrecacheModel(const char* pName, bool bPreload) {
     engine->PrecacheModel(pName, bPreload);
+}
+
+void SMSM::SetBackupKey(const char* key) {
+    backupKey = key;
+}
+
+const char* SMSM::GetBackupKey() {
+    return this->backupKey;
 }
 
 float SMSM::GetModeParam(int id) {
