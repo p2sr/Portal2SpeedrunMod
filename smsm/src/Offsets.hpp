@@ -61,6 +61,7 @@ extern int TraceRay;
 
 // IEngineTool
 extern int PrecacheModel;
+extern int GetWorldToScreenMatrixForView;
 
 // CClientTools
 extern int NextParticleSystem;

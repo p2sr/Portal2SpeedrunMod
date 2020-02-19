@@ -259,6 +259,7 @@ function SpeedrunModeLoad(){
       //fix ele
       EntFire("departure_elevator-blocked_elevator_tube_anim", "Kill", 0)
       EntFire("door_0-door_close_relay", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0)
+      GivePlayerPortalgun()
       break
     case "sp_a2_laser_intro":
       EntFire("start", "Kill")
@@ -295,6 +296,7 @@ function SpeedrunModeLoad(){
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Trigger::1:1", 0)
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Kill::1.1:1", 0)
       EntFire("hallway_sim_blocker", "Kill")
+      EntFire("catapult_target_relay", "Trigger")
       break
     case "sp_a2_trust_fling":
       //hide panels at the beginning
@@ -1362,15 +1364,17 @@ FUCKING_FOG_VALUES <-
   {name="sp_a2_bts3",color1=100,color2=100,start=0,end=1000}
 ]
 
+FOG_CONTROL_VALUES <- {r=0.4, g=0.8, b=1.3};
+
 function FogControl(){
   //EntFire("env_fog_controller", "SetColorSecondary", "0 20 40")
   //EntFire("env_fog_controller", "SetColor", "30 60 90")
   //EntFire("env_fog_controller", "SetStartDist", "-50")
 
   foreach (i, fog in FUCKING_FOG_VALUES){
-    local b = floor(fog.color1*1.3);
-    local g = floor(fog.color1*0.8);
-    local r = floor(fog.color1*0.4);
+    local b = floor(fog.color1*FOG_CONTROL_VALUES.b);
+    local g = floor(fog.color1*FOG_CONTROL_VALUES.g);
+    local r = floor(fog.color1*FOG_CONTROL_VALUES.r);
 
     if(GetMapName()==fog.name){
       EntFire("env_fog_controller", "SetColor", r+" "+g+" "+b);

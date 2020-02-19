@@ -23,7 +23,6 @@ public:
 #endif
     using _ClientCommand = int(*)(void* thisptr, void* pEdict, const char* szFmt, ...);
     using _TraceRay = void(__func*)(void* thisptr, const Ray_t& ray, unsigned int fMask, ITraceFilter* pTraceFilter, CGameTrace* pTrace);
-    
 
     _GetScreenSize GetScreenSize = nullptr;
     _PrecacheModel PrecacheModel = nullptr;
@@ -38,6 +37,8 @@ public:
     bool Init() override;
     void Shutdown() override;
     const char* Name() override { return MODULE("engine"); }
+
+    DECL_DETOUR(GetWorldToScreenMatrixForView, const CViewSetup& view, VMatrix* pVMatrix);
 };
 
 extern Engine* engine;

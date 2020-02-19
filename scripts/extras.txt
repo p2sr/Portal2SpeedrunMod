@@ -1,11 +1,31 @@
 "Extras"
 {
+	"main_cat"
+	{
+		"title"		"MAIN CATEGORIES:"
+		"subtitle"	"Main categories of Speedrun Mod"
+		"pic"		""
+	}
 	"speedrunmode"
 	{
 		"title"		"Normal%"
 		"subtitle"	"Original mode of the Speedrun Mod."
 		"pic"		"srmod/menu_modes/normal"
 		"command"	"sm_mode 0;map sp_a1_intro1"
+	}
+	"celeste"
+	{
+		"title"		"Celeste 2 (alpha)"
+		"subtitle"	"Dash your way through Aperture!"
+		"pic"		"srmod/menu_modes/normal"
+		"command"	"sm_mode 2;map sp_a1_intro1"
+	}
+	"space"{}
+	"ext_cat"
+	{
+		"title"		"MISCELLANEOUS:"
+		"subtitle"	"Categories not as much popular."
+		"pic"		""
 	}
 	"fog_percent"
 	{
@@ -14,16 +34,10 @@
 		"pic"		"srmod/menu_modes/fog"
 		"command"	"sm_mode 1;map sp_a1_intro1"
 	}
-	"celeste"
+	"space"{}
+	"extras"
 	{
-		"title"		"Celeste 2 (alpha)"
-		"subtitle"	"???"
-		"pic"		"srmod/menu_modes/normal"
-		"command"	"sm_mode 2;map sp_a1_intro1"
-	}
-	"separator"
-	{
-		"title"		"=========================="
+		"title"		"EXTRAS:"
 		"subtitle"	""
 		"pic"		""
 		"url"		"https://www.youtube.com/watch?v=2ZIpFytCSVc"

@@ -37,6 +37,7 @@ void Portal2::LoadOffsets()
     m_hUseEntity = 2960; // CBaseEntity
     GetScreenSize = 5; // CEngineClient
     PrecacheModel = 62; // IEngineTool
+    GetWorldToScreenMatrixForView = 80; // IEngineTool
 
     // client.dll
 

@@ -13,12 +13,13 @@ ModeParams <- {
 };
 
 function CelestePostSpawn(){
-    
+    //FOG_CONTROL_VALUES = {r=0.8, g=0.4, b=1.3};
 }
 
 function Precache(){
     self.PrecacheSoundScript("player/windgust.wav")
     smsm.PrecacheModel("models/srmod/hintplank.mdl", true)
+    smsm.PrecacheModel("models/srmod/strawberry.mdl", true)
 }
 
 FIRST_MAP_WITH_1_DASH <- "sp_a1_intro4"
@@ -100,6 +101,11 @@ function CelesteLoad(){
 
         EntFire("logic_drop_box", "Trigger")
         EntFire("trigger_dropbox", "Kill")
+        break;
+    case "sp_a1_intro6":
+        local berry = Entities.CreateByClassname("prop_dynamic");
+        berry.SetModel("models/srmod/strawberry.mdl");
+        berry.SetOrigin(Vector(-70, 220, 64));
         break;
     }
 

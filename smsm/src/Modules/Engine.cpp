@@ -8,6 +8,15 @@
 
 #include "SMSM.hpp"
 
+REDECL(Engine::GetWorldToScreenMatrixForView);
+DETOUR(Engine::GetWorldToScreenMatrixForView, const CViewSetup& view, VMatrix* pVMatrix) {
+    pVMatrix->m[0][0] *= -1;
+    auto result = Engine::GetWorldToScreenMatrixForView(thisptr, view, pVMatrix);
+    console->Print("aay lmao\n");
+    
+    return result;
+}
+
 Engine::Engine()
     : Module()
 {
@@ -49,8 +58,9 @@ bool Engine::Init()
         this->ClientCommand = g_VEngineServer->Original<_ClientCommand>(Offsets::ClientCommand);
     }
 
-    if (this->engineTool = Interface::Create(this->Name(), "VENGINETOOL003", false)) {
+    if (this->engineTool = Interface::Create(this->Name(), "VENGINETOOL003")) {
         this->PrecacheModel = this->engineTool->Original<_PrecacheModel>(Offsets::PrecacheModel);
+        this->engineTool->Hook(Engine::GetWorldToScreenMatrixForView_Hook, Engine::GetWorldToScreenMatrixForView, Offsets::GetWorldToScreenMatrixForView);
     }
 
     return this->hasLoaded = this->engineClient

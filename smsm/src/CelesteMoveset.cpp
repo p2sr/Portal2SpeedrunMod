@@ -449,18 +449,45 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
         viewmodel_offset_z.ThisPtr()->m_fValue = currentVmOffset;
     }else{
         crosshair.ThisPtr()->m_nValue = (int)crosshair.ThisPtr()->m_fValue;
-        if (currentVmOffset < originalVmOffset)currentVmOffset += 2.5;
+        if (currentVmOffset < originalVmOffset)currentVmOffset += 2.0;
         if (currentVmOffset > originalVmOffset)currentVmOffset = originalVmOffset;
     }
     viewmodel_offset_z.ThisPtr()->m_fValue = currentVmOffset;
 
 
-
-    //walljumping
     if (walljumpCooldown > 0)walljumpCooldown -= dt;
     if (walljumpCooldown < 0)walljumpCooldown = 0;
 
-    if ((pMove->m_outWishVel.Length2D() > 0.01) || (holdingWall && climbJumping<=0)) {
+    //wallbounce
+    if (dashingCooldown > 0 && pMove->m_vecVelocity.z > 100 && pressedJump && !holdingWall && walljumpCooldown<=0) {
+        float angle = RAD2DEG(atan2f(pMove->m_outWishVel.y, pMove->m_outWishVel.x));
+        for (int i = 0; i < 4; i++) {
+            Vector wallNormal;
+            if (IsPlaceSuitableForWallgrab(pPlayer, pMove->m_vecAbsOrigin, angle, &wallNormal)) {
+                //calculate wallbounce vector
+                float wall2dNormLen = wallNormal.Length2D();
+                Vector wall2dNormal(wallNormal.x / wall2dNormLen, wallNormal.y / wall2dNormLen, 0);
+
+                float bounceAng = asin(wallNormal.z) + 0.9f;
+
+                Vector bounceNorm = wall2dNormal * cos(bounceAng);
+                bounceNorm.z = sin(bounceAng);
+
+                Vector bounceVec = bounceNorm * wallJumpForce;
+
+                //apply old horizontal velocity on top of that.
+                pMove->m_vecVelocity.x += bounceVec.x;
+                pMove->m_vecVelocity.y += bounceVec.y;
+                pMove->m_vecVelocity.z = bounceVec.z * 2.5;
+                dashing = 0;
+                break;
+            }
+            angle += 90;
+        }
+    }
+
+    //walljumping
+    if (dashingCooldown<=0 && ((pMove->m_outWishVel.Length2D() > 0.01) || (holdingWall && climbJumping<=0))) {
         float wishVelAng = RAD2DEG(atan2f(pMove->m_outWishVel.y, pMove->m_outWishVel.x));
         if (holdingWall)wishVelAng = holdingWallAngle;
         Vector wallNormal;
@@ -480,17 +507,10 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                 //apply old horizontal velocity on top of that.
                 pMove->m_vecVelocity.x += jumpVec.x;
                 pMove->m_vecVelocity.y += jumpVec.y;
-                if (dashing > 0) {
-                    dashing = 0;
-                    pMove->m_vecVelocity.z += jumpVec.z;
-                }
-                else {
-                    pMove->m_vecVelocity.z = jumpVec.z;
-                }
+                pMove->m_vecVelocity.z = jumpVec.z;
                 holdingWall = false;
-                walljumpCooldown = 0.2;
             }
-            else if (!holdingWall && dashing <= 0) {
+            else if (!holdingWall) {
                 if (pMove->m_vecVelocity.z < -wallSlidingSpeedVertical) {
                     float stepZ = pMove->m_vecVelocity.z + wallSlidingSpeedVerticalSpeed;
                     float newZ = (stepZ > wallSlidingSpeedVertical) ? wallSlidingSpeedVertical : stepZ;
@@ -506,6 +526,10 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                 }
             }
         }
+    }
+
+    if (pressedJump) {
+        walljumpCooldown = 0.2;
     }
 }
 

@@ -834,6 +834,10 @@ struct matrix3x4_t {
     float m_flMatVal[3][4];
 };
 
+struct VMatrix {
+    float m[4][4];
+};
+
 struct Ray_t {
     VectorAligned m_Start; // starting point, centered within the extents
     VectorAligned m_Delta; // direction + length of the ray
@@ -887,7 +891,8 @@ public:
     int x, y, width, height;
     //TODO: all of the stuff below is most likely wrong.
     //find a way to properly use it. It might be useful for future mirror% mode.
-    bool		m_bOrtho;
+
+    /*bool		m_bOrtho;
     float		m_OrthoLeft;
     float		m_OrthoTop;
     float		m_OrthoRight;
@@ -928,7 +933,7 @@ public:
     bool		m_bDrawWorldNormal : 1;
     bool		m_bCullFrontFaces : 1;
     bool		m_bCacheFullSceneState : 1;
-    bool		m_bRenderFlashlightDepthTranslucents : 1;
+    bool		m_bRenderFlashlightDepthTranslucents : 1;*/
 };
 
 #pragma region vscript
