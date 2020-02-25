@@ -1,15 +1,20 @@
-//*****************************************************
-//*****************************************************
-//====SPEEDRUN MOD v1.0 by Krzyhau====
-//this mod removes all of major and most of minor cutscenes
-//from the game, reducing the time for speedruning it lol.
-//*****************************************************
-//*****************************************************
+/*
+=== MAIN SCRIPT ===
+
+This script is "hooked" into the main game by custom sp_transition_list script file.
+
+It's basically a core of a mode, since most of changes are made through scripts.
+
+This system is heavily aided by SMSM plugin, so it's REQUIRED for it to work.
+*/
 
 
-//some useful functions
+
+
+/* some utility functions */
 
 //Basically Entity.ConnectOutput, but adds this script to its execution scope
+//...is it even used?
 function AddOutput(entityname,event,func){
   local entity = GetEntity(entityname)
   if(entity){
@@ -20,6 +25,7 @@ function AddOutput(entityname,event,func){
   }
 }
 
+//Easier way of obtaining entity handle.
 //finding entity by name, and then by class
 function GetEntity(name, old=null){
   local entity = Entities.FindByName(old,name);
@@ -32,9 +38,11 @@ function modlog(msg){
   printl("### SPEEDRUN MOD ###: "+msg);
 }
 
+//self-explanatory
 function IsSMSMActive(){
   return ("smsm" in this);
 }
+
 
 
 
@@ -64,10 +72,14 @@ if(IsSMSMActive()){
   }
 }
 
+
+
+//backup system - a simple script retrieving plugin values from a save file.
 DoIncludeScript("backup", self.GetScriptScope());
 
-function OnPostSpawn(){
 
+
+function OnPostSpawn(){
   if(!IsSMSMActive()){
     modlog("SMSM PLUGIN VERIFICATION FAILED!!!!!!")
     EntFire("@command", "Command", "disconnect", 1)
@@ -116,6 +128,7 @@ function SpeedrunModThink(){
     
     OLD_TIME = OLD_TIME==0 ? Time() : NEW_TIME;
     NEW_TIME = Time();  //TICKING AWAY THE MOMENTS THAT MAKE UP A DULL DAY
+    //also idk if it's needed. it seems to be a constant rate of 0.0333s but idc i'll just leave it here
 
     local mode = SPEEDRUN_MODES[smsm.GetMode()]
     foreach (id, modename in mode){
