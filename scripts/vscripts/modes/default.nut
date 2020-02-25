@@ -771,8 +771,14 @@ function SpeedrunModeLoad(){
       EntFire("exit_gate_clipbrush", "Kill")
       EntFire("sphere_entrance_lift_movelinear", "Open")
       EntFire("officedoor_4_trigger", "Kill")
-      EntFire("potatos_prop", "Kill")
-      EntFire("officedoor_4", "SetAnimation", "close", 2)
+      EntFire("potatos_prop", "Kill", "", 2)
+      EntFire("officedoor_4", "SetAnimation", "close", 2);
+      
+      //remove triggers in office section
+      local trigger1 = Entities.FindByClassnameNearest("trigger_once", Vector(-2878,450,-4512), 10)
+      EntFireByHandle(trigger1, "Kill", "0", 0, null, null)
+      local trigger2 = Entities.FindByClassnameNearest("trigger_once", Vector(-3240,576,-4464), 10)
+      EntFireByHandle(trigger2, "Kill", "0", 0, null, null)
 
       //making doors faster
       EntFire("pump_machine_relay", "Kill")

@@ -14,7 +14,7 @@ CelesteMoveset::CelesteMoveset()
     , dashingCooldownDuration(0.4)
     , dashingOriginalVelMult(0.25)
     , maxDashes(1)
-    , wavedashRefreshTime(0.085)
+    , wavedashRefreshTime(0.08)
 
     , wallSlidingSpeedVertical(75.0)
     , wallSlidingSpeedHorizontal(50.0)
@@ -459,7 +459,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     if (walljumpCooldown < 0)walljumpCooldown = 0;
 
     //wallbounce
-    if (dashingCooldown > 0 && pMove->m_vecVelocity.z > 100 && pressedJump && !holdingWall && walljumpCooldown<=0) {
+    if (dashingCooldown > 0 && pMove->m_vecVelocity.Length2D() < 300 && pMove->m_vecVelocity.z > 100 && pressedJump && !holdingWall && walljumpCooldown <= 0) {
         float angle = RAD2DEG(atan2f(pMove->m_outWishVel.y, pMove->m_outWishVel.x));
         for (int i = 0; i < 4; i++) {
             Vector wallNormal;
