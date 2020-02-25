@@ -15,9 +15,9 @@
 	}
 	"celeste"
 	{
-		"title"		"Celeste 2 (alpha)"
+		"title"		"Celeste 2 (beta)"
 		"subtitle"	"Dash your way through Aperture!"
-		"pic"		"srmod/menu_modes/normal"
+		"pic"		"srmod/menu_modes/celeste"
 		"command"	"sm_mode 2;map sp_a1_intro1"
 	}
 	"space"{}
@@ -25,7 +25,7 @@
 	{
 		"title"		"MISCELLANEOUS:"
 		"subtitle"	"Categories not as much popular."
-		"pic"		""
+		"pic"		"srmod/srcom_thumbnail"
 	}
 	"fog_percent"
 	{
@@ -54,6 +54,6 @@
 		"title"		"Credits"
 		"subtitle"	"For all of the people."
 		"pic"		"vgui/backgrounds/background05"
-		"command"	"map credits"
+		"command"	"sm_mode 0;map credits"
 	}
 }

@@ -108,7 +108,7 @@ function CelestePostSpawn(){
 }
 
 function Precache(){
-    self.PrecacheSoundScript("player/windgust.wav")
+    self.PrecacheSoundScript("celeste.dash")
     smsm.PrecacheModel("models/srmod/hintplank.mdl", true)
     smsm.PrecacheModel("models/srmod/strawberry.mdl", true)
 }
@@ -248,7 +248,7 @@ function CelesteUpdate(){
 
     local makeSound = previousDashCount>dashesLeft;
     if(makeSound){
-        self.EmitSound("player/windgust.wav")
+        self.EmitSound("celeste.dash")
     } 
     previousDashCount=dashesLeft;
 

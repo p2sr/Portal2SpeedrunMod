@@ -20,7 +20,12 @@
 	}
 }
 
-"dash"
+"celeste.dash"
 {
-	"wave"			"dash.wav"
+	"channel"    "CHAN_AUTO"
+    "volume"     "VOL_NORM"
+    "pitch"      "PITCH_NORM"
+    "soundlevel" "SNDLVL_NONE"
+	"volume"		"1.0"
+	"wave"			"celeste/dash.wav"
 }
