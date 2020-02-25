@@ -8,14 +8,14 @@
 	}
 	"speedrunmode"
 	{
-		"title"		"Normal%"
+		"title"		"Normal"
 		"subtitle"	"Original mode of the Speedrun Mod."
 		"pic"		"srmod/menu_modes/normal"
 		"command"	"sm_mode 0;map sp_a1_intro1"
 	}
 	"celeste"
 	{
-		"title"		"Celeste 2 (beta)"
+		"title"		"Celeste Mode (beta)"
 		"subtitle"	"Dash your way through Aperture!"
 		"pic"		"srmod/menu_modes/celeste"
 		"command"	"sm_mode 2;map sp_a1_intro1"
@@ -24,7 +24,7 @@
 	"ext_cat"
 	{
 		"title"		"MISCELLANEOUS:"
-		"subtitle"	"Categories not as much popular."
+		"subtitle"	"Memes and stuff noone likes."
 		"pic"		"srmod/srcom_thumbnail"
 	}
 	"fog_percent"
