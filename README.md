@@ -20,10 +20,14 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 - Dense fog makes you unable to see further than 128 units.
 - If you don't move for 20 seconds, you can see through fog until you move again.
 
-### Celeste 2 (currently in development)
+### Celeste 2 (in beta testing)
 - Everything from Normal%.
-- Celeste-like movement added on top of current one (dash, wave dash and wall climb).
-- Red berries added and placed all around the facility. Collect all of them to unlock special ending.
+- Celeste-like movement added on top of current one (dash, wave dash, wallclimb and many more).
+- Container Ride, Portal Carousel, Portal Gun, Smooth Jazz and PotatOS have been modified to fit Celeste movement into the gameplay.
+In the final version, these changes will be available:
+- Red berries added and placed all around the facility. 
+- Quantum berries - special berries that will disappear once you use a portal.
+- A special ending course for those who manage to collect all berries.
 
 ## Modes planned for the future:
 - **100 Portals Run** - complete the game with less than 100 portals.
