@@ -24,6 +24,7 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 - Everything from Normal%.
 - Celeste-like movement added on top of current one (dash, wave dash, wallclimb and many more).
 - Container Ride, Portal Carousel, Portal Gun, Smooth Jazz and PotatOS have been modified to fit Celeste movement into the gameplay.
+
 In the final version, these changes will be available:
 - Red berries added and placed all around the facility. 
 - Quantum berries - special berries that will disappear once you use a portal.
