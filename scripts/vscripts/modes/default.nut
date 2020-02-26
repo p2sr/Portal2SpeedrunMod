@@ -65,6 +65,8 @@ function SpeedrunModeLoad(){
   //remove shaking before anything happens
   EntFire("env_shake", "Kill")
 
+  //well, that happens
+  EntFire("@command", "Command", "mat_fullbright 0")
 
   switch(GetMapName()){
     case "sp_a1_intro1":

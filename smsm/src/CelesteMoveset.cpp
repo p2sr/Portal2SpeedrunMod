@@ -276,7 +276,7 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
     if (!collidingWithSurface) return false;
 
     //surface is too steep or too plain
-    if (pn.z > 0.3 || pn.z < -0.2) return false;
+    if (pn.z > 0.4 || pn.z < -0.2) return false;
 
     float surfAngle = RAD2DEG(atan2f(-pn.y, -pn.x));
     const float range = 45;
@@ -434,6 +434,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     }
     else {
         climbJumping = 0;
+        holdingWall = false;
     }
     if (holdingWall && (!holdingUse || isHoldingSth))holdingWall = false;
     

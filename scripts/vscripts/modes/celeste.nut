@@ -221,6 +221,7 @@ function CelesteLoad(){
         EntFireByHandle(eletrigger, "Kill", "", 0, null, null)
         EntFire("sphere_entrance_potatos_button", "AddOutput", "OnPressed exit_lift_doortop_movelinear:Open::1:-1")
         EntFire("sphere_entrance_potatos_button", "AddOutput", "OnPressed exit_lift_doorbottom_movelinear:Open::1:-1")
+        EntFire("sphere_entrance_potatos_button", "AddOutput", "OnPressed blocking_hintsign:Kill::0:-1")
 
         //level up text
         EntFire( "@chapter_subtitle_text", "SetTextColor2", "210 210 210 255", 0.0 )
@@ -228,6 +229,15 @@ function CelesteLoad(){
         EntFire( "@chapter_subtitle_text", "SetPosY", "0.35", 0.0 )
         EntFire( "@chapter_subtitle_text", "settext", "LEVEL UP!", 0.0 )
         EntFire("sphere_entrance_potatos_button", "AddOutput", "OnPressed @chapter_subtitle_text:display::0:-1")
+
+        //sign to block the intentional doors
+        for(local i=0;i<2;i++){
+            local sign = Entities.CreateByClassname("prop_dynamic_override");
+            sign.SetModel("models/srmod/hintplank.mdl");
+            sign.SetOrigin(Vector(-3276, 576, -4550 + i*100));
+            sign.SetAngles(90,0,0);
+            EntFireByHandle(sign, "AddOutput", "targetname blocking_hintsign", 0, null, null)
+        }
 
         break;
     }
@@ -284,9 +294,9 @@ local color = Vector(1,1,1);
         if(r<0)r = 0; if(g<0)g = 0; if(b<0)b = 0;
         color = Vector(r,g,b);
     }else if(dashesLeft==2){
-        color = Vector(100,50,255)
+        color = Vector(150,75,255)
     }else if(dashesLeft==1){
-        color = Vector(255,50,0)
+        color = Vector(255,40,0)
     }
     
     smsm.SetPortalGunIndicatorColor(color);
