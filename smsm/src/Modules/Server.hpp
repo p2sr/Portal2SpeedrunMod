@@ -8,6 +8,8 @@ public:
     Interface* g_GameMovement = nullptr;
     Interface* g_ServerGameDLL = nullptr;
 public:
+    int tickBase;
+public:
     Server();
     bool Init() override;
     void Shutdown() override;
@@ -20,6 +22,8 @@ public:
     _UTIL_PlayerByIndex UTIL_PlayerByIndex = nullptr;
 
     void* GetPlayer(int index);
+
+    CGlobalVars* gpGlobals = nullptr;
 };
 
 extern Server* server;

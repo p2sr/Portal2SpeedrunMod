@@ -33,7 +33,7 @@ public:
     Cheats* cheats;
 
     std::vector<void*> clients;
-   
+    bool isPaused = false;
 protected:
     int mode;
     float modeParams[MAX_MODE_PARAMETERS];

@@ -10,6 +10,7 @@
 #include "Interface.hpp"
 #include "Offsets.hpp"
 #include "Utils.hpp"
+#include "CelesteMoveset.hpp"
 
 REDECL(VGui::Paint);
 
@@ -19,54 +20,54 @@ DETOUR(VGui::Paint, int mode)
     // drawing custom gui only once per frame
     // flag is set by RenderView detour in client
     if (vgui->canDrawThisFrame) { 
-        surface->StartDrawing(surface->matsurface->ThisPtr());
-        //currently drawn gui can have clipping enabled. disable that
-        surface->DisableClipping(surface->matsurface->ThisPtr(), true);
-
-        //get width and height for gui drawing
-        int width, height;
-        engine->GetScreenSize(width, height);
-
-        //drawing covering color
-        Color cColor = vgui->coverColor;
-        if ((cColor.r() || cColor.g() || cColor.b())) {
-            if (vgui->coverTexture == 0 || !surface->IsTextureIDValid(surface->matsurface->ThisPtr(), vgui->coverTexture)) {
-                //generate the cover texture
-                vgui->coverTexture = surface->CreateNewTextureID(surface->matsurface->ThisPtr(), true);
-                const int scale = 400;
-                const int fadeStart = 50;
-                unsigned char testData[scale*scale * 4];
-                for (int x = 0; x < scale; x++)for (int y = 0; y < scale; y++) {
-                    int sideX = scale - x, sideY = scale - y;
-                    int d = fmin(fmin(fmin(x, y),sideX),sideY);
-                    int alpha = fmax(0, pow(1.0 - d / (float)fadeStart,3)*255);
-                    int offset = (x * scale + y) * 4;
-                    testData[offset] = 255;
-                    testData[offset+1] = 255;
-                    testData[offset+2] = 255;
-                    testData[offset+3] = alpha;
-                }
-                surface->DrawSetTextureRGBA(surface->matsurface->ThisPtr(), vgui->coverTexture, testData, scale, scale);
-            }
-            surface->DrawSetColor(surface->matsurface->ThisPtr(), cColor.r(), cColor.g(), cColor.b(), cColor.a());
-            surface->DrawSetTexture(surface->matsurface->ThisPtr(), vgui->coverTexture);
-            surface->DrawTexturedRect(surface->matsurface->ThisPtr(), 0, 0, width, height);
+        for (auto hud : vgui->huds) {
+            if (!hud->DrawingOnTop()) vgui->DrawCustomHud(hud);
         }
-        surface->DisableClipping(surface->matsurface->ThisPtr(), false);
-        surface->FinishDrawing();
     }
-
+    vgui->canDrawThisFrame = false;
     auto result = VGui::Paint(thisptr, mode);
 
-    vgui->canDrawThisFrame = false;
+    for (auto hud : vgui->huds) {
+        if (hud->DrawingOnTop()) vgui->DrawCustomHud(hud);
+    }
+    
     return result;
+}
+
+void VGui::DrawCustomHud(Hud* hud) {
+    surface->StartDrawing(surface->matsurface->ThisPtr());
+    surface->DisableClipping(surface->matsurface->ThisPtr(), true);
+
+    hud->Draw();
+
+    surface->DisableClipping(surface->matsurface->ThisPtr(), false);
+    surface->FinishDrawing();
+}
+
+unsigned long VGui::GetDefaultFont() {
+    return this->GetFont(this->g_pScheme->ThisPtr(), "DefaultFixedOutline", 0);
 }
 
 bool VGui::Init()
 {
+    huds.push_back(staminaHud = new StaminaHud());
+    huds.push_back(celesteBerryHud = new CelesteBerryHud());
+
     this->enginevgui = Interface::Create(this->Name(), "VEngineVGui0");
     if (this->enginevgui) {
         this->enginevgui->Hook(VGui::Paint_Hook, VGui::Paint, Offsets::Paint);
+    }
+
+    if (auto g_pVGuiSchemeManager = Interface::Create(MODULE("vgui2"), "VGUI_Scheme0", false)) {
+        using _GetIScheme = void* (__func*)(void* thisptr, unsigned long scheme);
+        auto GetIScheme = g_pVGuiSchemeManager->Original<_GetIScheme>(Offsets::GetIScheme);
+
+        // Default scheme is 1
+        this->g_pScheme = Interface::Create(GetIScheme(g_pVGuiSchemeManager->ThisPtr(), 1));
+        if (this->g_pScheme) {
+            this->GetFont = this->g_pScheme->Original<_GetFont>(Offsets::GetFont);
+        }
+        Interface::Delete(g_pVGuiSchemeManager);
     }
 
     return this->hasLoaded = this->enginevgui;

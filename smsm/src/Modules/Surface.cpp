@@ -6,6 +6,7 @@
 #include "Module.hpp"
 #include "Offsets.hpp"
 #include "Utils.hpp"
+#include "Engine.hpp"
 
 int Surface::GetFontHeight(HFont font)
 {
@@ -58,6 +59,17 @@ void Surface::DrawRectAndCenterTxt(Color clr, int x0, int y0, int x1, int y1, HF
 
     this->DrawTxt(font, xc - (tw / 2), yc - (th / 2), fontClr, data);
 }
+int Surface::GetWidth() {
+    int width, height;
+    engine->GetScreenSize(width, height);
+    return width;
+}
+int Surface::GetHeight() {
+    int width, height;
+    engine->GetScreenSize(width, height);
+    return height;
+}
+
 bool Surface::Init()
 {
     this->matsurface = Interface::Create(this->Name(), "VGUI_Surface0", false);

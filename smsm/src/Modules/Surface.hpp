@@ -68,6 +68,8 @@ public:
     void DrawTxt(HFont font, int x, int y, Color clr, const char* fmt, ...);
     void DrawRect(Color clr, int x0, int y0, int x1, int y1);
     void DrawRectAndCenterTxt(Color clr, int x0, int y0, int x1, int y1, HFont font, Color fontClr, const char* fmt, ...);
+    int GetWidth();
+    int GetHeight();
 
     bool Init() override;
     void Shutdown() override;

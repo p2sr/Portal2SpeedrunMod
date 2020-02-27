@@ -51,6 +51,7 @@ void Portal2::LoadOffsets()
     m_hActiveWeapon = 2140; // CBaseEntity
     m_bCanFirePortal1 = 1500; // CBaseEntity
     UTIL_PlayerByIndex = 39; // CServerGameDLL::Think
+    gpGlobals = 14; // UTIL_PlayerByIndex
     Think = 31; // CServerGameDLL
 
     // vstdlib.dll
@@ -63,6 +64,11 @@ void Portal2::LoadOffsets()
     // vscript.dll
 
     CreateVM = 8;
+
+    // vgui2.dll
+
+    GetIScheme = 8; // CSchemeManager
+    GetFont = 3; // CScheme
 
     // vguimatsurface.dll
 

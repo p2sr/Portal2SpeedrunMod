@@ -63,6 +63,12 @@ int TraceRay;
 int PrecacheModel;
 int GetWorldToScreenMatrixForView;
 
+// CSchemeManager
+int GetIScheme;
+
+// CScheme
+int GetFont;
+
 // CClientTools
 int NextParticleSystem;
 
@@ -99,4 +105,5 @@ int GetHud;
 int FindElement;
 int ProcessMovement;
 int UTIL_PlayerByIndex;
+int gpGlobals;
 }

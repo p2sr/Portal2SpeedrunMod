@@ -6,6 +6,8 @@
 #include "Modules/Console.hpp"
 #include "Modules/Engine.hpp"
 #include "Modules/Client.hpp"
+#include "Modules/Surface.hpp"
+#include "Modules/VGui.hpp"
 
 CelesteMoveset::CelesteMoveset()
     : dashingSpeed(300.0)
@@ -16,10 +18,8 @@ CelesteMoveset::CelesteMoveset()
     , maxDashes(1)
     , wavedashRefreshTime(0.08)
 
-    , wallSlidingSpeedVertical(75.0)
-    , wallSlidingSpeedHorizontal(50.0)
-    , wallSlidingSpeedVerticalSpeed(20.0)
-    , wallSlidingSpeedHorizontalSpeed(5.0)
+    , wallSlidingSpeed(75.0)
+    , wallSlidingSpeedSpeed(20.0)
     , wallJumpForce(250.0)
 
     , wallClimbMaxStamina(200)
@@ -34,6 +34,23 @@ CelesteMoveset::CelesteMoveset()
 void CelesteMoveset::PreProcessMovement(void* pPlayer, CMoveData* pMove) {
 
     if (smsm.GetMode() != Celeste) return;
+
+    auto m_fFlags = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_fFlags);
+    bool grounded = (m_fFlags & FL_ONGROUND);
+
+    //process jump input
+    bool holdingSpace = (pMove->m_nButtons & 0x2);
+    bool ducking = *reinterpret_cast<bool*>((uintptr_t)pPlayer + Offsets::m_bDucking);
+    if (holdingSpace && !ducking) {
+        pressedJump = !holdingJump;
+        holdingJump = true;
+    }
+    else {
+        holdingJump = false;
+        pressedJump = false;
+    }
+
+    if (pressedJump && grounded) walljumpCooldown = 0.2;
 
     if (holdingWall) {
         //block original movement, but store wish vel somewhere
@@ -74,17 +91,6 @@ void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
 
     UpdateModeParams();
 
-    //process jump input
-    bool holdingSpace = (pMove->m_nButtons & 0x2);
-    bool ducking = *reinterpret_cast<bool*>((uintptr_t)pPlayer + Offsets::m_bDucking);
-    if (holdingSpace && !ducking) {
-        pressedJump = !holdingJump;
-        holdingJump = true;
-    } else {
-        holdingJump = false;
-        pressedJump = false;
-    }
-
     //just in case, use tickbase counter within player entity to make proper logic loop
     int tickBase = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_nTickBase);
     if (tickBase > lastTickBase) {
@@ -94,10 +100,6 @@ void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
         ProcessMovementDashing(pPlayer, pMove, dt);
     }
     lastTickBase = tickBase;
-
-    
-    
-
 }
 
 
@@ -201,8 +203,9 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
 
         Vector pv = pMove->m_vecVelocity;
         //hyperdashing
-        if (dashingDir.z < 0 && grounded && pressedJump) {
+        if (dashingDir.z < 0 && ((grounded && pressedJump) || (dashingDir.z < -100 && pv.z > 100))) {
             pMove->m_vecVelocity = pv * (float)(0.5 - dashingDir.z / dashingSpeed);
+            if (dashingDir.z < -100 && pv.z > 300)pMove->m_vecVelocity.z = pv.z*1.5; // super gel bounce
             dashing = 0;
         }
         //initial dash speed management
@@ -348,12 +351,17 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     auto m_hUseEntity = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_hUseEntity);
     bool isHoldingSth = m_hUseEntity != 0xFFFFFFFF;
 
+
+    if (wallclimbCooldown > 0)wallclimbCooldown -= dt;
+    if (wallclimbCooldown < 0)wallclimbCooldown = 0;
+    bool oldHoldingWall = holdingWall;
+
     //wallclimbing
     bool holdingUse = pMove->m_nButtons & 0x20;
     if (grounded) {
         climbStamina = wallClimbMaxStamina;
     }
-    else if (holdingUse && climbStamina > 0 && !isHoldingSth) {
+    else if (holdingUse && climbStamina > 0 && !isHoldingSth && wallclimbCooldown<=0) {
         //depending on a state of a wallclimb, different angle is used.
         float grabAng = pMove->m_vecViewAngles.y;
         if (holdingWall) {
@@ -435,9 +443,11 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     else {
         climbJumping = 0;
         holdingWall = false;
+        
     }
     if (holdingWall && (!holdingUse || isHoldingSth))holdingWall = false;
     
+    if(oldHoldingWall && !holdingWall)wallclimbCooldown = wallClimbNextDelay;
 
     //visually grab the wall by internally replacing convar variables
     float originalVmOffset = std::stof(viewmodel_offset_z.ThisPtr()->m_pszString);
@@ -460,7 +470,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     if (walljumpCooldown < 0)walljumpCooldown = 0;
 
     //wallbounce
-    if (dashingCooldown > 0 && pMove->m_vecVelocity.Length2D() < 300 && pMove->m_vecVelocity.z > 100 && pressedJump && !holdingWall && walljumpCooldown <= 0) {
+    if (dashingCooldown > 0 && pMove->m_vecVelocity.Length2D() < 200 && pMove->m_vecVelocity.z > 100 && pressedJump && !holdingWall && walljumpCooldown <= 0) {
         float angle = RAD2DEG(atan2f(pMove->m_outWishVel.y, pMove->m_outWishVel.x));
         for (int i = 0; i < 4; i++) {
             Vector wallNormal;
@@ -511,19 +521,13 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
                 pMove->m_vecVelocity.z = jumpVec.z;
                 holdingWall = false;
             }
+            //wallsliding
             else if (!holdingWall) {
-                if (pMove->m_vecVelocity.z < -wallSlidingSpeedVertical) {
-                    float stepZ = pMove->m_vecVelocity.z + wallSlidingSpeedVerticalSpeed;
-                    float newZ = (stepZ > wallSlidingSpeedVertical) ? wallSlidingSpeedVertical : stepZ;
+                float len = fmaxf(pMove->m_vecVelocity.Length2D(), wallSlidingSpeed);
+                if (pMove->m_vecVelocity.z < -len) {
+                    float stepZ = pMove->m_vecVelocity.z + wallSlidingSpeedSpeed;
+                    float newZ = (stepZ > wallSlidingSpeed) ? wallSlidingSpeed : stepZ;
                     pMove->m_vecVelocity.z = newZ;
-                }
-                float len = pMove->m_vecVelocity.Length2D();
-                if (len > wallSlidingSpeedHorizontal) {
-                    float stepSpeed = len - wallSlidingSpeedHorizontalSpeed;
-                    float newSpeed = (stepSpeed > wallSlidingSpeedHorizontal) ? wallSlidingSpeedHorizontal : stepSpeed;
-                    Vector newVel = pMove->m_vecVelocity * (stepSpeed / len);
-                    newVel.z = pMove->m_vecVelocity.z;
-                    pMove->m_vecVelocity = newVel;
                 }
             }
         }

@@ -14,6 +14,9 @@
     <Filter Include="Source\Offset stuff">
       <UniqueIdentifier>{f718de65-b308-4d01-9ca0-021212018fe2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Hud">
+      <UniqueIdentifier>{39f217ea-7cf1-43cf-ae92-699502c6bddb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cheats.cpp">
@@ -78,6 +81,9 @@
     </ClCompile>
     <ClCompile Include="Modules\VGui.cpp">
       <Filter>Source\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Hud\Hud.cpp">
+      <Filter>Source\Hud</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +158,9 @@
     </ClInclude>
     <ClInclude Include="Modules\VGui.hpp">
       <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud\Hud.hpp">
+      <Filter>Source\Hud</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@ DETOUR(Server::ProcessMovement, void* pPlayer, CMoveData* pMove) {
     celesteMoveset.PreProcessMovement(pPlayer, pMove);
 
     auto result = Server::ProcessMovement(thisptr, pPlayer, pMove);
+    server->tickBase = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_nTickBase);
 
     celesteMoveset.ProcessMovement(pPlayer, pMove);
     return result;
@@ -39,6 +40,7 @@ bool Server::Init() {
     if (this->g_ServerGameDLL) {
         auto Think = this->g_ServerGameDLL->Original(Offsets::Think);
         Memory::Read<_UTIL_PlayerByIndex>(Think + Offsets::UTIL_PlayerByIndex, &this->UTIL_PlayerByIndex);
+        Memory::DerefDeref<CGlobalVars*>((uintptr_t)this->UTIL_PlayerByIndex + Offsets::gpGlobals, &this->gpGlobals);
     }
 
     return this->hasLoaded = this->g_GameMovement && this->g_ServerGameDLL;

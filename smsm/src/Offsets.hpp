@@ -63,6 +63,12 @@ extern int TraceRay;
 extern int PrecacheModel;
 extern int GetWorldToScreenMatrixForView;
 
+// CSchemeManager
+extern int GetIScheme;
+
+// CScheme
+extern int GetFont;
+
 // CClientTools
 extern int NextParticleSystem;
 
@@ -99,4 +105,5 @@ extern int GetHud;
 extern int FindElement;
 extern int ProcessMovement;
 extern int UTIL_PlayerByIndex;
+extern int gpGlobals;
 }

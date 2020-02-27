@@ -6,18 +6,21 @@
 #include "Interface.hpp"
 #include "Utils.hpp"
 #include "Surface.hpp"
+#include "Hud/Hud.hpp"
 
 class VGui : public Module {
 public:
     Interface* enginevgui = nullptr;
+    Interface* g_pScheme = nullptr;
 
-    void SetCoverColor(Color c) {coverColor = c;};
-
-    bool canDrawThisFrame = true;
-    
+    using _GetFont = unsigned long(__func*)(void* thisptr, const char* fontName, bool proportional);
+    _GetFont GetFont = nullptr;
+    unsigned long GetDefaultFont();
+    void AllowCustomHudThisFrame() { canDrawThisFrame = true; }
+    void DrawCustomHud(Hud* hud);
 private:
-    Color coverColor;
-    int coverTexture = 0;
+    bool canDrawThisFrame = true;
+    std::vector<Hud*> huds;
 public:
     // CEngineVGui::Paint
     DECL_DETOUR(Paint, int mode);

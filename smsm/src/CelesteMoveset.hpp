@@ -26,10 +26,8 @@ public:
     float dashingOriginalVelMult; // how much of a original speed to keep
     float wavedashRefreshTime;
 
-    float wallSlidingSpeedVertical; // how fast can player slide vertically on a wall
-    float wallSlidingSpeedHorizontal; // how fast can player slide horizontally on a wall
-    float wallSlidingSpeedVerticalSpeed; // how much should vertical speed be enforced to sliding speed
-    float wallSlidingSpeedHorizontalSpeed; // how much should horizontal speed be enforced to sliding speed
+    float wallSlidingSpeed; // how fast can player slide vertically on a wall
+    float wallSlidingSpeedSpeed; // how much should vertical speed be enforced to sliding speed
     float wallJumpForce; //how much should player be pushed away from a wall when jumping on it
     float wallJumpAngle; //what angle should be used to calculate wall jump direction (NOT IMPLEMENTED YET)
 
@@ -38,6 +36,7 @@ public:
     float wallClimbJumpDuration; //how long should that jump take
     float wallClimbMovementSpeed; // speed in which player can move on a wall
     float wallClimbHoldFatigue; // how much to take from stamina if not moving
+    float wallClimbNextDelay = 0.4;
 
     int maxDashes;
 private:
@@ -60,7 +59,9 @@ private:
 
     bool holdingJump = false;
     bool pressedJump = false;
+    bool preGrounded = false;
     float walljumpCooldown = 0;
+    float wallclimbCooldown = 0; //fuck you
 public:
     const enum ModeParams {
         InitialValue = 0,
@@ -68,6 +69,10 @@ public:
         MaxStamina = 2,
         DashesLeft = 3,
         StaminaLeft = 4,
+        DisplayBerriesGot = 10,
+        DisplayBerriesMax = 11,
+        DisplayInLevelBerriesCount = 12,
+        DisplayInLevelBerriesOffset = 13,
         BerriesOffset = 100,
     };
 };

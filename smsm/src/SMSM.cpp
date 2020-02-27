@@ -20,6 +20,7 @@
 #include "Game.hpp"
 #include "Utils.hpp"
 #include "Utils/Memory.hpp"
+#include "Hud/Hud.hpp"
 
 SMSM smsm;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(SMSM, IServerPluginCallbacks, INTERFACEVERSION_ISERVERPLUGINCALLBACKS, smsm);
@@ -100,7 +101,7 @@ const char* SMSM::GetPluginDescription() {
 void SMSM::LevelShutdown() {
     console->DevMsg("SMSM::LevelShutdown\n");
 
-    vgui->SetCoverColor(Color(0, 0, 0, 0));
+    staminaHud->SetStaminaColor(Color(0, 0, 0, 0));
     this->SetBackupKey("0");
 
     // Make sure to clear the list after sending any client-side shutdown commands
@@ -117,7 +118,6 @@ void SMSM::ClientActive(void* pEntity) {
 }
 
 void SMSM::ClientFullyConnect(void* pEdict) {
-
     this->clients.push_back(pEdict);
 }
 
@@ -190,7 +190,7 @@ void SMSM::SetPortalGunIndicatorColor(Vector color) {
 }
 
 void SMSM::SetScreenCoverColor(int r, int g, int b, int a) {
-    vgui->SetCoverColor(Color(r, g, b, a));
+    staminaHud->SetStaminaColor(Color(r, g, b, a));
 }
 
 bool SMSM::IsDialogueEnabled() {
@@ -223,6 +223,7 @@ void SMSM::UnPause()
 }
 void SMSM::GameFrame(bool simulating)
 {
+    isPaused = !simulating;
 }
 void SMSM::ClientDisconnect(void* pEntity)
 {

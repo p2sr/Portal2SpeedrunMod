@@ -17,7 +17,7 @@
 
 REDECL(Client::RenderView);
 DETOUR(Client::RenderView, const CViewSetup& view, int nClearFlags, int whatToDraw) {
-    vgui->canDrawThisFrame = true;
+    vgui->AllowCustomHudThisFrame();
     client->UpdatePortalGunIndicatorColor();
 
     return client->RenderView(thisptr, view, nClearFlags, whatToDraw);
