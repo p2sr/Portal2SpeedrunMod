@@ -37,6 +37,7 @@ DEFINE_SCRIPTFUNC(PrecacheModel, "Precaches model")
 DEFINE_SCRIPTFUNC(GetBackupKey, "Gets currently set key used by script to recover parameters.")
 DEFINE_SCRIPTFUNC(SetBackupKey, "Sets backup key used by script to recover parameters.")
 DEFINE_SCRIPTFUNC(GetModeParamsNumber, "Maximum number of parameters you can assign.")
+DEFINE_SCRIPTFUNC(AreModeParamsChanged, "Used by backup system. Returns true once if change to mode-specifc params was made.")
 END_SCRIPTDESC()
 
 SMSM::SMSM()
@@ -154,6 +155,7 @@ void SMSM::SetMode(int mode) {
     this->mode = mode;
     //reset param table and other stuff when switching modes
     this->ResetModeVariables();
+    if (this->mode != mode)this->paramsChanged = true;
 }
 
 void SMSM::ResetModeVariables() {
@@ -168,6 +170,7 @@ void SMSM::PrecacheModel(const char* pName, bool bPreload) {
 
 void SMSM::SetBackupKey(const char* key) {
     backupKey = key;
+    this->paramsChanged = true;
 }
 
 const char* SMSM::GetBackupKey() {
@@ -181,8 +184,15 @@ float SMSM::GetModeParam(int id) {
 
 bool SMSM::SetModeParam(int id, float value) {
     if (id < 0 || id >= MAX_MODE_PARAMETERS)return false;
+    if (this->modeParams[id] != value)this->paramsChanged = true;
     this->modeParams[id] = value;
     return true;
+}
+
+bool SMSM::AreModeParamsChanged() {
+    bool changed = this->paramsChanged;
+    if(changed)this->paramsChanged = false;
+    return changed;
 }
 
 void SMSM::SetPortalGunIndicatorColor(Vector color) {

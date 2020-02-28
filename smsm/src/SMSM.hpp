@@ -38,6 +38,7 @@ protected:
     int mode;
     float modeParams[MAX_MODE_PARAMETERS];
     const char* backupKey;
+    bool paramsChanged = false;
 public:
     SMSM();
 
@@ -76,6 +77,7 @@ public:
     int GetModeParamsNumber() { return MAX_MODE_PARAMETERS; };
     void SetBackupKey(const char* key);
     const char* GetBackupKey();
+    bool AreModeParamsChanged();
     void ResetModeVariables();
 
     void ForceAct5MenuBackground();

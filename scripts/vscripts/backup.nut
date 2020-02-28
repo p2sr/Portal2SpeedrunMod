@@ -7,12 +7,19 @@ SLBS_key <- "";
 SLBS_params <- {};
 SLBS_mode <- 0;
 
+
+
 function SLBS_Backup(){
     if(!SLBS_initiated){
         //sets the key
         SLBS_key = RandomInt(100000000,999999999)+"";
         smsm.SetBackupKey(SLBS_key);
 
+        modlog("Created mode parameters backup with random key '"+SLBS_key+"'.");
+        SLBS_initiated = true;
+    }
+
+    if(smsm.AreModeParamsChanged()){
         //backups mode and parameters
         SLBS_mode = smsm.GetMode();
         
@@ -22,15 +29,12 @@ function SLBS_Backup(){
             params[i] <- smsm.GetModeParam(i);
         }
         SLBS_params = params;
-
-        modlog("Created mode parameters backup with random key '"+SLBS_key+"'.");
-        SLBS_initiated = true;
     }
+    
 }
 
 //this function is plugged into main loop
 function SLBS_Check(){
-    SLBS_Backup();
     if(SLBS_initiated && SLBS_key != smsm.GetBackupKey()){
         modlog("Backup key variance detected ("+SLBS_key +" <-> "+ smsm.GetBackupKey()+"). Restoring variables...");
 
@@ -43,4 +47,5 @@ function SLBS_Check(){
             smsm.SetModeParam(i, SLBS_params[i]);
         }
     }
+    SLBS_Backup();
 }

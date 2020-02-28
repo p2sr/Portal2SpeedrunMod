@@ -73,6 +73,7 @@ public:
         DisplayBerriesMax = 11,
         DisplayInLevelBerriesCount = 12,
         DisplayInLevelBerriesOffset = 13,
+        DisplayBerriesForce = 14,
         BerriesOffset = 100,
     };
 };
