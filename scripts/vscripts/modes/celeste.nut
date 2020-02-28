@@ -3,12 +3,26 @@
 //Advanced movement and stuff
 //*****************************************************
 
+ModeParams <- {
+    InitialValue = 0,
+    MaxDashes = 1,
+    MaxStamina = 2,
+    DashesLeft = 3,
+    StaminaLeft = 4,
+    DisplayBerriesGot = 10,
+    DisplayBerriesMax = 11,
+    DisplayBerriesInLevelCount = 12,
+    DisplayBerriesForce = 13,
+    BerriesOffset = 20,
+};
+
 //birb code
 
 BirbHandle <- null;
 IsBirbMap <- false;
 BirbInterp <- 0.0;
 BirbFrame <- 0;
+BirbJumpLoop <-0;
 BirbKeyframes <- [
     {pos=Vector(-2159,-1351,-5112),ang=Vector(0,315,0),speed=0.1},
     {pos=Vector(-2207,-1223,-5112),ang=Vector(0,60,0),speed=0.1},
@@ -35,6 +49,7 @@ BirbMaxKeyframes <- 19;
 
 
 function UpdateBirbPos(){
+    if(BirbFrame >= BirbMaxKeyframes)return;
     local prevKf = BirbKeyframes[BirbFrame];
     local nextKf = prevKf;
     if(BirbFrame<BirbMaxKeyframes-1){
@@ -48,6 +63,12 @@ function UpdateBirbPos(){
     local jumpHeight = (-BirbInterp*(BirbInterp-1))*maxJH;
     birbPos.z += jumpHeight;
 
+    if(BirbInterp == 0){
+        local smallJump = sin(BirbJumpLoop)*10;
+        if(smallJump<0)smallJump = -smallJump;
+        birbPos.z += smallJump;
+        BirbJumpLoop += 0.5;
+    }
     //BirbHandle.SetOrigin(birbPos);
     BirbHandle.SetAbsOrigin(birbPos);
     //EntFireByHandle(BirbHandle, "SetLocalOrigin", birbPos.x + " " + birbPos.y + " " + birbPos.z, 0, null, null)
@@ -68,8 +89,8 @@ function UpdateBirb(){
         if(BirbInterp>=1){
             BirbInterp = 0;
             BirbFrame++;
+            BirbJumpLoop = 0;
         }
-        UpdateBirbPos();
     }else if(BirbFrame < BirbMaxKeyframes){
         local kfPos = BirbKeyframes[BirbFrame].pos;
         local pPos = GetPlayer().GetOrigin();
@@ -87,20 +108,89 @@ function UpdateBirb(){
             }
         }
     }
+    UpdateBirbPos();
 }
 
 
 
-//main code
 
-ModeParams <- {
-    InitialValue = 0,
-    MaxDashes = 1,
-    MaxStamina = 2,
-    DashesLeft = 3,
-    StaminaLeft = 4,
-    BerriesOffset = 100,
-};
+//berries
+BERRIES <- {};
+
+BERRIES["sp_a1_intro2"] <- [
+    {pos=Vector(-230, 190, 580), berryType=0}
+];
+
+BERRIES_counter <- 0;
+BERRIES_max <- 0;
+
+function CreateBerries(){
+    //assigning ID to every berry, and check if its collected already
+    foreach( mapname, berryset in BERRIES){
+        foreach(index, berry in berryset){
+            berry.id <- BERRIES_max;
+            berry.collected <- false;
+            if(smsm.GetModeParam(ModeParams.BerriesOffset+BERRIES_max)>0){
+                berry.collected = true;
+            }
+            BERRIES_max++;
+        }
+    }
+
+    //spawning uncollected berries
+    foreach( index, berry in BERRIES[GetMapName()] ) if(!berry.collected){
+        local berryEnt = Entities.CreateByClassname("prop_dynamic");
+        EntFireByHandle(berryEnt, "AddOutput", "targetname berry_"+index, 0, null, null);
+        EntFireByHandle(berryEnt, "SetAnimation", "idle", 0, null, null);
+        berryEnt.SetModel("models/srmod/strawberry.mdl");
+        berryEnt.SetOrigin(berry.pos);
+        berry.entity <- berryEnt;
+    }
+
+    UpdateBerryCounter();
+}
+
+function ResetBerries(){
+    for(local i=0;i<BERRIES_max;i++){
+        smsm.SetModeParam(ModeParams.BerriesOffset+i,0);
+    }
+    UpdateBerryCounter();
+}
+
+function UpdateBerryCounter(){
+    local berriesCollected = 0;
+    for(local i=0;i<BERRIES_max;i++){
+        if(smsm.GetModeParam(ModeParams.BerriesOffset+i)>0)berriesCollected++;
+    }
+    smsm.SetModeParam(ModeParams.DisplayBerriesGot, berriesCollected);
+}
+
+function UpdateBerries(){
+    local pmin = GetPlayer().GetOrigin()+GetPlayer().GetBoundingMins();
+    local pmax = GetPlayer().GetOrigin()+GetPlayer().GetBoundingMaxs();
+    foreach( index, berry in BERRIES[GetMapName()] ){
+        berry.entity.SetModel("models/srmod/strawberry.mdl");
+        if(!berry.collected){
+            local bsize = 16;
+            local bmin = berry.entity.GetOrigin() - Vector(bsize,bsize,bsize);
+            local bmax = berry.entity.GetOrigin() + Vector(bsize,bsize,bsize);
+            //if player bbox overlaps berry bbox
+            if(pmax.x > bmin.x && pmin.x < bmax.x && pmax.y > bmin.y && pmin.y < bmax.y && pmax.z > bmin.z && pmin.z < bmax.z){
+                berry.collected = true;
+                berry.entity.EmitSound("celeste.berryget");
+                EntFireByHandle(berry.entity, "Kill", "", 0, null, null);
+                smsm.SetModeParam(ModeParams.BerriesOffset+berry.id,1);
+                UpdateBerryCounter();
+                
+            }
+        }
+    }
+}
+
+
+
+
+//main code
 
 function CelestePostSpawn(){
     //FOG_CONTROL_VALUES = {r=0.8, g=0.4, b=1.3};
@@ -109,8 +199,11 @@ function CelestePostSpawn(){
 
 function Precache(){
     self.PrecacheSoundScript("celeste.dash")
+    self.PrecacheSoundScript("celeste.berrypulse")
+    self.PrecacheSoundScript("celeste.berryget")
     smsm.PrecacheModel("models/srmod/hintplank.mdl", true)
     smsm.PrecacheModel("models/srmod/strawberry.mdl", true)
+    smsm.PrecacheModel("models/srmod/introcar.mdl", true)
 }
 
 FIRST_MAP_WITH_1_DASH <- "sp_a1_intro4"
@@ -132,10 +225,10 @@ function CelesteLoad(){
         local containerWall1 = Entities.FindByClassnameNearest("func_door", Vector(-5818, 1327, 285), 10)
         EntFireByHandle(containerWall1, "SetLocalOrigin", "-1403.22 4404.75 2733.44", 0, null, null)
         EntFireByHandle(containerWall1, "SetLocalAngles", "0 90 98", 0, null, null)
-        //slanted wall, can't climb it
+        //normal wall. slanted one confused lots of peples
         local containerWall2 = Entities.FindByClassnameNearest("func_door", Vector(-5477, 1400, 285), 10)
         EntFireByHandle(containerWall2, "SetLocalOrigin", "-1210 4602 2745", 0, null, null)
-        EntFireByHandle(containerWall2, "SetLocalAngles", "-15 0 5", 0, null, null)
+        EntFireByHandle(containerWall2, "SetLocalAngles", "0 0 5", 0, null, null)
 
         local sign = Entities.CreateByClassname("prop_dynamic_override");
         sign.SetModel("models/srmod/hintplank.mdl");
@@ -193,11 +286,6 @@ function CelesteLoad(){
         EntFire("logic_drop_box", "Trigger")
         EntFire("trigger_dropbox", "Kill")
         break;
-    case "sp_a1_intro6":
-        // local berry = Entities.CreateByClassname("prop_dynamic");
-        // berry.SetModel("models/srmod/strawberry.mdl");
-        // berry.SetOrigin(Vector(-70, 220, 64));
-        break;
     case "sp_a3_transition01":
         FindBirb();
         EntFire("potatos_prop", "AddOutput", "targetname potato_powerup_prop");
@@ -240,9 +328,17 @@ function CelesteLoad(){
         }
 
         break;
+    case "sp_a1_intro5":
+        local introcar = CreateProp("prop_physics", Vector(-400, -930, 668), "models/srmod/introcar.mdl", 1);
+        EntFireByHandle(introcar, "AddOutput", "targetname introcar", 0, null, null)
+        EntFireByHandle(introcar, "AddOutput", "solid 6", 0, null, null)
+        introcar.SetAngles(0,225,0)
+        print("INTRO CAAAR\n")
+        break;
     }
 
     UpgradeDashes(dashes);
+    CreateBerries();
 }
 
 rainbowColorState <- 0;
@@ -263,6 +359,8 @@ function CelesteUpdate(){
     previousDashCount=dashesLeft;
 
     if(IsBirbMap)UpdateBirb();
+
+    UpdateBerries();
 }
 
 

@@ -8,15 +8,6 @@
 
 #include "SMSM.hpp"
 
-REDECL(Engine::GetWorldToScreenMatrixForView);
-DETOUR(Engine::GetWorldToScreenMatrixForView, const CViewSetup& view, VMatrix* pVMatrix) {
-    pVMatrix->m[0][0] *= -1;
-    auto result = Engine::GetWorldToScreenMatrixForView(thisptr, view, pVMatrix);
-    console->Print("aay lmao\n");
-    
-    return result;
-}
-
 Engine::Engine()
     : Module()
 {

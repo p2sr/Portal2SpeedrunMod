@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+$baseTexture "models/srmod/introcar"
+$phong 1
+$phongexponent 5
+$phongboost 5.0
+$phongfresnelranges "[1 0.5 0]"
+}

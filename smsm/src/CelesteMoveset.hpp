@@ -71,10 +71,9 @@ public:
         StaminaLeft = 4,
         DisplayBerriesGot = 10,
         DisplayBerriesMax = 11,
-        DisplayInLevelBerriesCount = 12,
-        DisplayInLevelBerriesOffset = 13,
-        DisplayBerriesForce = 14,
-        BerriesOffset = 100,
+        DisplayBerriesInLevelCount = 12,
+        DisplayBerriesForce = 13,
+        BerriesOffset = 20,
     };
 };
 

@@ -447,7 +447,7 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     }
     if (holdingWall && (!holdingUse || isHoldingSth))holdingWall = false;
     
-    if(oldHoldingWall && !holdingWall)wallclimbCooldown = wallClimbNextDelay;
+    if(oldHoldingWall && !holdingWall && !holdingUse)wallclimbCooldown = wallClimbNextDelay;
 
     //visually grab the wall by internally replacing convar variables
     float originalVmOffset = std::stof(viewmodel_offset_z.ThisPtr()->m_pszString);

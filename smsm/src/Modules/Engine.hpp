@@ -37,8 +37,6 @@ public:
     bool Init() override;
     void Shutdown() override;
     const char* Name() override { return MODULE("engine"); }
-
-    DECL_DETOUR(GetWorldToScreenMatrixForView, const CViewSetup& view, VMatrix* pVMatrix);
 };
 
 extern Engine* engine;

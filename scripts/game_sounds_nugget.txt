@@ -29,3 +29,22 @@
 	"volume"		"1.0"
 	"wave"			"celeste/dash.wav"
 }
+
+"celeste.berryget"
+{
+	"channel"    "CHAN_AUTO"
+    "volume"     "VOL_NORM"
+    "pitch"      "PITCH_NORM"
+    "soundlevel" "SNDLVL_NONE"
+	"volume"		"1.0"
+	"wave"			"celeste/berry_get.wav"
+}
+
+"celeste.berrypulse"
+{
+	"channel"		"CHAN_AUTO"
+	"pitch"      	"PITCH_NORM"
+	"soundlevel"	"SNDLVL_70db"
+	"volume"		"0.5,1.0"
+	"wave"			")celeste/berry_pulse.wav"
+}

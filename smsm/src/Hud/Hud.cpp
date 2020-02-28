@@ -96,7 +96,7 @@ int CelesteBerryHud::GetBerryTexture() {
 void CelesteBerryHud::Draw() {
     if (smsm.GetMode() != Celeste) return;
 
-    if (engine->hoststate->m_bWaitingForConnection || !engine->hoststate->m_activeGame) {
+    if (server->gpGlobals->tickcount<40 || engine->hoststate->m_bWaitingForConnection || !engine->hoststate->m_activeGame || smsm.clients.size()==0) {
         oldBerryCount = smsm.GetModeParam(CelesteMoveset::DisplayBerriesGot);
         displayBerryCount = oldBerryCount;
         return;
@@ -104,9 +104,10 @@ void CelesteBerryHud::Draw() {
 
     float dt = fmaxf(server->gpGlobals->realtime - prevRealTime, 0);
     prevRealTime = server->gpGlobals->realtime;
-    
+
     int newBerryCount = (int)smsm.GetModeParam(CelesteMoveset::DisplayBerriesGot);
-    if (newBerryCount != oldBerryCount || smsm.isPaused) {
+    bool forceShow = smsm.GetModeParam(CelesteMoveset::DisplayBerriesForce) > 0;
+    if (newBerryCount != oldBerryCount || smsm.isPaused || forceShow) {
         if (posOffset < 1.0)posOffset += 4 * dt;
         if (posOffset >= 1.0) {
             posOffset = 1.0;
@@ -119,9 +120,11 @@ void CelesteBerryHud::Draw() {
         if (posOffset > 0)posOffset -= 3 * dt;
         if (posOffset < 0)posOffset = 0;
     }
-    else {
-        collectAnimState -= 0.7 * dt;
-        if (collectAnimState < 0.6)displayBerryCount = oldBerryCount;
+
+    const float animDelay = 0.88;
+    if (collectAnimState > 0) {
+        collectAnimState -= 0.8 * dt;
+        if (collectAnimState < animDelay)displayBerryCount = oldBerryCount;
         if (collectAnimState < 0.0) collectAnimState = 0;
     }
 
@@ -147,7 +150,7 @@ void CelesteBerryHud::Draw() {
     //surface->DrawRect(Color(0, 0, 0, 200), width - counterTextWidth - xTextWidth - 78, height - 10, width, height + 65);
 
     width -= counterTextWidth;
-    float anim = fminf(fmaxf((0.6-collectAnimState)/0.2,0),1.0);
+    float anim = fminf(fmaxf((animDelay -collectAnimState)/0.25,0),1.0);
     int animY = -sin(anim * 3.1416)*10;
     int animC = (anim==0 || anim==1) ? 0 : (sin(anim*15)+1) * 50;
     surface->DrawTxt(font, width+4, height+4 + animY, Color(0, 0, 0, 150), counterText);
