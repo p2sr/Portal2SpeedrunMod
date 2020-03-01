@@ -116,10 +116,27 @@ function UpdateBirb(){
 
 //berries
 BERRIES <- {};
-
+//okay, look, i know you think "yaya me me smart" but 
+//at least try to not spoil berries location for yourself
 BERRIES["sp_a1_intro2"] <- [
     {pos=Vector(-230, 190, 580), berryType=0}
 ];
+BERRIES["sp_a1_intro3"] <- [
+    {pos=Vector(-512, 1200, 1160), berryType=0},
+    {pos=Vector(-1278, 3390, 400), berryType=0}
+];
+BERRIES["sp_a1_intro4"] <- [
+    {pos=Vector(848, -704, 340), berryType=0}
+];
+BERRIES["sp_a1_intro5"] <- [
+    {pos=Vector(-345, -876, 710), berryType=0}
+];
+
+BERRIES["sp_a2_laser_vs_turret"] <- [
+    {pos=Vector(64, 96, 320), berryType=1}
+    //{pos=Vector(-64, 352, 320), berryType=1}
+];
+
 
 BERRIES_counter <- 0;
 BERRIES_max <- 0;
@@ -138,14 +155,19 @@ function CreateBerries(){
     }
 
     //spawning uncollected berries
-    foreach( index, berry in BERRIES[GetMapName()] ) if(!berry.collected){
-        local berryEnt = Entities.CreateByClassname("prop_dynamic");
+    if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ) if(!berry.collected){
+        local berryEnt = Entities.CreateByClassname("prop_dynamic_override");
         EntFireByHandle(berryEnt, "AddOutput", "targetname berry_"+index, 0, null, null);
-        EntFireByHandle(berryEnt, "SetAnimation", "idle", 0, null, null);
-        berryEnt.SetModel("models/srmod/strawberry.mdl");
+        EntFireByHandle(berryEnt, "SetAnimation", "collect", 0, null, null);
+        EntFireByHandle(berryEnt, "SetAnimation", "idle", 1, null, null);
+        if(berry.berryType==0)berryEnt.SetModel("models/srmod/strawberry.mdl");
+        if(berry.berryType==1)berryEnt.SetModel("models/srmod/quantumberry.mdl");
         berryEnt.SetOrigin(berry.pos);
         berry.entity <- berryEnt;
     }
+
+    //prepare portal detection system
+    CheckPortals(true);
 
     UpdateBerryCounter();
 }
@@ -165,45 +187,89 @@ function UpdateBerryCounter(){
     smsm.SetModeParam(ModeParams.DisplayBerriesGot, berriesCollected);
 }
 
+BERRIES_portal_init <- 0;
+BERRIES_quantum_removed <- false;
+
+//not reliable!
+//apparently sometimes portals appear in the level even if they're not placed,
+//and sometimes it's not (0,0,0), so it's dumb solution, but it works in most cases
+function CheckPortals(checkInitial){
+    if(!BERRIES_quantum_removed){
+        local portalCount = 0;
+        local portal = null;
+        while(portal = Entities.FindByClassname(portal, "prop_portal")){
+            if(portal.GetOrigin().Length() > 0)portalCount++;
+        }
+        if(checkInitial){
+            BERRIES_portal_init = portalCount
+        }else if(BERRIES_portal_init != portalCount){
+            RemovePortalBerries();
+        }
+    }
+}
+
+function RemovePortalBerries(){
+    if(!BERRIES_quantum_removed){
+        modlog("Portal placement detected, destroying quantum berries!")
+
+        if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
+            if(berry.berryType==1 && !berry.collected && berry.entity){
+                local berryFizzle = Entities.CreateByClassname("prop_weighted_cube");
+                if(berry.berryType==1)berryFizzle.SetModel("models/srmod/quantumberry.mdl");
+                berryFizzle.SetOrigin(berry.pos);
+                berryFizzle.EmitSound("celeste.quantumberrylost");
+                EntFireByHandle(berryFizzle, "Dissolve", "", 0, null, null);
+                EntFireByHandle(berry.entity, "Skin", "2", 0, null, null);
+                EntFireByHandle(berry.entity, "DisableDraw", "", 0, null, null)
+                EntFireByHandle(berry.entity, "EnableDraw", "", 2, null, null)
+                berry.entity = null;
+            }
+        }
+
+        BERRIES_quantum_removed = true;
+    }
+}
+
 function UpdateBerries(){
     local pmin = GetPlayer().GetOrigin()+GetPlayer().GetBoundingMins();
     local pmax = GetPlayer().GetOrigin()+GetPlayer().GetBoundingMaxs();
-    foreach( index, berry in BERRIES[GetMapName()] ){
-        berry.entity.SetModel("models/srmod/strawberry.mdl");
-        if(!berry.collected){
+    local quantumCount = 0;
+    if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
+        if(!berry.collected && berry.entity){
+            if(berry.berryType==1)quantumCount++;
             local bsize = 16;
             local bmin = berry.entity.GetOrigin() - Vector(bsize,bsize,bsize);
             local bmax = berry.entity.GetOrigin() + Vector(bsize,bsize,bsize);
             //if player bbox overlaps berry bbox
             if(pmax.x > bmin.x && pmin.x < bmax.x && pmax.y > bmin.y && pmin.y < bmax.y && pmax.z > bmin.z && pmin.z < bmax.z){
                 berry.collected = true;
-                berry.entity.EmitSound("celeste.berryget");
-                EntFireByHandle(berry.entity, "Kill", "", 0, null, null);
+                //berry.entity.EmitSound("celeste.berryget");
+                EntFireByHandle(berry.entity, "Kill", "", 2, null, null);
+                EntFireByHandle(berry.entity, "Skin", "1", 0.01, null, null);
+                EntFireByHandle(berry.entity, "SetAnimation", "collect", 0, null, null);
                 smsm.SetModeParam(ModeParams.BerriesOffset+berry.id,1);
                 UpdateBerryCounter();
-                
             }
         }
     }
+    if(quantumCount>0)CheckPortals(false);
 }
-
-
-
 
 //main code
 
 function CelestePostSpawn(){
     //FOG_CONTROL_VALUES = {r=0.8, g=0.4, b=1.3};
     FIRST_MAP_WITH_POTATO_GUN = "sp_a3_speed_ramp"
+    
 }
 
 function Precache(){
     self.PrecacheSoundScript("celeste.dash")
-    self.PrecacheSoundScript("celeste.berrypulse")
-    self.PrecacheSoundScript("celeste.berryget")
+    self.PrecacheSoundScript("celeste.quantumberrylost")
     smsm.PrecacheModel("models/srmod/hintplank.mdl", true)
     smsm.PrecacheModel("models/srmod/strawberry.mdl", true)
     smsm.PrecacheModel("models/srmod/introcar.mdl", true)
+    smsm.PrecacheModel("models/srmod/quantumberry.mdl", true)
 }
 
 FIRST_MAP_WITH_1_DASH <- "sp_a1_intro4"

@@ -1,0 +1,56 @@
+"VertexLitGeneric"
+{
+  $baseTexture "models/srmod/quantumberry"
+  
+  $selfillum 1
+  $selfillummaskscale 0.1
+  
+  $glowscale 0.0
+  $glowscale2 0.0
+  $glowscale3 0.0
+  $glowscale4 0.0
+  $maxscale 20.0
+  $subtract 5.0
+  
+  "Proxies"
+  {
+    "TextureScroll"
+    {
+      "texturescrollVar" $basetexturetransform
+      "textureScrollRate" 0.3333333
+      "textureScrollAngle" 90
+    }
+    
+    "Cycle"
+    {
+      "start" 0.0
+      "end" 1.0
+      "resultVar" "$glowscale"
+    }
+    "Multiply"
+    {
+      "srcVar1" "$glowscale"
+      "srcVar2" "$glowscale"
+      "resultVar" "$glowscale2"
+    }
+    "Multiply"
+    {
+      "srcVar1" "$glowscale2"
+      "srcVar2" "$maxscale"
+      "resultVar" "$glowscale3"
+    }
+    "Subtract"
+    {
+      "srcVar1" "$glowscale3"
+      "srcVar2" "$subtract"
+      "resultVar" "$glowscale4"
+    }
+    "Clamp"
+    {
+      "min" 0.1
+      "max" 20.0
+      "srcVar1" "$glowscale4"
+      "resultVar" "$selfillummaskscale"
+    }
+  }
+}

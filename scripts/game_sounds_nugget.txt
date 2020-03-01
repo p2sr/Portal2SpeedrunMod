@@ -48,3 +48,31 @@
 	"volume"		"0.5,1.0"
 	"wave"			")celeste/berry_pulse.wav"
 }
+
+"celeste.quantumberryget"
+{
+	"channel"    "CHAN_AUTO"
+    "volume"     "VOL_NORM"
+    "pitch"      "PITCH_NORM"
+    "soundlevel" "SNDLVL_NONE"
+	"volume"		"1.0"
+	"wave"			"celeste/quantumberry_get.wav"
+}
+
+"celeste.quantumberrypulse"
+{
+	"channel"		"CHAN_AUTO"
+	"pitch"      	"PITCH_NORM"
+	"soundlevel"	"SNDLVL_70db"
+	"volume"		"0.5,1.0"
+	"wave"			")celeste/quantumberry_pulse.wav"
+}
+
+"celeste.quantumberrylost"
+{
+	"channel"		"CHAN_AUTO"
+	"pitch"      	"PITCH_NORM"
+	"soundlevel"	"SNDLVL_100db"
+	"volume"		"1.0"
+	"wave"			")celeste/quantumberry_lost.wav"
+}

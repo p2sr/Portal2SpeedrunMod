@@ -1,0 +1,17 @@
+"VertexLitGeneric"
+{
+  $baseTexture "models/srmod/quantumberry"
+  
+  $selfillum 1
+  $selfillummaskscale 0.1
+  
+  "Proxies"
+  {
+    "TextureScroll"
+    {
+      "texturescrollVar" $basetexturetransform
+      "textureScrollRate" 0.3333333
+      "textureScrollAngle" 90
+    }
+  }
+}

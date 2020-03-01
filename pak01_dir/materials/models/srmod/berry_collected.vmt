@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+  $baseTexture "models/srmod/berry_collected"
+  
+  $translucent 1
+}
