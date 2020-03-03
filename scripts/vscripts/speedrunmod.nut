@@ -45,16 +45,45 @@ function IsSMSMActive(){
 
 
 
+//dialogue mute stuff
+DialogueMute_Previous <- -1
+DialogueMute_Forced <- false
+
+function DialogueMute_Update(){
+    local newState = smsm.IsDialogueEnabled();
+    if(DialogueMute_Forced)newState = true;
+    if(DialogueMute_Previous != newState){
+        if(newState==true){
+            SendToConsole("snd_setmixer gladosVO vol 1;snd_setmixer potatosVO vol 1;snd_setmixer announcerVO vol 1")
+        }else{
+            SendToConsole("snd_setmixer gladosVO vol 0;snd_setmixer potatosVO vol 0;snd_setmixer announcerVO vol 0")
+        }
+        DialogueMute_Previous = newState;
+    }
+}
+
+function DialogueMute_SetForceState(state){
+  DialogueMute_Forced = state;
+}
+
+function DialogueMute_ForceFor(time){
+  DialogueMute_SetForceState(true);
+  EntFire(self.GetName(), "RunScriptCode", "DialogueMute_SetForceState(false)", time);
+}
+
+
 
 //actual script function loader
 POST_SPAWN_FUNCTIONS <- {}
 MAP_SPAWN_FUNCTIONS <- {}
 UPDATE_FUNCTIONS <- {}
+PRECACHE_FUNCTIONS <- {}
 
-function AddModeFunctions(modeName, postSpawnFunc, mapSpawnFunc, updateFunc){
+function AddModeFunctions(modeName, postSpawnFunc, mapSpawnFunc, updateFunc, precacheFunc){
   POST_SPAWN_FUNCTIONS[modeName] <- postSpawnFunc
   MAP_SPAWN_FUNCTIONS[modeName] <- mapSpawnFunc
   UPDATE_FUNCTIONS[modeName] <- updateFunc
+  PRECACHE_FUNCTIONS[modeName] <- precacheFunc
 }
 
 //all different modes
@@ -77,7 +106,14 @@ if(IsSMSMActive()){
 //backup system - a simple script retrieving plugin values from a save file.
 DoIncludeScript("backup", self.GetScriptScope());
 
-
+function Precache(){
+  local mode = SPEEDRUN_MODES[smsm.GetMode()]
+  foreach (id, modename in mode){
+    modlog("Loading Precache function for "+modename+".")
+    local func = PRECACHE_FUNCTIONS[modename]
+    func()
+  }
+}
 
 function OnPostSpawn(){
   if(!IsSMSMActive()){
@@ -125,7 +161,8 @@ NEW_TIME <- 0
 function SpeedrunModThink(){
   if ( initialized ){
     SLBS_Check();
-    
+    DialogueMute_Update();
+
     OLD_TIME = OLD_TIME==0 ? Time() : NEW_TIME;
     NEW_TIME = Time();  //TICKING AWAY THE MOMENTS THAT MAKE UP A DULL DAY
     //also idk if it's needed. it seems to be a constant rate of 0.0333s but idc i'll just leave it here

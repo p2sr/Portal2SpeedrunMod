@@ -44,6 +44,21 @@ function spTransitionListFix(){
   }
 }
 
+function SpeedrunModePrecache(){
+  //loading glass window model replacement ("removing" prop_static model for celeste mode)
+  smsm.PrecacheModel("models/props_destruction/glass_broken_128x128_d_copy.mdl", true)
+}
+
+function FixCelesteModeWindow(pos,ang){
+  //spawning window replacement (celeste mode ugh)
+  local window_fix = Entities.CreateByClassname("prop_dynamic");
+  window_fix.SetModel("models/props_destruction/glass_broken_128x128_d_copy.mdl")
+  window_fix.SetOrigin(pos);
+  EntFireByHandle(window_fix, "AddOutput", "targetname celeste_window_fix", 0, null, null)
+  EntFireByHandle(window_fix, "AddOutput", "solid 6", 0, null, null)
+  window_fix.SetAngles(ang.x,ang.y,ang.z)
+}
+
 function SpeedrunModePostSpawn(){
   CHAPTER_TITLES = []
   spTransitionListFix()
@@ -54,13 +69,6 @@ function SpeedrunModeLoad(){
 
   modlog("Speedrun mode started!")
   modlog("Fixing entities..")
-
-
-  local disableDialogue = false
-  if(!smsm.IsDialogueEnabled())disableDialogue = true
-
-  //in some levels, we want to leave dialogue entity active
-  local blockAnnouncerDelay = 0;
 
   //remove shaking before anything happens
   EntFire("env_shake", "Kill")
@@ -81,7 +89,7 @@ function SpeedrunModeLoad(){
       //GetPlayer().SetOrigin(Vector(-1232,4440,2770))
       GetPlayer().SetOrigin(Vector(-1335,4166,2945))
       
-      blockAnnouncerDelay = 15
+      DialogueMute_ForceFor(15);
       EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro01\")", 3)
       EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro04\")", 7.2)
 
@@ -303,7 +311,8 @@ function SpeedrunModeLoad(){
       EntFire("env_portal_laser", "TurnOn")
       break
     case "sp_a2_laser_over_goo":
-      EntFire("arrival_elevator-leaving_elevator_trigger", "Kill", 0.5)
+      local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(4000, -2832, 96), 10)
+      EntFireByHandle(trigger, "Kill", "", 0, null, null) //thanks PH-MLK for helping fix this crash
       EntFire("@glados", "RunScriptCode", "PuzzleStart()", 0)
       EntFire("InstanceAuto69-corridor_repair-corridor_repair", "Trigger", 2)
       EntFire("InstanceAuto69-corridor_repair-proxy", "Kill", 0)
@@ -414,6 +423,9 @@ function SpeedrunModeLoad(){
 
       //remove all small turret parts (and stuff in BtS, because who walks there anyway)
       EntFire("npc_portal_turret_floor", "AddOutput", "OnExplode prop_physics:Kill::0.01:1")
+      break;
+    case "sp_a2_pull_the_rug":
+      FixCelesteModeWindow(Vector(128, -649, 192), Vector(0,270,0));
       break;
     case "sp_a2_column_blocker":
       EntFire("blackout_teleport_player_to_surprise", "Kill", 0)
@@ -791,6 +803,8 @@ function SpeedrunModeLoad(){
       //open some doors
       EntFire("pumproom_door_bottom_button", "Press")
       EntFire("pumproom_door_top_button", "Press")
+      
+      FixCelesteModeWindow(Vector(-2621, 640, -4384), Vector(0,180,-90));
       break
     case "sp_a3_speed_ramp":
       FastUndergroundTransition(20, 14)
@@ -1024,6 +1038,8 @@ function SpeedrunModeLoad(){
       EntFire("relay_walkway_fall", "Kill")
       break
     case "sp_a4_finale3":
+      FixCelesteModeWindow(Vector(-192, -2253, 256), Vector(0,90,180));
+
       EntFire("practice_bomb_timer", "disable")
       EntFire("bomb_divert_screw_rotator", "Start")
       EntFire("bomb_divert_vertical_door", "Open")
@@ -1203,17 +1219,23 @@ function SpeedrunModeLoad(){
   EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger @entry_door-door_open_relay:Trigger::0:1")
   EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger room_1_entry_door-door_open_relay:Trigger::0:1")
   //activate fast departure for "modern" elevators
-  AddOutput("departure_elevator-close", "OnTrigger", "FastTransition")
+  
+  //AddOutput("departure_elevator-close", "OnTrigger", "FastTransition") //potential reason for laser over goo crash?
+  EntFire("departure_elevator-close", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:FastTransition():0:1");
+  EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-signs_off:Disable::0.6:1")
+
   EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-signs_off:Trigger::0.5:1")
+  EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-signs_off:Disable::0.6:1")
   EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-elevator_1:RunScriptCode:StartMoving():0.5:1")
   EntFire("departure_elevator-close", "AddOutput", "OnTrigger departure_elevator-floor_clip:Disable::0.5:1")
   
   //kill glados (metal bitch aint tell me what to do)
-  if(disableDialogue && blockAnnouncerDelay>=0){
-    EntFire("@glados", "Kill", 0.0, blockAnnouncerDelay)
-    EntFire("@cave", "Kill", 0.0, blockAnnouncerDelay)
-    modlog("Dialogue deleted")
-  }
+
+  // if(disableDialogue && blockAnnouncerDelay>=0){
+  //   EntFire("@glados", "Kill", 0.0, blockAnnouncerDelay)
+  //   EntFire("@cave", "Kill", 0.0, blockAnnouncerDelay)
+  //   modlog("Dialogue deleted")
+  // }
 
   //fog lol
   FogControl()
@@ -1417,4 +1439,4 @@ function FogControl(){
 
 
 
-AddModeFunctions("default", SpeedrunModePostSpawn, SpeedrunModeLoad, SpeedrunModeUpdate)
+AddModeFunctions("default", SpeedrunModePostSpawn, SpeedrunModeLoad, SpeedrunModeUpdate, SpeedrunModePrecache)

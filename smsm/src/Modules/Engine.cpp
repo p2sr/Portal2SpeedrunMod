@@ -51,7 +51,6 @@ bool Engine::Init()
 
     if (this->engineTool = Interface::Create(this->Name(), "VENGINETOOL003")) {
         this->PrecacheModel = this->engineTool->Original<_PrecacheModel>(Offsets::PrecacheModel);
-        this->engineTool->Hook(Engine::GetWorldToScreenMatrixForView_Hook, Engine::GetWorldToScreenMatrixForView, Offsets::GetWorldToScreenMatrixForView);
     }
 
     return this->hasLoaded = this->engineClient

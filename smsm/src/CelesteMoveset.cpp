@@ -35,8 +35,8 @@ void CelesteMoveset::PreProcessMovement(void* pPlayer, CMoveData* pMove) {
 
     if (smsm.GetMode() != Celeste) return;
 
-    auto m_fFlags = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_fFlags);
-    bool grounded = (m_fFlags & FL_ONGROUND);
+    unsigned int groundEntity = *reinterpret_cast<unsigned int*>((uintptr_t)pPlayer + Offsets::m_hGroundEntity);
+    bool grounded = groundEntity != 0xFFFFFFFF;
 
     //process jump input
     bool holdingSpace = (pMove->m_nButtons & 0x2);
@@ -100,6 +100,9 @@ void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
         ProcessMovementDashing(pPlayer, pMove, dt);
     }
     lastTickBase = tickBase;
+
+    //for maps where you spawn midair (incinerator, underground)
+    if (tickBase < 30)climbStamina = wallClimbMaxStamina;
 }
 
 
@@ -107,8 +110,8 @@ void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
 
 
 void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, float dt) {
-    auto m_fFlags = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_fFlags);
-    bool grounded = (m_fFlags & FL_ONGROUND);
+    unsigned int groundEntity = *reinterpret_cast<unsigned int*>((uintptr_t)pPlayer + Offsets::m_hGroundEntity);
+    bool grounded = groundEntity != 0xFFFFFFFF;
 
     //refresh dashing if on ground
     bool canWaveJump = dashingCooldown < dashingCooldownDuration - wavedashRefreshTime;
@@ -204,8 +207,7 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
         Vector pv = pMove->m_vecVelocity;
         //hyperdashing
         if (dashingDir.z < 0 && ((grounded && pressedJump) || (dashingDir.z < -100 && pv.z > 100))) {
-            pMove->m_vecVelocity = pv * (float)(0.5 - dashingDir.z / dashingSpeed);
-            if (dashingDir.z < -100 && pv.z > 300)pMove->m_vecVelocity.z = pv.z*1.5; // super gel bounce
+            if (!(dashingDir.z < -100 && pv.z > 300))pMove->m_vecVelocity = pv * (float)(0.5 - dashingDir.z / dashingSpeed);
             dashing = 0;
         }
         //initial dash speed management
@@ -345,8 +347,8 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
 
 
 void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, float dt) {
-    auto m_fFlags = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_fFlags);
-    bool grounded = (m_fFlags & FL_ONGROUND);
+    unsigned int groundEntity = *reinterpret_cast<unsigned int*>((uintptr_t)pPlayer + Offsets::m_hGroundEntity);
+    bool grounded = groundEntity != 0xFFFFFFFF;
 
     auto m_hUseEntity = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_hUseEntity);
     bool isHoldingSth = m_hUseEntity != 0xFFFFFFFF;

@@ -27,18 +27,19 @@ extern StaminaHud* staminaHud;
 
 class CelesteBerryHud : public Hud {
 private:
-    int berryTexture = 0;
+    int berryTexture[4];
     int indicatorTexture = 0;
 
     int displayBerryCount = 0;
     int oldBerryCount = 0;
     float posOffset = 0.0;
+    float posOffset2 = 0.0; //ah, yes, good variable name
     float collectAnimState = 0.0;
     float prevRealTime = 0;
 public:
     void Draw();
     bool DrawingOnTop() { return true; }
-    int GetBerryTexture();
+    int GetBerryTexture(int type);
 };
 
 extern CelesteBerryHud* celesteBerryHud;

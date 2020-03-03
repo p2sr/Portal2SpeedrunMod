@@ -11,10 +11,21 @@ ModeParams <- {
     StaminaLeft = 4,
     DisplayBerriesGot = 10,
     DisplayBerriesMax = 11,
-    DisplayBerriesInLevelCount = 12,
-    DisplayBerriesForce = 13,
-    BerriesOffset = 20,
+    DisplayBerriesForce = 12,
+    DisplayBerriesInLevelCount = 13,
+    DisplayBerriesInLevelOffset = 20,
+    BerriesOffset = 30,
 };
+
+function CelestePrecache(){
+    self.PrecacheSoundScript("celeste.dash")
+    self.PrecacheSoundScript("celeste.quantumberrylost")
+    self.PrecacheSoundScript("celeste.quantumberrylost_distant")
+    smsm.PrecacheModel("models/srmod/hintplank.mdl", true)
+    smsm.PrecacheModel("models/srmod/strawberry.mdl", true)
+    smsm.PrecacheModel("models/srmod/introcar.mdl", true)
+    smsm.PrecacheModel("models/srmod/quantumberry.mdl", true)
+}
 
 //birb code
 
@@ -41,7 +52,7 @@ BirbKeyframes <- [
     {pos=Vector(-2360,378,-4568),ang=Vector(0,-60,0),speed=0.1},
     {pos=Vector(-2391,574,-4568),ang=Vector(0,50,0),speed=0.1},
     {pos=Vector(-2566,553,-4568),ang=Vector(0,0,0),speed=0.1},
-    {pos=Vector(-2621,547,-4372),ang=Vector(0,0,0),speed = 0.05},
+    {pos=Vector(-2621,547,-4440),ang=Vector(0,0,0),speed = 0.05},
     {pos=Vector(-2929,415,-4529),ang=Vector(0,0,0),speed=0.1},
 
 ];
@@ -118,12 +129,15 @@ function UpdateBirb(){
 BERRIES <- {};
 //okay, look, i know you think "yaya me me smart" but 
 //at least try to not spoil berries location for yourself
+BERRIES["sp_a1_intro1"] <- [
+    {pos=Vector(-1075, 4348, 2739), berryType=0}
+];
 BERRIES["sp_a1_intro2"] <- [
     {pos=Vector(-230, 190, 580), berryType=0}
 ];
 BERRIES["sp_a1_intro3"] <- [
     {pos=Vector(-512, 1200, 1160), berryType=0},
-    {pos=Vector(-1278, 3390, 400), berryType=0}
+    {pos=Vector(-1278, 3390, 400), berryType=0},
 ];
 BERRIES["sp_a1_intro4"] <- [
     {pos=Vector(848, -704, 340), berryType=0}
@@ -131,10 +145,12 @@ BERRIES["sp_a1_intro4"] <- [
 BERRIES["sp_a1_intro5"] <- [
     {pos=Vector(-345, -876, 710), berryType=0}
 ];
-
 BERRIES["sp_a2_laser_vs_turret"] <- [
-    {pos=Vector(64, 96, 320), berryType=1}
-    //{pos=Vector(-64, 352, 320), berryType=1}
+    //{pos=Vector(64, 96, 320), berryType=1}
+    {pos=Vector(0, 224, 320), berryType=1}
+];
+BERRIES["sp_a3_portal_intro"] <- [
+    {pos=Vector(3600, 32, 5696), berryType=1}
 ];
 
 
@@ -185,6 +201,17 @@ function UpdateBerryCounter(){
         if(smsm.GetModeParam(ModeParams.BerriesOffset+i)>0)berriesCollected++;
     }
     smsm.SetModeParam(ModeParams.DisplayBerriesGot, berriesCollected);
+
+    local inLevelBerriesCount = 0;
+    if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
+        if(index>=10)break;
+        local berryType = berry.berryType;
+        if(berry.collected) berryType+=2;
+        smsm.SetModeParam(ModeParams.DisplayBerriesInLevelOffset + index, berryType);
+        inLevelBerriesCount++;
+    }
+    smsm.SetModeParam(ModeParams.DisplayBerriesInLevelCount, inLevelBerriesCount);
+
 }
 
 BERRIES_portal_init <- 0;
@@ -212,19 +239,28 @@ function RemovePortalBerries(){
     if(!BERRIES_quantum_removed){
         modlog("Portal placement detected, destroying quantum berries!")
 
+        local emitDistant = true;
+
         if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
             if(berry.berryType==1 && !berry.collected && berry.entity){
                 local berryFizzle = Entities.CreateByClassname("prop_weighted_cube");
                 if(berry.berryType==1)berryFizzle.SetModel("models/srmod/quantumberry.mdl");
                 berryFizzle.SetOrigin(berry.pos);
-                berryFizzle.EmitSound("celeste.quantumberrylost");
                 EntFireByHandle(berryFizzle, "Dissolve", "", 0, null, null);
                 EntFireByHandle(berry.entity, "Skin", "2", 0, null, null);
                 EntFireByHandle(berry.entity, "DisableDraw", "", 0, null, null)
                 EntFireByHandle(berry.entity, "EnableDraw", "", 2, null, null)
                 berry.entity = null;
+
+                local dist = (berry.pos - GetPlayer().GetOrigin()).Length();
+                if(dist<1000){
+                    emitDistant = false;
+                    berryFizzle.EmitSound("celeste.quantumberrylost");
+                }
             }
         }
+
+        if(emitDistant)GetPlayer().EmitSound("celeste.quantumberrylost_distant");
 
         BERRIES_quantum_removed = true;
     }
@@ -261,15 +297,6 @@ function CelestePostSpawn(){
     //FOG_CONTROL_VALUES = {r=0.8, g=0.4, b=1.3};
     FIRST_MAP_WITH_POTATO_GUN = "sp_a3_speed_ramp"
     
-}
-
-function Precache(){
-    self.PrecacheSoundScript("celeste.dash")
-    self.PrecacheSoundScript("celeste.quantumberrylost")
-    smsm.PrecacheModel("models/srmod/hintplank.mdl", true)
-    smsm.PrecacheModel("models/srmod/strawberry.mdl", true)
-    smsm.PrecacheModel("models/srmod/introcar.mdl", true)
-    smsm.PrecacheModel("models/srmod/quantumberry.mdl", true)
 }
 
 FIRST_MAP_WITH_1_DASH <- "sp_a1_intro4"
@@ -393,6 +420,16 @@ function CelesteLoad(){
             EntFireByHandle(sign, "AddOutput", "targetname blocking_hintsign", 0, null, null)
         }
 
+        EntFire("celeste_window_fix", "Kill")
+
+        //sing for idiots
+        local sign1 = Entities.CreateByClassname("prop_dynamic_override");
+        sign1.SetModel("models/srmod/hintplank.mdl");
+        sign1.SetOrigin(Vector(-2160, -130, -4159));
+        sign1.SetAngles(0,170,0);
+        EntFireByHandle(sign1, "skin", "3", 0, null, null)
+        EntFireByHandle(sign1, "AddOutput", "targetname blocking_hintsign", 0, null, null)
+
         break;
     case "sp_a1_intro5":
         local introcar = CreateProp("prop_physics", Vector(-400, -930, 668), "models/srmod/introcar.mdl", 1);
@@ -470,4 +507,4 @@ function UpgradeDashes(dashes){
     smsm.SetModeParam(ModeParams.MaxDashes, dashes);
 }
 
-AddModeFunctions("celeste", CelestePostSpawn, CelesteLoad, CelesteUpdate)
+AddModeFunctions("celeste", CelestePostSpawn, CelesteLoad, CelesteUpdate, CelestePrecache)

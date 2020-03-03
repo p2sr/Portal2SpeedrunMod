@@ -3,4 +3,14 @@
   $baseTexture "models/srmod/berry_collected"
   
   $translucent 1
+  
+  "Proxies"
+  {
+    "TextureScroll"
+    {
+      "texturescrollVar" $basetexturetransform
+      "textureScrollRate" 0.3333333
+      "textureScrollAngle" 90
+    }
+  }
 }

@@ -79,6 +79,7 @@ extern int m_bDucking;
 extern int m_hActiveWeapon;
 extern int m_bCanFirePortal1;
 extern int m_hUseEntity;
+extern int m_hGroundEntity;
 
 // CServerGameDLL
 extern int Think;

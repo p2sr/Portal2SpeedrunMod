@@ -53,6 +53,7 @@ void Portal2::LoadOffsets()
     UTIL_PlayerByIndex = 39; // CServerGameDLL::Think
     gpGlobals = 14; // UTIL_PlayerByIndex
     Think = 31; // CServerGameDLL
+    m_hGroundEntity = 344; // CBaseEntity
 
     // vstdlib.dll
 

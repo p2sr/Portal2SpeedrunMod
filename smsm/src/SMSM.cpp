@@ -204,7 +204,7 @@ void SMSM::SetScreenCoverColor(int r, int g, int b, int a) {
 }
 
 bool SMSM::IsDialogueEnabled() {
-    return true;
+    return puzzlemaker_play_sounds.GetBool();
 }
 
 void SMSM::StartMainThread() {

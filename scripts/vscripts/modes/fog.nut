@@ -3,6 +3,10 @@
 //you cant see shit
 //*****************************************************
 
+function FogPrecentPrecache(){
+
+}
+
 function FogPercentPostSpawn(){
     FogControl = NewFogControl
 }
@@ -62,4 +66,4 @@ function FogPercentUpdate(){
 
 //r_paintblob_material 4
 
-AddModeFunctions("fog_percent", FogPercentPostSpawn, FogPercentLoad, FogPercentUpdate)
+AddModeFunctions("fog_percent", FogPercentPostSpawn, FogPercentLoad, FogPercentUpdate, FogPrecentPrecache)

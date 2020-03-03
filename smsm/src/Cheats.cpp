@@ -17,6 +17,7 @@ Variable ui_loadingscreen_mintransition_time;
 Variable sv_cheats;
 Variable crosshair;
 Variable viewmodel_offset_z;
+Variable puzzlemaker_play_sounds;
 
 void Cheats::Init()
 {
@@ -41,6 +42,7 @@ void Cheats::Init()
     sv_cheats = Variable("sv_cheats");
     crosshair = Variable("crosshair");
     viewmodel_offset_z = Variable("viewmodel_offset_z");
+    puzzlemaker_play_sounds = Variable("puzzlemaker_play_sounds");
 
 
     Variable::RegisterAll();

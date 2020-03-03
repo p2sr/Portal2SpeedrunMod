@@ -76,3 +76,12 @@
 	"volume"		"1.0"
 	"wave"			")celeste/quantumberry_lost.wav"
 }
+
+"celeste.quantumberrylost_distant"
+{
+	"channel"		"CHAN_AUTO"
+	"pitch"      	"PITCH_NORM"
+	"soundlevel"	"SNDLVL_NONE"
+	"volume"		"1.0"
+	"wave"			")celeste/quantumberry_lost_distant.wav"
+}

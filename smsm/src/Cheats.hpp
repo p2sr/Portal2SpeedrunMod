@@ -19,3 +19,4 @@ extern Variable ui_loadingscreen_mintransition_time;
 extern Variable sv_cheats;
 extern Variable crosshair;
 extern Variable viewmodel_offset_z;
+extern Variable puzzlemaker_play_sounds;
