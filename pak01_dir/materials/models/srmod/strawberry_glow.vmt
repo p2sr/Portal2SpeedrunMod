@@ -5,6 +5,9 @@
   $selfillum 1
   $selfillummaskscale 0.0
   
+  $envmap env_cubemap
+  $envmaptint "[0.3 0.3 0.3]"
+  
   $glowscale 0.0
   $glowscale2 0.0
   $glowscale3 0.0

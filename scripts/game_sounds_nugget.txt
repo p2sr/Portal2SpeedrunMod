@@ -85,3 +85,22 @@
 	"volume"		"1.0"
 	"wave"			")celeste/quantumberry_lost_distant.wav"
 }
+
+"celeste.goldenberryget"
+{
+	"channel"    "CHAN_AUTO"
+    "volume"     "VOL_NORM"
+    "pitch"      "PITCH_NORM"
+    "soundlevel" "SNDLVL_NONE"
+	"volume"		"1.0"
+	"wave"			"celeste/goldenberry_get.wav"
+}
+
+"celeste.goldenberrypulse"
+{
+	"channel"		"CHAN_AUTO"
+	"pitch"      	"PITCH_NORM"
+	"soundlevel"	"SNDLVL_70db"
+	"volume"		"0.5,1.0"
+	"wave"			")celeste/goldenberry_pulse.wav"
+}

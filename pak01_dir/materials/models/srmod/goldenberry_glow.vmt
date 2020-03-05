@@ -1,9 +1,9 @@
 "VertexLitGeneric"
 {
-  $baseTexture "models/srmod/quantumberry"
-  
+  $baseTexture "models/srmod/goldenberry"
+
   $selfillum 1
-  $selfillummaskscale 0.1
+  $selfillummaskscale 0.01
   
   $envmap env_cubemap
   
@@ -13,16 +13,8 @@
   $glowscale4 0.0
   $maxscale 20.0
   $subtract 5.0
-  
   "Proxies"
   {
-    "TextureScroll"
-    {
-      "texturescrollVar" $basetexturetransform
-      "textureScrollRate" 0.3333333
-      "textureScrollAngle" 90
-    }
-    
     "Cycle"
     {
       "start" 0.0

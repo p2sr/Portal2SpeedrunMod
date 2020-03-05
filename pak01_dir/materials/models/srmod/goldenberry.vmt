@@ -1,0 +1,9 @@
+"VertexLitGeneric"
+{
+  $baseTexture "models/srmod/goldenberry"
+  
+  $envmap env_cubemap
+  
+  $selfillum 1
+  $selfillummaskscale 0.01
+}

@@ -27,7 +27,7 @@ extern StaminaHud* staminaHud;
 
 class CelesteBerryHud : public Hud {
 private:
-    int berryTexture[4];
+    int berryTexture[8];
     int indicatorTexture = 0;
 
     int displayBerryCount = 0;

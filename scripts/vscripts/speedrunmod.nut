@@ -53,11 +53,14 @@ function DialogueMute_Update(){
     local newState = smsm.IsDialogueEnabled();
     if(DialogueMute_Forced)newState = true;
     if(DialogueMute_Previous != newState){
-        if(newState==true){
-            SendToConsole("snd_setmixer gladosVO vol 1;snd_setmixer potatosVO vol 1;snd_setmixer announcerVO vol 1")
-        }else{
-            SendToConsole("snd_setmixer gladosVO vol 0;snd_setmixer potatosVO vol 0;snd_setmixer announcerVO vol 0")
+        local mixers = ["gladosVO", "potatosVO", "announcerVO", "wheatleyVO", "coreVO", "caveVO"];
+        local defaults = [0.7, 0.4, 0.7, 0.7, 0.75, 0.88];
+        local command = "";
+        foreach (id, mixer in mixers){
+          command += "snd_setmixer "+mixer+" vol "+(newState ? defaults[id] : 0)+";";
         }
+        //modlog(command);
+        SendToConsole(command);
         DialogueMute_Previous = newState;
     }
 }

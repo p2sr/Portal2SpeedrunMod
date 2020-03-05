@@ -1,4 +1,6 @@
 "VertexLitGeneric"
 {
   $baseTexture "models/srmod/strawberry"
+  $envmap env_cubemap
+  $envmaptint "[0.3 0.3 0.3]"
 }

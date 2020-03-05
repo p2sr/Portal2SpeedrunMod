@@ -76,8 +76,9 @@ static int TextureFromDumbData(int& id, int width, int height, const unsigned ch
         }
         surface->DrawSetTextureRGBA(surface->matsurface->ThisPtr(), id, dataRGBA, 10, 13);
     }
-    else return id;
+    return id;
 }
+
 
 const unsigned char BERRY_TEX_DATA[130] = {
     0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,2,2,1,0,0,0,1,2,2,1,3,3,2,1,0,1,3,1,4,2,2,4,1,2,1,0,1,4,5,
@@ -115,12 +116,79 @@ const unsigned char QBERRY_COL_DATA[10 * 4] = {
     0, 128, 255, 255,
 };
 
+const unsigned char GBERRY_TEX_DATA[130] = {
+    1,1,1,0,1,1,0,1,1,1,
+    1,4,3,1,3,3,1,3,4,1,
+    1,4,4,3,3,3,3,4,4,1,
+    1,1,1,1,1,1,1,1,1,1,
+    0,1,5,5,5,5,5,5,1,0,
+    1,4,3,3,3,3,2,3,3,1,
+    1,2,3,3,2,3,3,3,2,1,
+    1,4,3,3,4,3,2,3,4,1,
+    1,3,4,3,3,3,4,4,3,1,
+    0,1,3,4,4,4,4,3,1,0,
+    0,0,1,3,4,4,3,1,0,0,
+    0,0,0,1,3,3,1,0,0,0,
+    0,0,0,0,1,1,0,0,0,0,
+};
+
+const unsigned char GBERRY_COL_DATA[6 * 4] = {
+    0, 0, 0, 0,
+    0, 0, 0, 255,
+    253,237,68,255,
+    219, 193,42, 255,
+    134, 118, 14, 255,
+    115,88,22,255,
+};
+const unsigned char GQBERRY_TEX_DATA[130] = {
+    1,1,1,0,1,1,0,1,1,1,
+    1,3,2,1,2,2,1,2,3,1,
+    1,3,2,2,2,2,2,3,3,1,
+    1,1,1,1,1,1,1,1,1,1,
+    0,1,4,4,4,4,4,4,1,0,
+    0,1,6,5,6,8,6,7,1,0,
+    1,6,5,6,5,6,8,6,7,1,
+    1,5,6,5,6,8,6,7,6,1,
+    1,6,5,6,8,6,7,6,7,1,
+    0,1,6,8,6,7,6,7,1,0,
+    0,0,1,6,8,6,7,1,0,0,
+    0,0,0,1,6,7,1,0,0,0,
+    0,0,0,0,1,1,0,0,0,0,
+};
+
+const unsigned char GQBERRY_COL_DATA[9 * 4] = {
+    0, 0, 0, 0,
+    0, 0, 0, 255,
+    219, 193,42, 255,
+    134, 118, 14, 255,
+    115,88,22,255,
+    155,118,68,255,
+    255,218,0,255,
+    238,185,0,255,
+    225,224,220,255,
+};
+
+const unsigned char* BERRIES_TEX_DATAS[4] = {
+    BERRY_TEX_DATA,
+    QBERRY_TEX_DATA,
+    GBERRY_TEX_DATA,
+    GQBERRY_TEX_DATA,
+};
+
+const unsigned char* BERRIES_COL_DATAS[4] = {
+    BERRY_COL_DATA,
+    QBERRY_COL_DATA,
+    GBERRY_COL_DATA,
+    GQBERRY_COL_DATA,
+};
+
 int CelesteBerryHud::GetBerryTexture(int type) {
+    int b = type / 2;
     return TextureFromDumbData(
         this->berryTexture[type], 10, 13,
-        type % 2 == 0 ? BERRY_TEX_DATA : QBERRY_TEX_DATA,
-        type % 2 == 0 ? BERRY_COL_DATA : QBERRY_COL_DATA,
-        type<2
+        BERRIES_TEX_DATAS[b],
+        BERRIES_COL_DATAS[b],
+        type%2 == 0
     );
 }
 
@@ -195,7 +263,7 @@ void CelesteBerryHud::Draw() {
     
     int textHeight = surface->GetFontHeight(font);
 
-    if (int texture = this->GetBerryTexture(2)) {
+    if (int texture = this->GetBerryTexture(1)) {
         surface->DrawSetColor(surface->matsurface->ThisPtr(), 255,255,255,255);
         surface->DrawSetTexture(surface->matsurface->ThisPtr(), texture);
         int x = drawX - 60, y = drawY + textHeight/2 - 38;

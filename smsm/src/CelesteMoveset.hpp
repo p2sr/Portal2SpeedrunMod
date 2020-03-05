@@ -14,7 +14,7 @@ public:
     void ProcessMovementDashing(void* pPlayer, CMoveData* pMove, float dt);
     void ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, float dt);
 
-    void Dash() { dashRequested = true; }
+    void Dash() { dashRequested = dashingDuration; }
     void UpdateModeParams();
 
     bool IsPlaceSuitableForWallgrab(void * player, Vector pos, float angle, Vector * placeNormal = nullptr);
@@ -46,7 +46,7 @@ private:
     float dashingCooldown = 0;
     short dashesLeft = 0;
     int lastTickBase = 0;
-    bool dashRequested = false;
+    float dashRequested = 0.0;
     bool dashedOnGround = false;
 
     bool holdingWall = false;
@@ -69,6 +69,7 @@ public:
         MaxStamina = 2,
         DashesLeft = 3,
         StaminaLeft = 4,
+        Dashing = 5,
         DisplayBerriesGot = 10,
         DisplayBerriesMax = 11,
         DisplayBerriesForce = 12,

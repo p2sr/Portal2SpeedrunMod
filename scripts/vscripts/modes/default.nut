@@ -613,7 +613,7 @@ function SpeedrunModeLoad(){
 
       break
     case "sp_a2_core":
-      blockAnnouncerDelay=-1
+      //blockAnnouncerDelay=-1
       //leave only interactive parts of cutscene (excluding ele)
       EntFire("teleport_dbg", "Kill")
       EntFire("debug_wheatley_spawn", "Trigger")

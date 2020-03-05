@@ -9,6 +9,7 @@ ModeParams <- {
     MaxStamina = 2,
     DashesLeft = 3,
     StaminaLeft = 4,
+    Dashing = 5,
     DisplayBerriesGot = 10,
     DisplayBerriesMax = 11,
     DisplayBerriesForce = 12,
@@ -25,6 +26,8 @@ function CelestePrecache(){
     smsm.PrecacheModel("models/srmod/strawberry.mdl", true)
     smsm.PrecacheModel("models/srmod/introcar.mdl", true)
     smsm.PrecacheModel("models/srmod/quantumberry.mdl", true)
+    smsm.PrecacheModel("models/srmod/goldenberry.mdl", true)
+    smsm.PrecacheModel("models/srmod/goldenquantumberry.mdl", true)
 }
 
 //birb code
@@ -130,28 +133,138 @@ BERRIES <- {};
 //okay, look, i know you think "yaya me me smart" but 
 //at least try to not spoil berries location for yourself
 BERRIES["sp_a1_intro1"] <- [
-    {pos=Vector(-1075, 4348, 2739), berryType=0}
+    {pos=Vector(-1075, 4348, 2739)},
 ];
 BERRIES["sp_a1_intro2"] <- [
-    {pos=Vector(-230, 190, 580), berryType=0}
+    {pos=Vector(-230, 190, 580)},
 ];
 BERRIES["sp_a1_intro3"] <- [
-    {pos=Vector(-512, 1200, 1160), berryType=0},
-    {pos=Vector(-1278, 3390, 400), berryType=0},
+    {pos=Vector(-512, 1200, 1160)},
+    {pos=Vector(-1278, 3390, 400)},
 ];
 BERRIES["sp_a1_intro4"] <- [
-    {pos=Vector(848, -704, 340), berryType=0}
+    {pos=Vector(848, -704, 340)},
 ];
 BERRIES["sp_a1_intro5"] <- [
-    {pos=Vector(-345, -876, 710), berryType=0}
+    {pos=Vector(-345, -876, 710)},
+];
+BERRIES["sp_a1_intro6"] <- [
+    {pos=Vector(444, -256, 600)},
+    {pos=Vector(1245, 394, 720)},
+    {pos=Vector(1664, -472, 630), golden=1},
+];
+BERRIES["sp_a1_intro7"] <- [
+    {pos=Vector(0, -448, 1280)},
+    {pos=Vector(-588, -609, 1490), quantum=1},
+];
+BERRIES["sp_a1_wakeup"] <- [
+    {pos=Vector(6974, 840, 620)},
+];
+BERRIES["sp_a2_intro"] <- [
+    {pos=Vector(412, 520, -10288)},
+];
+BERRIES["sp_a2_laser_intro"] <- [
+    {pos=Vector(224, 280, 42)},
+];
+BERRIES["sp_a2_laser_stairs"] <- [
+    {pos=Vector(-665, -420, 828)},
+    {pos=Vector(665, -41, 128)},
+];
+BERRIES["sp_a2_dual_lasers"] <- [
+    {pos=Vector(303, -704, 1104)},
+];
+BERRIES["sp_a2_laser_over_goo"] <- [
+    {pos=Vector(3004, -923, 102), quantum=1},
+];
+BERRIES["sp_a2_catapult_intro"] <- [
+    {pos=Vector(-512, -351, 608), golden=1},
+];
+BERRIES["sp_a2_trust_fling"] <- [
+    {pos=Vector(-992, -640, -320)},
+    {pos=Vector(2035, -57, 258)},
+    {pos=Vector(-1152, 1442, 64), quantum=1},
+];
+BERRIES["sp_a2_pit_flings"] <- [
+    {pos=Vector(608, 194, 528)},
+    {pos=Vector(-672, -352, 64), quantum=1},
+];
+BERRIES["sp_a2_fizzler_intro"] <- [
+    {pos=Vector(164, -352, 544)},
+];
+BERRIES["sp_a2_sphere_peek"] <- [
+    {pos=Vector(-1824, 1824, 264)},
+    {pos=Vector(-1416, 2336, 800)},
+];
+BERRIES["sp_a2_ricochet"] <- [
+    {pos=Vector(2464, 1152, -992)},
+    {pos=Vector(3232, 1344, 480), golden=1},
+];
+BERRIES["sp_a2_bridge_intro"] <- [
+    {pos=Vector(-104, 1116, -80), quantum=1, golden=1},
+];
+BERRIES["sp_a2_bridge_the_gap"] <- [
+    {pos=Vector(-1123, -595, 1495)},
+    {pos=Vector(-128, -256, 1752)},
+];
+BERRIES["sp_a2_turret_intro"] <- [
+    {pos=Vector(256, -416, 192)},
+    {pos=Vector(-475, 391, -191), golden=1},
+];
+BERRIES["sp_a2_turret_blocker"] <- [
+    {pos=Vector(64, 1376, 64), quantum=1},
 ];
 BERRIES["sp_a2_laser_vs_turret"] <- [
-    //{pos=Vector(64, 96, 320), berryType=1}
-    {pos=Vector(0, 224, 320), berryType=1}
+    {pos=Vector(864, -448, 360)},
+];
+BERRIES["sp_a2_pull_the_rug"] <- [
+    {pos=Vector(128, -1104, 550), quantum=1},
+];
+BERRIES["sp_a2_column_blocker"] <- [
+    {pos=Vector(32, -912, 660)},
+    {pos=Vector(-192, 1060, 86)},
+];
+BERRIES["sp_a2_laser_chaining"] <- [
+    {pos=Vector(448, 64, 704)},
+    {pos=Vector(-432, -860, 704)},
+];
+
+BERRIES["sp_a2_bts4"] <- [
+    {pos=Vector(1072, -2656, 7232), golden=1},
+    {pos=Vector(1938, -3200, 7744)},
+    {pos=Vector(2896, -5120, 6688)},
+    {pos=Vector(-1664, -7360, 6720)},
+];
+BERRIES["sp_a2_core"] <- [
+    {pos=Vector(168, 2118, -40)},
+];
+BERRIES["sp_a3_01"] <- [
+    {pos=Vector(-528, -1363, 2451), golden=1},
+    {pos=Vector(-1880, -2760, 396)},
+    {pos=Vector(-1090, 194, 69)},
+    {pos=Vector(-7, 2786, 512)},
+];
+BERRIES["sp_a3_03"] <- [
+    {pos=Vector(-5416, -1808, -4928)},
+    {pos=Vector(-7040, 1216, -4672)},
+];
+BERRIES["sp_a3_transition01"] <- [
+    {pos=Vector(-2496, 704, -4832), golden=1},
+];
+BERRIES["sp_a3_speed_ramp"] <- [
+    {pos=Vector(-1218, 1664, 0)},
+    {pos=Vector(-640, 3, 600)},
+    {pos=Vector(-160, -640, 1592)},
+    {pos=Vector(1140, -702, 1800), golden=1},
+    
+];
+BERRIES["sp_a3_speed_flings"] <- [
+    {pos=Vector(2048, 768, 1484)},
+    {pos=Vector(455, 1237, 502)},
 ];
 BERRIES["sp_a3_portal_intro"] <- [
-    {pos=Vector(3600, 32, 5696), berryType=1}
+    {pos=Vector(3600, 32, 5696), quantum=1}
 ];
+
 
 
 BERRIES_counter <- 0;
@@ -163,6 +276,8 @@ function CreateBerries(){
         foreach(index, berry in berryset){
             berry.id <- BERRIES_max;
             berry.collected <- false;
+            if(!("quantum" in berry))berry.quantum <- 0;
+            if(!("golden" in berry))berry.golden <- 0;
             if(smsm.GetModeParam(ModeParams.BerriesOffset+BERRIES_max)>0){
                 berry.collected = true;
             }
@@ -174,10 +289,11 @@ function CreateBerries(){
     if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ) if(!berry.collected){
         local berryEnt = Entities.CreateByClassname("prop_dynamic_override");
         EntFireByHandle(berryEnt, "AddOutput", "targetname berry_"+index, 0, null, null);
-        EntFireByHandle(berryEnt, "SetAnimation", "collect", 0, null, null);
-        EntFireByHandle(berryEnt, "SetAnimation", "idle", 1, null, null);
-        if(berry.berryType==0)berryEnt.SetModel("models/srmod/strawberry.mdl");
-        if(berry.berryType==1)berryEnt.SetModel("models/srmod/quantumberry.mdl");
+        EntFireByHandle(berryEnt, "SetAnimation", "idle", 0, null, null);
+        if(berry.golden && berry.quantum)berryEnt.SetModel("models/srmod/goldenquantumberry.mdl");
+        else if(berry.quantum)berryEnt.SetModel("models/srmod/quantumberry.mdl");
+        else if(berry.golden)berryEnt.SetModel("models/srmod/goldenberry.mdl");
+        else berryEnt.SetModel("models/srmod/strawberry.mdl");
         berryEnt.SetOrigin(berry.pos);
         berry.entity <- berryEnt;
     }
@@ -205,8 +321,10 @@ function UpdateBerryCounter(){
     local inLevelBerriesCount = 0;
     if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
         if(index>=10)break;
-        local berryType = berry.berryType;
-        if(berry.collected) berryType+=2;
+        local berryType = 0;
+        if(berry.quantum)berryType+=2;
+        if(berry.golden)berryType+=4;
+        if(berry.collected) berryType++;
         smsm.SetModeParam(ModeParams.DisplayBerriesInLevelOffset + index, berryType);
         inLevelBerriesCount++;
     }
@@ -242,9 +360,10 @@ function RemovePortalBerries(){
         local emitDistant = true;
 
         if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
-            if(berry.berryType==1 && !berry.collected && berry.entity){
+            if(berry.quantum && !berry.collected && berry.entity){
                 local berryFizzle = Entities.CreateByClassname("prop_weighted_cube");
-                if(berry.berryType==1)berryFizzle.SetModel("models/srmod/quantumberry.mdl");
+                if(berry.golden)berryFizzle.SetModel("models/srmod/goldenquantumberry.mdl");
+                else berryFizzle.SetModel("models/srmod/quantumberry.mdl");
                 berryFizzle.SetOrigin(berry.pos);
                 EntFireByHandle(berryFizzle, "Dissolve", "", 0, null, null);
                 EntFireByHandle(berry.entity, "Skin", "2", 0, null, null);
@@ -272,7 +391,7 @@ function UpdateBerries(){
     local quantumCount = 0;
     if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
         if(!berry.collected && berry.entity){
-            if(berry.berryType==1)quantumCount++;
+            if(berry.quantum)quantumCount++;
             local bsize = 16;
             local bmin = berry.entity.GetOrigin() - Vector(bsize,bsize,bsize);
             local bmax = berry.entity.GetOrigin() + Vector(bsize,bsize,bsize);
@@ -438,6 +557,21 @@ function CelesteLoad(){
         introcar.SetAngles(0,225,0)
         print("INTRO CAAAR\n")
         break;
+    case "sp_a2_bts1":
+        local fakeBerryPos = Vector(352,-64,0);
+        local fakeBerry = Entities.CreateByClassname("prop_dynamic_override");
+        EntFireByHandle(fakeBerry, "AddOutput", "targetname jebaited", 0, null, null);
+        EntFireByHandle(fakeBerry, "SetAnimation", "idle", 0, null, null);
+        fakeBerry.SetModel("models/srmod/goldenberry.mdl");
+        fakeBerry.SetOrigin(fakeBerryPos);
+        local fakeBerry2 = Entities.CreateByClassname("prop_weighted_cube");
+        fakeBerry2.SetModel("models/srmod/goldenberry.mdl");
+        fakeBerry2.SetOrigin(fakeBerryPos);
+        EntFireByHandle(fakeBerry2, "AddOutput", "targetname jebaited2", 0, null, null)
+        EntFireByHandle(fakeBerry2, "DisableDraw", "", 0.5, null, null)
+        EntFire("pre_solved_chamber-toxin_reveal_rl", "AddOutput", "OnTrigger jebaited:Disable::0:-1");
+        EntFire("pre_solved_chamber-toxin_reveal_rl", "AddOutput", "OnTrigger jebaited2:EnableDraw::0:-1");
+        EntFire("pre_solved_chamber-toxin_reveal_rl", "AddOutput", "OnTrigger jebaited2:Dissolve::0.01:-1");
     }
 
     UpgradeDashes(dashes);
@@ -445,7 +579,7 @@ function CelesteLoad(){
 }
 
 rainbowColorState <- 0;
-previousDashCount <- 0;
+previousDashing <- 0;
 staminaAnimTimer <- 0;
 
 function CelesteUpdate(){
@@ -453,19 +587,18 @@ function CelesteUpdate(){
     UpdateIndicatorDiode();
     UpdateStaminaCover();
 
-    local dashesLeft = smsm.GetModeParam(ModeParams.DashesLeft);
+    local dashing = smsm.GetModeParam(ModeParams.Dashing);
 
-    local makeSound = previousDashCount>dashesLeft;
+    local makeSound = dashing>previousDashing;
     if(makeSound){
         self.EmitSound("celeste.dash")
     } 
-    previousDashCount=dashesLeft;
+    previousDashing=dashing;
 
     if(IsBirbMap)UpdateBirb();
 
     UpdateBerries();
 }
-
 
 
 function UpdateStaminaCover(){

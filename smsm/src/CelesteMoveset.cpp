@@ -79,6 +79,7 @@ void CelesteMoveset::UpdateModeParams() {
     }
     maxDashes = smsm.GetModeParam(MaxDashes);
     wallClimbMaxStamina = smsm.GetModeParam(MaxStamina);
+    smsm.SetModeParam(Dashing, (dashing > 0) ? 1 : 0);
 }
 
 void CelesteMoveset::ProcessMovement(void* pPlayer, CMoveData* pMove) {
@@ -120,7 +121,7 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
     }
 
     //check for dashing
-    if (dashRequested) {
+    if (dashRequested > 0) {
         int health = *reinterpret_cast<int*>((uintptr_t)pPlayer + 528);
         if (dashesLeft>0 && dashing==0 && dashingCooldown==0 && health>0) {
             if (grounded) dashedOnGround = true;
@@ -181,8 +182,8 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
             // GetPlayer().EmitSound("player/windgust.wav")
             //smsm.modeParams[DashRequested] = true;
             //TODO: find a way to play sound
+            dashRequested = 0.0;
         }
-        dashRequested = false;
     }
 
     if (dashing > 0) {
@@ -223,6 +224,11 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
     if (dashingCooldown > 0) {
         dashingCooldown -= dt;
         if (dashingCooldown < 0)dashingCooldown = 0;
+    }
+
+    if (dashRequested > 0) {
+        dashRequested -= dt;
+        if (dashRequested < 0)dashRequested = 0;
     }
 }
 

@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-  $baseTexture "models/srmod/quantumberry"
+  $baseTexture "models/srmod/goldenquantumberry"
   
   $selfillum 1
   $selfillummaskscale 0.1
