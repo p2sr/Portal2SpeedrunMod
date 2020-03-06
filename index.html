@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal 2 Speedrun Mod Official Website</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <script>
+        //animated background
+        var bgMovX = 0;
+        setInterval(function(){
+            bgMovX += 1;
+            document.body.style.backgroundPositionX = bgMovX + "px";
+        },50);
+    </script>
+    <div class="container mt-sm-4">
+        <div id="p2smlogo" class="p2box col-12"> 
+            <img src="img/logo.png">
+        </div>
+    </div>
+    <div class="container">
+        <nav class="p2sm-nav">
+            <div class="main-links col-sm-12 col-md-9">
+                <a href="#about">About</a>
+                <a href="#modes">Modes</a>
+                <a href="#download">Download</a>
+            </div>
+            <div class="side-links col-sm-12 col-md-3">
+                
+                <a href="#" title="Join the discord server!"><i class="fa fa-discord"></i></a>
+                <a href="https://github.com/Krzyhau/Portal2SpeedrunMod" title="GitHub repository"><i class="fa fa-github"></i></a>
+                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3B2J2YC7BQHPU&source=url" title="Donate to support this project!"><i class="fa fa-paypal"></i></a>
+            </div>
+        </nav>
+    </div>
+    <div class="container p2sm-content about hidden">
+        <div class="p2box col-12"> 
+            <h1>You don't have to go THAT slowly!</h1>
+            <p>
+                It started as a simple hack for speedrunners, now aims to be <b>the greatest toy box</b> Portal 2 Speedrunning Community could ever receive. 
+                <b>Portal 2 Speedrun Mod</b> is a modification that alters the way you run through the default Portal 2 campaign. Not only it <b>removes majority
+                of cutscenes and downsides</b>, making the game a lot more entertaining to speedrun, but also introduces several <b>game-changing modes</b>, giving
+                a fresh experience into your favourite test chambers, allowing you to enjoy them in a new unique way.
+            </p>
+
+            <br>
+
+            <h1>Special thanks</h1>
+            <p>
+                This project wouldn't be possible without help of these individuals:
+                <ul>
+                    <li><b>NeKz</b> - creating a base for the plugin (<a href="https://github.com/NeKzor/chaos">Chaos mod</a>) and massive support during its development.</li>
+                    <li><b>Blenderiste</b> - Chapter 9 scripting & testing.</li>
+                    <li><b>Big D</b> - motivation so large that it deserves a separate credit</li>
+                    <li><b>Valve</b> - creating original game.</li>
+                    <li><b>A bunch of generous people</b> - supporting development of this mod.</li>
+                </ul>
+
+                I also thank people who helped debug and beta-test the project, including, but not limited to:
+                <ul>
+                    <li><b>Can't Even</b> - live testing.</li>
+                    <li><b>Betsruner</b></li>
+                    <li><b>PH-MLK</b> - Laser Over Goo crash debugging.</li>
+                    <li><b>BreweryJake</b></li>
+                    <li><b>Rex</b></li>
+                    <li>..and bunch of other people I forgot to credit (sorry :/)</li>
+                </ul>
+            </p>
+        </div>
+    </div>
+    <div class="container p2sm-content modes hidden">
+        <div class="p2box col-12"> 
+            WIP
+        </div>
+        
+    </div>
+    <div class="container p2sm-content download hidden">
+        <div class="p2box col-12"> 
+            WIP
+        </div>
+    </div>
+
+    <script>
+        function showSitePart(name){
+            let fixedName = name.replace("#", ".");
+            $(".p2sm-content").addClass("hidden");
+            $(fixedName + ".p2sm-content").removeClass("hidden");
+            
+        }
+        $("a[href*='#']").click(function(e) {
+            let href = $(this).attr("href");
+            showSitePart(href);
+        });
+
+        let anchor = window.top.location.hash || "#about";
+        showSitePart(anchor);
+
+        if(window.top.location.hash){
+            window.scrollTo(0, 0);
+            setTimeout(function() {window.scrollTo(0, 0);}, 1);
+        }
+        
+    </script>
+</body>
+</html>

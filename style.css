@@ -1,0 +1,132 @@
+@font-face {
+    font-family: "D-Din";
+    src: url("ddin.otf") format("opentype");
+}
+
+body{
+    background-color:black;
+    background-image:url("img/finale_stars.jpg");
+    background-repeat: repeat;
+    margin:0 -15px;
+    overflow-x: hidden;
+    overflow-y:scroll;
+    font-family: "D-Din", Arial, Helvetica, sans-serif;
+    font-size: 1.6em;
+    
+}
+@media (max-width: 767px) {
+    body{font-size:1.3em;}
+}
+
+h1{
+    font-weight: 800;
+    font-size: 2.2em;
+}
+
+a{
+    color:black;
+    text-decoration: underline;
+}
+
+#p2smlogo{
+    padding: 1em 0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background:url("img/main_thumbnail_bg.png");
+    background-size:cover;
+}
+
+.p2box{
+    padding: 2em 1em;
+    background:url("img/tilebg.png");
+    background-size: 10% auto;
+    background-repeat: repeat;
+    -webkit-box-shadow: inset 0px 0px 30px 0px rgba(0,0,0,1);
+    -moz-box-shadow: inset 0px 0px 30px 0px rgba(0,0,0,1);
+    box-shadow: inset 0px 0px 30px 0px rgba(0,0,0,1);
+}
+
+.p2sm-content.hidden{
+    display:none;
+}
+
+#p2smlogo>img{
+    max-width:100%;
+}
+
+
+.p2sm-nav{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    background: #d8d8d8;
+    -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.5);
+    height:2.5em;
+}
+
+.p2sm-nav>div{
+    display:flex;
+    align-items:center;
+    padding:0;
+    height:100%;
+}
+
+.p2sm-nav>.main-links{
+    justify-content: left;
+}
+
+.p2sm-nav>.side-links{
+    justify-content: right;
+}
+
+.p2sm-nav a{
+    padding: 0.5em 1em;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    color:black;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1em;
+    height:100%;
+    text-decoration: none;
+}
+
+.p2sm-nav >.side-links a{
+    padding:0 0.5em;
+    font-size: 1.5em;
+}
+
+.p2sm-nav a:hover{
+    color:white;
+    background:#555;
+    text-decoration: none;
+}
+
+
+
+
+@media (max-width: 767px) {
+    .p2sm-nav{
+        flex-direction: column;
+        height:5em;
+    }
+
+    .p2sm-nav>.side-links,.p2sm-nav>.main-links{
+        justify-content: stretch;
+        flex: inherit;
+    }
+    .p2sm-nav a{
+        width:100%;
+    }
+}
+
+
+.fa-discord{color:#697fc7;}
+.fa-github{color:#222;}
+.fa-paypal{color:#0070ba;}
+.p2sm-nav a:hover i{ color:white; }
