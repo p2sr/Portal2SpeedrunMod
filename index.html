@@ -26,7 +26,7 @@
             <img src="img/logo.png">
         </div>
     </div>
-    <div class="container">
+    <div class="container sticky">
         <nav class="p2sm-nav">
             <div class="main-links col-sm-12 col-md-9">
                 <a href="#about">About</a>
@@ -56,7 +56,7 @@
             <p>
                 This project wouldn't be possible without help of these individuals:
                 <ul>
-                    <li><b>NeKz</b> - creating a base for the plugin (<a href="https://github.com/NeKzor/chaos">Chaos mod</a>) and massive support during its development.</li>
+                    <li><b>NeKz</b> - creating a base for the plugin (<a target="_blank" href="https://github.com/NeKzor/chaos">Chaos mod</a>) and massive support during its development.</li>
                     <li><b>Blenderiste</b> - Chapter 9 scripting & testing.</li>
                     <li><b>Big D</b> - motivation so large that it deserves a separate credit</li>
                     <li><b>Valve</b> - creating original game.</li>
@@ -86,8 +86,8 @@
             <div class="download-info">
                 <h1>Current release</h1>
                 <div class="release-info">
-                    <p>Version: <br><b><span class="gh-version"></span></b></p>
-                    <p>Release date: <br><b><span class="gh-date"></span></b></p>
+                    <p>Version: <br><b><span class="gh-version">v0.0</span></b></p>
+                    <p>Release date: <br><b><span class="gh-date">0000-00-00</span></b></p>
                 </div>
                 
                 <a class="downloadbtn gh-binary">
@@ -119,6 +119,8 @@
             $(".p2sm-content").addClass("hidden");
             $(fixedName + ".p2sm-content").removeClass("hidden");
             
+            $(".p2sm-nav a").removeClass("clicked");
+            $(".p2sm-nav a[href='"+name+"']").addClass("clicked");
         }
         $("a[href*='#']").click(function(e) {
             let href = $(this).attr("href");
@@ -135,6 +137,7 @@
         
 
         //creating download link using github api
+        $(".download-info").addClass("loading");
         let http = new XMLHttpRequest();
         let githuburl = 'https://api.github.com/repos/Krzyhau/Portal2SpeedrunMod/releases/latest';
         http.open("GET", githuburl);
@@ -154,7 +157,7 @@
             $(".gh-date").html(date);
             $(".gh-size").html(size);
             
-            console.log(size);
+            $(".download-info").removeClass("loading");
         }catch(e){}}
     </script>
 </body>

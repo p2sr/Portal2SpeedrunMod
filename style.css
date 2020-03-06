@@ -69,6 +69,13 @@ a{
     height:2.5em;
 }
 
+.sticky{
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
 .p2sm-nav>div{
     display:flex;
     align-items:center;
@@ -103,7 +110,7 @@ a{
     font-size: 1.5em;
 }
 
-.p2sm-nav a:hover{
+.p2sm-nav a:hover, .p2sm-nav a.clicked{
     color:white;
     background:#555;
     text-decoration: none;
@@ -176,4 +183,8 @@ a{
     margin-bottom:1em;
     font-size:1.2em;
     background: #222;
+}
+
+.download-info.loading{
+    visibility: hidden;
 }
