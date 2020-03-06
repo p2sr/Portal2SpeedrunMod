@@ -21,6 +21,8 @@ body{
 h1{
     font-weight: 800;
     font-size: 2.2em;
+    text-transform: uppercase;
+    margin-top:0.5em;
 }
 
 a{
@@ -38,7 +40,7 @@ a{
 }
 
 .p2box{
-    padding: 2em 1em;
+    padding: 1em 1em;
     background:url("img/tilebg.png");
     background-size: 10% auto;
     background-repeat: repeat;
@@ -130,3 +132,48 @@ a{
 .fa-github{color:#222;}
 .fa-paypal{color:#0070ba;}
 .p2sm-nav a:hover i{ color:white; }
+
+
+
+.download-info{
+    text-align: center;
+}
+
+.download-info>.release-info{
+    display:flex;
+    justify-content: center;
+}
+
+.download-info>.release-info>p{
+    margin: 0 1em;
+}
+
+.downloadbtn{
+    display:inline-block;
+    padding: 0.1em 0.5em;
+    font-weight: bold;
+    color:white;
+    text-decoration: none;
+    background: #006fde;
+    width:auto;
+    font-size:1.5em;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.download-info .info{
+    font-size:0.6em;
+    margin:0;
+}
+
+.downloadbtn:hover{
+    text-decoration: none;
+    color:white;
+}
+
+.downloadbtn.gh-release{
+    margin-top:0.3em;
+    margin-bottom:1em;
+    font-size:1.2em;
+    background: #222;
+}
