@@ -266,6 +266,19 @@ BERRIES["sp_a3_portal_intro"] <- [
 ];
 
 
+BERRIES["sp_a4_laser_platform"] <- [
+    {pos=Vector(-20, -1142, 750)},
+    {pos=Vector(-172, -720, 352)},
+    {pos=Vector(3520, -608, -300), golden=1},
+];
+
+BERRIES["sp_a4_speed_tb_catch"] <- [
+    {pos=Vector(448, 1192, 898)},
+    {pos=Vector(-2688, 2080, 72)},
+    {pos=Vector(-2400, 496, 64), quantum=1},
+];
+
+
 
 BERRIES_counter <- 0;
 BERRIES_max <- 0;
@@ -430,6 +443,11 @@ function CelesteLoad(){
         if(map == GetMapName()) break;
     }
 
+    //ensure that is turned on
+    if(GetMapName()=="sp_a1_intro1" || GetMapName()=="sp_a1_intro3"){
+        SendToConsole("gameinstructor_enable 1")
+    }
+
     switch(GetMapName()){
     case "sp_a1_intro1":
 
@@ -444,8 +462,17 @@ function CelesteLoad(){
 
         local sign = Entities.CreateByClassname("prop_dynamic_override");
         sign.SetModel("models/srmod/hintplank.mdl");
+        EntFireByHandle(sign, "AddOutput", "targetname climb_sign", 0, null, null)
         sign.SetOrigin(Vector(-1405, 4374, 2740));
         sign.SetAngles(85,0,90)
+
+        local hint = Entities.CreateByClassname("env_instructor_hint");
+        EntFireByHandle(hint, "AddOutput", "targetname climb_hint", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_target climb_sign", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_binding +use", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_caption Wallclimb", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_color 255 255 255", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_icon_onscreen use_binding", 0, null, null)
 
         break;
     case "sp_a1_intro2":
@@ -476,11 +503,12 @@ function CelesteLoad(){
         sign1.SetAngles(79,338,24);
         EntFireByHandle(sign1, "skin", "1", 0, null, null)
 
-        local sign2 = Entities.CreateByClassname("prop_dynamic_override");
-        sign2.SetModel("models/srmod/hintplank.mdl");
-        sign2.SetOrigin(Vector(-54, 2050, -368));
-        sign2.SetAngles(76,270,-43);
-        EntFireByHandle(sign2, "skin", "2", 0, null, null)
+        local hint = Entities.CreateByClassname("env_instructor_hint");
+        EntFireByHandle(hint, "AddOutput", "targetname dash_hint", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_binding +dash", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_caption Dash", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_color 255 255 255", 0, null, null)
+        EntFireByHandle(hint, "AddOutput", "hint_icon_onscreen use_binding", 0, null, null)
         break;
     case "sp_a1_intro4":
         EntFire("portal_emitter_a_lvl3", "Kill")
@@ -581,6 +609,7 @@ function CelesteLoad(){
 rainbowColorState <- 0;
 previousDashing <- 0;
 staminaAnimTimer <- 0;
+hintState <- 0
 
 function CelesteUpdate(){
     
@@ -598,6 +627,30 @@ function CelesteUpdate(){
     if(IsBirbMap)UpdateBirb();
 
     UpdateBerries();
+
+    UpdateHints();
+}
+
+function UpdateHints(){
+    if(GetMapName()=="sp_a1_intro1" && hintState < 2){
+        local o = GetPlayer().GetOrigin();
+        if(hintState==0 && o.y < 4200 && o.x > -1348 && o.z < 2900){
+            EntFire("climb_hint", "ShowHint");
+            hintState++;
+        }else if(hintState==1 && o.y > 4360 && o.x < -1348){
+            hintState++;
+            EntFire("climb_hint", "EndHint")
+        }
+    }
+    if(GetMapName()=="sp_a1_intro3" && hintState < 2){
+        if(hintState==0 && smsm.GetModeParam(ModeParams.MaxDashes)>0){
+            EntFire("dash_hint", "ShowHint");
+            hintState++;
+        }else if(hintState==1 && smsm.GetModeParam(ModeParams.Dashing)>0){
+            hintState++;
+            EntFire("dash_hint", "EndHint")
+        }
+    }
 }
 
 
@@ -616,8 +669,7 @@ function UpdateStaminaCover(){
 }
 
 function UpdateIndicatorDiode(){
-local color = Vector(1,1,1);
-
+    local color = Vector(1,1,1);
     local dashesLeft = smsm.GetModeParam(ModeParams.DashesLeft);
     if(dashesLeft>2){
         rainbowColorState += 10;

@@ -76,6 +76,10 @@ function SpeedrunModeLoad(){
   //well, that happens
   EntFire("@command", "Command", "mat_fullbright 0")
 
+  //get rid of default hints, who needs them lmao
+  local hint = null;
+  while(hint=Entities.FindByClassname(hint,"env_instructor_hint"))EntFireByHandle(hint, "Kill", "", 0, null, null)
+
   switch(GetMapName()){
     case "sp_a1_intro1":
       //creating beginning cutscene out of original elements in glass chamber
