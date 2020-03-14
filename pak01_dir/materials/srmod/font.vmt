@@ -1,0 +1,64 @@
+"UnlitGeneric"
+{
+  "$baseTexture" "srmod/font"
+  $translucent 1
+  $vertexcolor 1
+  $vertexalpha 1
+
+  $frame "1"
+  $entityorigin "[0 0 0]"
+  $posz "0.0"
+  $poszAdd "0.0"
+  $poszFrac "0.0"
+  $poszMult "0.0"
+  $frameInt "0.0"
+
+  $zero "0.0"
+  $hund "100.0"
+  $huge "10000.0"
+  
+  $frameMax "80.9"
+  
+  "Proxies"
+  {
+    "EntityOrigin"
+    {
+    }
+    "Clamp"
+    {
+      "srcVar1" "$zero"
+      "min" "$entityorigin[2]"
+      "max" "$entityorigin[2]"
+      "resultVar" "$posz"
+    }
+    "Add"
+    {
+      "srcVar1" "$posz"
+      "srcVar2" "$huge"
+      "resultVar" "$poszAdd"
+    }
+    "Frac"
+    {
+      "srcVar1" "$poszAdd"
+      "resultVar" "$poszFrac"
+    }
+    "Multiply"
+    {
+      "srcVar1" "$poszFrac"
+      "srcVar2" "$hund"
+      "resultVar" "$poszMult"
+    }
+    Int
+    {
+      "srcVar1" "$poszMult"
+      "resultVar" "$frameInt"
+    }
+    WrapMinMax
+    {
+      "srcVar1" "$poszMult"
+      "minVal" "$zero"
+      "maxVal" "$frameMax"
+      "resultVar" "$frame"
+    }
+  }
+}

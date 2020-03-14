@@ -133,155 +133,267 @@ BERRIES <- {};
 //okay, look, i know you think "yaya me me smart" but 
 //at least try to not spoil berries location for yourself
 BERRIES["sp_a1_intro1"] <- [
-    {pos=Vector(-1075, 4348, 2739)},
+    {name="First Steps",pos=Vector(-1075, 4348, 2739)},
 ];
 BERRIES["sp_a1_intro2"] <- [
-    {pos=Vector(-230, 190, 580)},
+    {name="Sever The Skyline",pos=Vector(-230, 190, 580)},
 ];
 BERRIES["sp_a1_intro3"] <- [
-    {pos=Vector(-512, 1200, 1160)},
-    {pos=Vector(-1278, 3390, 400)},
+    {name="Where You Suppose To Go",pos=Vector(-512, 1200, 1160)},
+    {name="Up Where You Shouldn't Go",pos=Vector(-1278, 3390, 400)},
 ];
 BERRIES["sp_a1_intro4"] <- [
-    {pos=Vector(848, -704, 340)},
+    {name="Lab Observator",pos=Vector(848, -704, 340)},
 ];
 BERRIES["sp_a1_intro5"] <- [
-    {pos=Vector(-345, -876, 710)},
+    {name="intro car",pos=Vector(-345, -876, 710)},
 ];
 BERRIES["sp_a1_intro6"] <- [
-    {pos=Vector(444, -256, 600)},
-    {pos=Vector(1245, 394, 720)},
-    {pos=Vector(1664, -472, 630), golden=1},
+    {name="Following Faulty Momentum",pos=Vector(444, -256, 600)},
+    {name="Empty Spaces",pos=Vector(1245, 394, 720)},
+    {name="Golden Seam Shooter",pos=Vector(1664, -472, 630), golden=1},
 ];
 BERRIES["sp_a1_intro7"] <- [
-    {pos=Vector(0, -448, 1280)},
-    {pos=Vector(-588, -609, 1490), quantum=1},
+    {name="Covered By Old Technology",pos=Vector(0, -448, 1280)},
+    {name="Thinking Without Portals",pos=Vector(-588, -609, 1490), quantum=1},
 ];
 BERRIES["sp_a1_wakeup"] <- [
-    {pos=Vector(6974, 840, 620)},
+    {name="The One You Probably Missed",pos=Vector(6974, 840, 620)},
+    {name="In The Mess",pos=Vector(9790, 1440, 464)},
+    {name="In The Darkness",pos=Vector(10320, 1375, -300)},
 ];
 BERRIES["sp_a2_intro"] <- [
-    {pos=Vector(412, 520, -10288)},
+    {name="You Take Me Even Higher",pos=Vector(-2230, 600, -9868)},
+    {name="Chilling On A Metal Rod",pos=Vector(412, 520, -10288)},
 ];
 BERRIES["sp_a2_laser_intro"] <- [
-    {pos=Vector(224, 280, 42)},
+    {name="The Hole In A Wall",pos=Vector(224, 280, 42)},
 ];
 BERRIES["sp_a2_laser_stairs"] <- [
-    {pos=Vector(-665, -420, 828)},
-    {pos=Vector(665, -41, 128)},
+    {name="Climbing The Pipe Ladder",pos=Vector(-665, -420, 828)},
+    {name="Navigating The Pipe Maze",pos=Vector(665, -41, 128)},
 ];
 BERRIES["sp_a2_dual_lasers"] <- [
-    {pos=Vector(303, -704, 1104)},
+    {name="Golden Clip Executor",pos=Vector(-221, 215, 1408), golden=1},
+    {name="I'm Just Hopping",pos=Vector(303, -704, 1104)},
 ];
 BERRIES["sp_a2_laser_over_goo"] <- [
-    {pos=Vector(3004, -923, 102), quantum=1},
+    {name="Thinking With Wavedashing",pos=Vector(3004, -923, 102), quantum=1},
 ];
 BERRIES["sp_a2_catapult_intro"] <- [
-    {pos=Vector(-512, -351, 608), golden=1},
+    {name="Golden Cube Jumper",pos=Vector(-512, -351, 608), golden=1},
 ];
 BERRIES["sp_a2_trust_fling"] <- [
-    {pos=Vector(-992, -640, -320)},
-    {pos=Vector(2035, -57, 258)},
-    {pos=Vector(-1152, 1442, 64), quantum=1},
+    {name="Watching Catapults Through A Pipe",pos=Vector(-992, -640, -320)},
+    {name="Hoopy Companion",pos=Vector(2035, -57, 258)},
+    {name="Thinking With Dashing",pos=Vector(-1152, 1442, 64), quantum=1},
 ];
 BERRIES["sp_a2_pit_flings"] <- [
-    {pos=Vector(608, 194, 528)},
-    {pos=Vector(-672, -352, 64), quantum=1},
+    {name="One Of These In A Ceiling",pos=Vector(608, 194, 528)},
+    {name="Thinking With Climbing",pos=Vector(-672, -352, 64), quantum=1},
 ];
 BERRIES["sp_a2_fizzler_intro"] <- [
-    {pos=Vector(164, -352, 544)},
+    {name="Another One Of These In A Ceiling",pos=Vector(164, -352, 544)},
 ];
 BERRIES["sp_a2_sphere_peek"] <- [
-    {pos=Vector(-1824, 1824, 264)},
-    {pos=Vector(-1416, 2336, 800)},
+    {name="Comfy Box Of Steel",pos=Vector(-1824, 1824, 264)},
+    {name="Bumping Into A Lab",pos=Vector(-1408, 1184, 512)},
+    {name="Glorious Room Of Heavens",pos=Vector(-1416, 2336, 800)},
 ];
 BERRIES["sp_a2_ricochet"] <- [
-    {pos=Vector(2464, 1152, -992)},
-    {pos=Vector(3232, 1344, 480), golden=1},
+    {name="Casual Wall Climber",pos=Vector(2269, 1152, 262)},
+    {name="Golden Wall Climber",pos=Vector(3232, 1344, 480), golden=1},
 ];
 BERRIES["sp_a2_bridge_intro"] <- [
-    {pos=Vector(-104, 1116, -80), quantum=1, golden=1},
+    {name="Golden Least Portal Thinker",pos=Vector(-104, 1116, -80), quantum=1, golden=1},
 ];
 BERRIES["sp_a2_bridge_the_gap"] <- [
-    {pos=Vector(-1123, -595, 1495)},
-    {pos=Vector(-128, -256, 1752)},
+    {name="Another One You Probably Missed",pos=Vector(-1123, -595, 1495)},
+    {name="Barely Anyone Knows This Place",pos=Vector(-128, -256, 1752)},
 ];
 BERRIES["sp_a2_turret_intro"] <- [
-    {pos=Vector(256, -416, 192)},
-    {pos=Vector(-475, 391, -191), golden=1},
+    {name="Thinking With Turrets",pos=Vector(700, 256, -192), quantum=1},
+    {name="Golden Trigger Observer",pos=Vector(-475, 391, -192), golden=1},
 ];
 BERRIES["sp_a2_turret_blocker"] <- [
-    {pos=Vector(64, 1376, 64), quantum=1},
+    {name="Thinking With Turret Guardians",pos=Vector(64, 1376, 64), quantum=1},
 ];
 BERRIES["sp_a2_laser_vs_turret"] <- [
-    {pos=Vector(864, -448, 360)},
+    {name="Serenade Listener",pos=Vector(864, -448, 360)},
 ];
 BERRIES["sp_a2_pull_the_rug"] <- [
-    {pos=Vector(128, -1104, 550), quantum=1},
+    {name="Thinking With Secret Rooms",pos=Vector(128, -1104, 550), quantum=1},
 ];
 BERRIES["sp_a2_column_blocker"] <- [
-    {pos=Vector(32, -912, 660)},
-    {pos=Vector(-192, 1060, 86)},
+    {name="Surprise Provider",pos=Vector(32, -912, 660)},
+    {name="Guarded By A Turret",pos=Vector(-192, 1060, 86)},
 ];
 BERRIES["sp_a2_laser_chaining"] <- [
-    {pos=Vector(448, 64, 704)},
-    {pos=Vector(-432, -860, 704)},
+    {name="Hanging By Fingers From A Moutain",pos=Vector(448, 64, 704)},
+    {name="Hidden Yet Exposed",pos=Vector(-432, -860, 704)},
 ];
-
+BERRIES["sp_a2_triple_laser"] <- [
+    {name="Surrounded By Arms",pos=Vector(8231, -5915, 64)},
+    //TODO: allow triple laser oob in leaderboards
+    {name="Golden OOB Explorer",pos=Vector(7420, -5732, 100), golden=1}, 
+];
+BERRIES["sp_a2_bts1"] <- [
+    {name="Part Of Non-Existing Test",pos=Vector(-9118, -890, 638)},
+    {name="Basically On Our Way",pos=Vector(-1216, -992, 400)},
+    {name="Practically On Our Way",pos=Vector(848, -1742, -384)},
+];
+BERRIES["sp_a2_bts2"] <- [
+    {name="The Path Of A Least Portaler",pos=Vector(1034, -2888, 176)},
+];
+BERRIES["sp_a2_bts3"] <- [
+    {name="On Wheatley's Way",pos=Vector(4574, 1410, 420)},
+    {name="Technically On Our Way",pos=Vector(5234, -510, 352)},
+    {name="Wait, that's not a turret!",pos=Vector(6142, 760, -64)},
+    {name="Where Panels Come From",pos=Vector(6532, 3008, -192)},
+    {name="Secret Room Near Pipes",pos=Vector(9920, 3934, -384)},
+    {name="Above The Construction Noise",pos=Vector(7744, 5440, -64)},
+    {name="Above The Fall",pos=Vector(6720, 4672, 300)},
+];
 BERRIES["sp_a2_bts4"] <- [
-    {pos=Vector(1072, -2656, 7232), golden=1},
-    {pos=Vector(1938, -3200, 7744)},
-    {pos=Vector(2896, -5120, 6688)},
-    {pos=Vector(-1664, -7360, 6720)},
+    {name="Golden Pancake Shooter",pos=Vector(1072, -2656, 7232), golden=1},
+    {name="Turret Redemption Observer",pos=Vector(1938, -3200, 7744)},
+    {name="Guarded By The Test Doll",pos=Vector(2896, -5120, 6688)},
+    {name="Not Stepping On Children's Projects",pos=Vector(-1664, -7360, 6720)},
 ];
 BERRIES["sp_a2_core"] <- [
-    {pos=Vector(168, 2118, -40)},
+    {name="Corridor From A Near Past",pos=Vector(168, 2118, -40)},
+    {name="Where's My Turkey?",pos=Vector(-1648, 0, 320)},
+    {name="Thinking With Big Jumps",pos=Vector(0, 308, -180), quantum=1},
 ];
 BERRIES["sp_a3_01"] <- [
-    {pos=Vector(-528, -1363, 2451), golden=1},
-    {pos=Vector(-1880, -2760, 396)},
-    {pos=Vector(-1090, 194, 69)},
-    {pos=Vector(-7, 2786, 512)},
+    {name="Golden Reactions Possessor",pos=Vector(-528, -1363, 2451), golden=1},
+    {name="Lurking From A Darkness",pos=Vector(-1880, -2760, 396)},
+    {name="Swimming Below A Pipe",pos=Vector(-1090, 194, 69)},
+    {name="Hiding Behind The Barrier",pos=Vector(-7, 2786, 512)},
+    {name="Thinking With Underground Maze",pos=Vector(4878, 4402, -480), quantum=1},
 ];
 BERRIES["sp_a3_03"] <- [
-    {pos=Vector(-5416, -1808, -4928)},
-    {pos=Vector(-7040, 1216, -4672)},
+    {name="Admiring The Underestimated Power",pos=Vector(-5416, -1808, -4928)},
+    {name="Olympian",pos=Vector(-9232, 644, -4664)},
+    {name="Phone Call From A Past",pos=Vector(-7040, 1216, -4672)},
+    {name="Appreciating The High Ground",pos=Vector(-5062, 1024, -2244)},
+];
+BERRIES["sp_a3_jump_intro"] <- [
+    {name="The Casual Wall",pos=Vector(-1136, 704, 580)},
+    {name="Jumpless Office",pos=Vector(-1790, 598, 1004)},
+];
+BERRIES["sp_a3_bomb_flings"] <- [
+    {name="Exploring The Ruins",pos=Vector(-1220, 996, -876)},
+    {name="Hiding On The Edge",pos=Vector(598, 330, 400)},
+    {name="Thinking With Ladder",pos=Vector(288, 2080, 804), quantum=1},
+];
+BERRIES["sp_a3_crazy_box"] <- [
+    {name="Waiting For Time Travel",pos=Vector(2080,-1436,240)},
+    {name="Thinking With The Crazy Box",pos=Vector(642,8,2144), quantum=1},
 ];
 BERRIES["sp_a3_transition01"] <- [
-    {pos=Vector(-2496, 704, -4832), golden=1},
+    {name="Golden Crouching Stander",pos=Vector(-2496, 704, -4832), golden=1},
+    {name="Admiring Borealis",pos=Vector(-5054,721,-3998)},
 ];
 BERRIES["sp_a3_speed_ramp"] <- [
-    {pos=Vector(-1218, 1664, 0)},
-    {pos=Vector(-640, 3, 600)},
-    {pos=Vector(-160, -640, 1592)},
-    {pos=Vector(1140, -702, 1800), golden=1},
-    
+    {name="Useless Cube Companion",pos=Vector(-1218, 1664, 0)},
+    {name="Familiar Faces",pos=Vector(-640, 3, 600)},
+    {name="Tower Climber",pos=Vector(-160, -640, 1592)},
+    {name="Golden Solidity Researcher",pos=Vector(1140, -702, 1800), golden=1},
 ];
 BERRIES["sp_a3_speed_flings"] <- [
-    {pos=Vector(2048, 768, 1484)},
-    {pos=Vector(455, 1237, 502)},
+    {name="Up",pos=Vector(2048, 768, 1484)},
+    {name="A Sign To Quit",pos=Vector(455, 1237, 502)},
 ];
 BERRIES["sp_a3_portal_intro"] <- [
-    {pos=Vector(3600, 32, 5696), quantum=1}
+    {name="First Fizzler Companion",pos=Vector(2448, -1096, -2495)},
+    {name="DANGER KEEPOUT",pos=Vector(784, 1712, -1594)},
+    {name="Observing Conversion",pos=Vector(-768, -256, 1024)},
+    {name="Protecting The Entrance",pos=Vector(2944, -192, 748)},
+    {name="Thinking With Reaching The Summit",pos=Vector(3600, 32, 5696), quantum=1},
+];
+BERRIES["sp_a3_end"] <- [
+    {name="Behind The Red Pipe",pos=Vector(-2096, -758, -2690)},
+    {name="Watching White Paint Dry",pos=Vector(-246, 256, -2008)},
+    {name="The Summit",pos=Vector(-1730, 190, 3980)},
+];
+BERRIES["sp_a4_intro"] <- [
+    {name="Hidden Behind Screens",pos=Vector(1470, -192, 1052)},
+];
+BERRIES["sp_a4_tb_trust_drop"] <- [
+    {name="Dropped With Trust",pos=Vector(-128, 608, 374)},
+    {name="Blessed By Wheatley",pos=Vector(-798, 1086, 947)},
+];
+BERRIES["sp_a4_tb_wall_button"] <- [
+    {name="WHY ISN'T THIS SOLID?!",pos=Vector(-448, 576, 20)},
+    {name="Chilling On A Lamp",pos=Vector(-656, 1408, 332)},
+];
+BERRIES["sp_a4_tb_polarity"] <- [
+    {name="Unnecessarily Guarded By A Turret",pos=Vector(128, 2672, 256)},
+];
+BERRIES["sp_a4_tb_catch"] <- [
+    {name="PORTAL CUUT!",pos=Vector(444, 800, 250)},
+];
+BERRIES["sp_a4_stop_the_box"] <- [
+    {name="Catapult Not For You",pos=Vector(-774, 318, 874)},
+    {name="Moving Chamber Is A Lie",pos=Vector(-32, -496, 1488)},
+    {name="My Secret Room",pos=Vector(-386, -629, 668)},
+];
+BERRIES["sp_a4_laser_catapult"] <- [
+    {name="The Casual Cube",pos=Vector(1124, 126, 192)},
 ];
 
-
 BERRIES["sp_a4_laser_platform"] <- [
-    {pos=Vector(-20, -1142, 750)},
-    {pos=Vector(-172, -720, 352)},
-    {pos=Vector(3520, -608, -300), golden=1},
+    {name="Living In A Crack",pos=Vector(-20, -1142, 750)},
+    {name="Observing The Funnel",pos=Vector(-172, -720, 352)},
 ];
 
 BERRIES["sp_a4_speed_tb_catch"] <- [
-    {pos=Vector(448, 1192, 898)},
-    {pos=Vector(-2688, 2080, 72)},
-    {pos=Vector(-2400, 496, 64), quantum=1},
+    {name="Appretiating The Chamber's Height",pos=Vector(448, 1192, 898)},
+    {name="A Catwalk To Nowhere",pos=Vector(-2688, 2080, 72)},
+    {name="Thinking With P-Body",pos=Vector(-2400, 496, 64), quantum=1},
 ];
+BERRIES["sp_a4_jump_polarity"] <- [
+    {name="Hidden In A Gel Pipe",pos=Vector(-570, -60, 420)},
+    {name="Burning On Catwalks",pos=Vector(-494, 2113, 977)},
+    {name="*teleports behind you*",pos=Vector(2560, -4192, 432)},
+];
+BERRIES["sp_a4_finale1"] <- [
+    {name="Actually Solving The Test",pos=Vector(-3712, -7424, 182)},
+    {name="Watching The Part Where He Kills You",pos=Vector(-8594, -1535, 412)},
+    {name="On A Lamp",pos=Vector(-13020, -2270, 760)},
+];
+BERRIES["sp_a4_finale2"] <- [
+    {name="Holmes Vs Moriarty",pos=Vector(400, -2186, -448)},
+    {name="Living In The Trash",pos=Vector(-2075, 0, -331)},
+];
+BERRIES["sp_a4_finale3"] <- [
+    {name="Deep Inside The Pipe",pos=Vector(448, -1664, 304)},
+    {name="On A Pipe",pos=Vector(-480, 1890, 480)},
+    {name="Golden Berry Finder",pos=Vector(60, 5053, 589), golden=1},
+];
+
 
 
 
 BERRIES_counter <- 0;
 BERRIES_max <- 0;
+BERRIES_initialized <- false;
+
+BERRIES_count_red <- 0;
+BERRIES_count_quantum <- 0;
+BERRIES_count_golden <- 0;
+
+BERRIES_count_red_collected <- 0;
+BERRIES_count_quantum_collected <- 0;
+BERRIES_count_golden_collected <- 0;
+
+function PrintBerriesCount(){
+    modlog("Number of berries total: "+BERRIES_max);
+    modlog("Number of red berries: "+BERRIES_count_red);
+    modlog("Number of quantum berries: "+BERRIES_count_quantum);
+    modlog("Number of golden berries: "+BERRIES_count_golden);
+}
 
 function CreateBerries(){
     //assigning ID to every berry, and check if its collected already
@@ -295,31 +407,56 @@ function CreateBerries(){
                 berry.collected = true;
             }
             BERRIES_max++;
+            
+            //counting berries
+            if(berry.golden){
+                BERRIES_count_golden++;
+                if(berry.collected)BERRIES_count_golden_collected++;
+            }else if(berry.quantum){
+                BERRIES_count_quantum++;
+                if(berry.collected)BERRIES_count_quantum_collected++;
+            }else{
+                BERRIES_count_red++;
+                if(berry.collected)BERRIES_count_red_collected++;
+            }
         }
     }
 
     //spawning uncollected berries
-    if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ) if(!berry.collected){
-        local berryEnt = Entities.CreateByClassname("prop_dynamic_override");
-        EntFireByHandle(berryEnt, "AddOutput", "targetname berry_"+index, 0, null, null);
-        EntFireByHandle(berryEnt, "SetAnimation", "idle", 0, null, null);
-        if(berry.golden && berry.quantum)berryEnt.SetModel("models/srmod/goldenquantumberry.mdl");
-        else if(berry.quantum)berryEnt.SetModel("models/srmod/quantumberry.mdl");
-        else if(berry.golden)berryEnt.SetModel("models/srmod/goldenberry.mdl");
-        else berryEnt.SetModel("models/srmod/strawberry.mdl");
-        berryEnt.SetOrigin(berry.pos);
-        berry.entity <- berryEnt;
+    if(GetMapName() in BERRIES){
+        foreach( index, berry in BERRIES[GetMapName()] ) if(!berry.collected){
+            local berryEnt = Entities.CreateByClassname("prop_dynamic_override");
+            EntFireByHandle(berryEnt, "AddOutput", "targetname berry_"+index, 0, null, null);
+            EntFireByHandle(berryEnt, "SetAnimation", "idle", 0, null, null);
+            if(berry.golden && berry.quantum)berryEnt.SetModel("models/srmod/goldenquantumberry.mdl");
+            else if(berry.quantum)berryEnt.SetModel("models/srmod/quantumberry.mdl");
+            else if(berry.golden)berryEnt.SetModel("models/srmod/goldenberry.mdl");
+            else berryEnt.SetModel("models/srmod/strawberry.mdl");
+            berryEnt.SetOrigin(berry.pos);
+            berry.entity <- berryEnt;
+        }
+        //prepare portal detection system
+        CheckPortals(true);
     }
 
-    //prepare portal detection system
-    CheckPortals(true);
-
     UpdateBerryCounter();
+
+    BERRIES_initialized = true;
 }
 
 function ResetBerries(){
     for(local i=0;i<BERRIES_max;i++){
         smsm.SetModeParam(ModeParams.BerriesOffset+i,0);
+    }
+    UpdateBerryCounter();
+}
+
+function CollectAllBerriesBeforeThisMap(){
+    foreach( index, map in MapPlayOrder ){
+        if(map == GetMapName()) break;
+        if(map in BERRIES)foreach( index, berry in BERRIES[map] ){
+            smsm.SetModeParam(ModeParams.BerriesOffset+berry.id,1);
+        }
     }
     UpdateBerryCounter();
 }
@@ -399,6 +536,7 @@ function RemovePortalBerries(){
 }
 
 function UpdateBerries(){
+    if(!BERRIES_initialized)return;
     local pmin = GetPlayer().GetOrigin()+GetPlayer().GetBoundingMins();
     local pmax = GetPlayer().GetOrigin()+GetPlayer().GetBoundingMaxs();
     local quantumCount = 0;
@@ -600,6 +738,18 @@ function CelesteLoad(){
         EntFire("pre_solved_chamber-toxin_reveal_rl", "AddOutput", "OnTrigger jebaited:Disable::0:-1");
         EntFire("pre_solved_chamber-toxin_reveal_rl", "AddOutput", "OnTrigger jebaited2:EnableDraw::0:-1");
         EntFire("pre_solved_chamber-toxin_reveal_rl", "AddOutput", "OnTrigger jebaited2:Dissolve::0.01:-1");
+
+        EntFire("jailbreak_chamber_lit-jailbreak_trigger", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:hintState++:0:1");
+        break;
+    case "sp_a2_triple_laser":
+        //dirty hack for golden
+        local camera = Entities.FindByClassname(null, "npc_security_camera")
+        EntFireByHandle(camera, "AddOutput", "targetname security_camera",0,null,null)
+        EntFire("berry_1", "SetParent", "security_camera", 0.01)
+        break;
+    case "sp_a2_core":
+        EntFire("death_fade", "Kill");
+        break;
     }
 
     UpgradeDashes(dashes);
@@ -651,6 +801,38 @@ function UpdateHints(){
             EntFire("dash_hint", "EndHint")
         }
     }
+
+    //not really a hint, but I'm gonna use this system anyway lmao
+    if(GetMapName()=="sp_a2_dual_lasers" && hintState < 2){
+        if(hintState==0 && BERRIES["sp_a2_dual_lasers"][0].collected){
+            if(!("entity" in BERRIES["sp_a2_dual_lasers"][0])){
+                hintState+=2;
+            }else{
+                SendToConsole("portal_place 1 0 92 64 1288 -90 -180 0; portal_place 1 1 92 64 1280 90 0 0")
+                hintState++;
+                modlog("Secret unlocked. Created helping portals.")
+            }
+        }else if(hintState==1){
+            local po = GetPlayer().GetOrigin();
+            local vec = Vector(92,64,1280);
+            po.z += GetPlayer().GetBoundingMaxs().z / 2;
+            if(po.z<1280 && (po-vec).Length()<128){
+                local portal = null;
+                while(portal = Entities.FindByClassnameWithin(portal, "prop_portal", vec, 10)){
+                    EntFireByHandle(portal, "Kill", "", 0, null, null)
+                }
+                hintState++;
+                modlog("Killing helping portals.")
+            }
+        }
+    }
+    if(GetMapName()=="sp_a2_bts1" && hintState == 1){
+        if(!BERRIES["sp_a2_bts1"][0].collected){
+            BERRIES["sp_a2_bts1"][0].pos.x = -3360;
+            BERRIES["sp_a2_bts1"][0].entity.SetOrigin(BERRIES["sp_a2_bts1"][0].pos);
+        }
+        hintState=2;
+    }
 }
 
 
@@ -692,4 +874,4 @@ function UpgradeDashes(dashes){
     smsm.SetModeParam(ModeParams.MaxDashes, dashes);
 }
 
-AddModeFunctions("celeste", CelestePostSpawn, CelesteLoad, CelesteUpdate, CelestePrecache)
+if("AddModeFunctions" in this)AddModeFunctions("celeste", CelestePostSpawn, CelesteLoad, CelesteUpdate, CelestePrecache)

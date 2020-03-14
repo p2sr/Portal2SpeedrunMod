@@ -46,7 +46,8 @@ function spTransitionListFix(){
 
 function SpeedrunModePrecache(){
   //loading glass window model replacement ("removing" prop_static model for celeste mode)
-  smsm.PrecacheModel("models/props_destruction/glass_broken_128x128_d_copy.mdl", true)
+  smsm.PrecacheModel("models/props_destruction/glass_broken_128x128_d_copy.mdl", true);
+  self.PrecacheSoundScript("music.itsaspeedrun");
 }
 
 function FixCelesteModeWindow(pos,ang){
@@ -108,6 +109,8 @@ function SpeedrunModeLoad(){
       EntFireByHandle(trigger, "Kill", "", 0, null, null)
       EntFire("fog_intro_ride", "SetStartDist", 128)
       EntFire("fog_intro_ride", "SetEndDist", 2500)
+
+      EntFire("radio", "AddOutput", "OnPlayerPickup "+self.GetName()+":RunScriptCode:IntroRadioPlay():0:1")
       break
     case "sp_a1_intro2":
       //that one is not really needed since ele is already waiting, but im gonna leave it lol
@@ -1357,6 +1360,13 @@ function FastFakeExplosionsInLvT(){
 function Finale1VeloBlock(){
   local p = GetPlayer().GetVelocity()
   GetPlayer().SetVelocity(Vector(-300,p.y,p.z))
+}
+
+function IntroRadioPlay(){
+  local radio = GetEntity("radio");
+  radio.EmitSound("music.itsaspeedrun");
+  EntFire("@music_chamberexit", "StopSound")
+  EntFire("@music_chamberexit", "StopSound", "", 2);
 }
 
 function Finale4Anim(frame){
