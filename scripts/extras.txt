@@ -15,7 +15,7 @@
 	}
 	"celeste"
 	{
-		"title"		"Celeste Mode (beta)"
+		"title"		"Celeste Mode"
 		"subtitle"	"Dash your way through Aperture!"
 		"pic"		"srmod/menu_modes/celeste"
 		"command"	"sm_mode 2;map sp_a1_intro1"

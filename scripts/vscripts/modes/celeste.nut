@@ -356,7 +356,7 @@ BERRIES["sp_a4_speed_tb_catch"] <- [
 BERRIES["sp_a4_jump_polarity"] <- [
     {name="Hidden In A Gel Pipe",pos=Vector(-570, -60, 420)},
     {name="Burning On Catwalks",pos=Vector(-494, 2113, 977)},
-    {name="*teleports behind you*",pos=Vector(2560, -4192, 432)},
+    {name="(teleports behind you)",pos=Vector(2560, -4192, 432)},
 ];
 BERRIES["sp_a4_finale1"] <- [
     {name="Actually Solving The Test",pos=Vector(-3712, -7424, 182)},
@@ -373,6 +373,11 @@ BERRIES["sp_a4_finale3"] <- [
     {name="Golden Berry Finder",pos=Vector(60, 5053, 589), golden=1},
 ];
 
+BERRIES["celeste_lastberry"] <- [
+    {name="Grand Red Berry",pos=Vector(-272, 260, -816)},
+    {name="Grand Quantum Berry",pos=Vector(-160, 260, -816), quantum=1},
+    {name="Grand Golden Berry",pos=Vector(-48, 260, -816), golden=1},
+];
 
 
 
@@ -408,6 +413,8 @@ function CreateBerries(){
             }
             BERRIES_max++;
             
+            if(mapname=="celeste_lastberry")continue;
+
             //counting berries
             if(berry.golden){
                 BERRIES_count_golden++;
@@ -432,6 +439,9 @@ function CreateBerries(){
             else if(berry.quantum)berryEnt.SetModel("models/srmod/quantumberry.mdl");
             else if(berry.golden)berryEnt.SetModel("models/srmod/goldenberry.mdl");
             else berryEnt.SetModel("models/srmod/strawberry.mdl");
+            if(GetMapName()=="celeste_lastberry"){
+                EntFireByHandle(berryEnt, "AddOutput", "modelscale 1.5", 0, null, null);
+            }
             berryEnt.SetOrigin(berry.pos);
             berry.entity <- berryEnt;
         }
@@ -750,6 +760,11 @@ function CelesteLoad(){
     case "sp_a2_core":
         EntFire("death_fade", "Kill");
         break;
+    case "sp_a4_finale4":
+        EntFire("ending_suction_relay", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:ForceBerryDisplay(1):10:1")
+        EntFire("ending_suction_relay", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:ForceBerryDisplay(0):15:1")
+        EntFire("ending_suction_relay", "AddOutput", "OnTrigger @command:Command:changelevel celeste_lastberry:15.5:1")
+        break;
     }
 
     UpgradeDashes(dashes);
@@ -872,6 +887,10 @@ function UpdateIndicatorDiode(){
 
 function UpgradeDashes(dashes){
     smsm.SetModeParam(ModeParams.MaxDashes, dashes);
+}
+
+function ForceBerryDisplay(force){
+    smsm.SetModeParam(ModeParams.DisplayBerriesForce, force)
 }
 
 if("AddModeFunctions" in this)AddModeFunctions("celeste", CelestePostSpawn, CelesteLoad, CelesteUpdate, CelestePrecache)

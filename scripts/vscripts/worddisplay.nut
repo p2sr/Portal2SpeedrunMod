@@ -1,5 +1,17 @@
+//import celeste mode
+
 DoIncludeScript("modes/celeste", self.GetScriptScope());
-CreateBerries();
+
+function Precache(){
+  CelestePrecache();
+  CreateBerries();
+  UpgradeDashes(1337);
+}
+
+function Think(){
+  CelesteUpdate();
+  return 0.01;
+}
 
 
 //word display functions
@@ -115,6 +127,7 @@ MAPS <- [
   {filename="sp_a4_finale2",name="Finale 2"},
   {filename="sp_a4_finale3",name="Finale 3"},
   {filename="sp_a4_finale4",name="Finale 4"},
+  {filename="celeste_lastberry",name="Farewell"},
 ];
 
 
@@ -241,6 +254,8 @@ function DisplayUnlockProgress(state){
   UpdateColor();
 }
 
+AlreadyUnlocked <- false;
+
 function UnlockChambers(state){
   local entToCall = null;
   local sound = 0;
@@ -259,8 +274,10 @@ function UnlockChambers(state){
     if(BERRIES_count_golden_collected==BERRIES_count_golden)entToCall += "success";
     else entToCall += "failure";
   }
-  if(entToCall)EntFire(entToCall, "Trigger");
-  else EntFire("computer_count", "PlaySound")
+  if(entToCall && !AlreadyUnlocked)EntFire(entToCall, "Trigger");
+  else EntFire("computer_count", "PlaySound");
+  
+  if(state==7)AlreadyUnlocked = true;
 }
 
 //DisplayUnlockProgress(7);
