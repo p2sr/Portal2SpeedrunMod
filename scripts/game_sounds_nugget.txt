@@ -134,3 +134,12 @@
 	"volume"		"0.5,1.0"
 	"wave"			")celeste/goldenberry_pulse.wav"
 }
+
+"celeste.spacewhistle"
+{
+	"channel"		"CHAN_AUTO"
+	"pitch"      	"PITCH_NORM"
+	"soundlevel"	"SNDLVL_NONE"
+	"volume"		"1.0"
+	"wave"			")celeste/space_whistle.mp3"
+}

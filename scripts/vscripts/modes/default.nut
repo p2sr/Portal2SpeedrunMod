@@ -883,6 +883,8 @@ function SpeedrunModeLoad(){
       //hopefully that fixes the shake thingy someone had
       //bruh like there are no reason for shaking to exist in this map anyway lol
       EntFire("env_shake", "Kill")
+
+      EntFire("big_door_button", "Kill") //lmao
       break
     case "sp_a4_intro":
 

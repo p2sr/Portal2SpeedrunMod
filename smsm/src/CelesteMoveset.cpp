@@ -114,6 +114,9 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
     unsigned int groundEntity = *reinterpret_cast<unsigned int*>((uintptr_t)pPlayer + Offsets::m_hGroundEntity);
     bool grounded = groundEntity != 0xFFFFFFFF;
 
+    //you can't have more dashes than max
+    if (dashesLeft > maxDashes)dashesLeft = maxDashes;
+
     //refresh dashing if on ground
     bool canWaveJump = dashingCooldown < dashingCooldownDuration - wavedashRefreshTime;
     if (grounded && ((!dashedOnGround && canWaveJump) || (dashedOnGround && dashingCooldown <=0))) {

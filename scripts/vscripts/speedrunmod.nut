@@ -110,6 +110,8 @@ if(IsSMSMActive()){
 DoIncludeScript("backup", self.GetScriptScope());
 
 function Precache(){
+  SLBS_Check();
+  DialogueMute_Previous <- -1;
   local mode = SPEEDRUN_MODES[smsm.GetMode()]
   foreach (id, modename in mode){
     modlog("Loading Precache function for "+modename+".")

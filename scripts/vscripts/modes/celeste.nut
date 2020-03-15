@@ -10,6 +10,7 @@ ModeParams <- {
     DashesLeft = 3,
     StaminaLeft = 4,
     Dashing = 5,
+    WarpToMoonRoom = 6,
     DisplayBerriesGot = 10,
     DisplayBerriesMax = 11,
     DisplayBerriesForce = 12,
@@ -302,7 +303,7 @@ BERRIES["sp_a3_speed_ramp"] <- [
     {name="Golden Solidity Researcher",pos=Vector(1140, -702, 1800), golden=1},
 ];
 BERRIES["sp_a3_speed_flings"] <- [
-    {name="Up",pos=Vector(2048, 768, 1484)},
+    {name="I'm Sorry Daniel",pos=Vector(2304, 896, 790)},
     {name="A Sign To Quit",pos=Vector(455, 1237, 502)},
 ];
 BERRIES["sp_a3_portal_intro"] <- [
@@ -373,7 +374,7 @@ BERRIES["sp_a4_finale3"] <- [
     {name="Golden Berry Finder",pos=Vector(60, 5053, 589), golden=1},
 ];
 
-BERRIES["celeste_lastberry"] <- [
+BERRIES["celeste_moonroom"] <- [
     {name="Grand Red Berry",pos=Vector(-272, 260, -816)},
     {name="Grand Quantum Berry",pos=Vector(-160, 260, -816), quantum=1},
     {name="Grand Golden Berry",pos=Vector(-48, 260, -816), golden=1},
@@ -413,7 +414,7 @@ function CreateBerries(){
             }
             BERRIES_max++;
             
-            if(mapname=="celeste_lastberry")continue;
+            if(mapname=="celeste_moonroom")continue;
 
             //counting berries
             if(berry.golden){
@@ -439,7 +440,7 @@ function CreateBerries(){
             else if(berry.quantum)berryEnt.SetModel("models/srmod/quantumberry.mdl");
             else if(berry.golden)berryEnt.SetModel("models/srmod/goldenberry.mdl");
             else berryEnt.SetModel("models/srmod/strawberry.mdl");
-            if(GetMapName()=="celeste_lastberry"){
+            if(GetMapName()=="celeste_moonroom"){
                 EntFireByHandle(berryEnt, "AddOutput", "modelscale 1.5", 0, null, null);
             }
             berryEnt.SetOrigin(berry.pos);
@@ -471,12 +472,20 @@ function CollectAllBerriesBeforeThisMap(){
     UpdateBerryCounter();
 }
 
+function ResetAllBerriesInThisLevel(){
+    if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
+        smsm.SetModeParam(ModeParams.BerriesOffset+berry.id,0);
+    }
+    UpdateBerryCounter();
+}
+
 function UpdateBerryCounter(){
     local berriesCollected = 0;
     for(local i=0;i<BERRIES_max;i++){
         if(smsm.GetModeParam(ModeParams.BerriesOffset+i)>0)berriesCollected++;
     }
     smsm.SetModeParam(ModeParams.DisplayBerriesGot, berriesCollected);
+    BERRIES_counter = berriesCollected;
 
     local inLevelBerriesCount = 0;
     if(GetMapName() in BERRIES)foreach( index, berry in BERRIES[GetMapName()] ){
@@ -576,7 +585,6 @@ function UpdateBerries(){
 function CelestePostSpawn(){
     //FOG_CONTROL_VALUES = {r=0.8, g=0.4, b=1.3};
     FIRST_MAP_WITH_POTATO_GUN = "sp_a3_speed_ramp"
-    
 }
 
 FIRST_MAP_WITH_1_DASH <- "sp_a1_intro4"
@@ -590,6 +598,7 @@ function CelesteLoad(){
         if(map == FIRST_MAP_WITH_2_DASHES) dashes = 2;
         if(map == GetMapName()) break;
     }
+    if(GetMapName() == "celeste_moonroom") dashes = 1337;
 
     //ensure that is turned on
     if(GetMapName()=="sp_a1_intro1" || GetMapName()=="sp_a1_intro3"){
@@ -753,9 +762,14 @@ function CelesteLoad(){
         break;
     case "sp_a2_triple_laser":
         //dirty hack for golden
-        local camera = Entities.FindByClassname(null, "npc_security_camera")
+        local camera = Entities.CreateByClassname("npc_security_camera")
         EntFireByHandle(camera, "AddOutput", "targetname security_camera",0,null,null)
+        camera.SetModel("models/props/security_camera.mdl");
+        camera.SetOrigin(Vector(7420-20, -5732-12, 100+20));
         EntFire("berry_1", "SetParent", "security_camera", 0.01)
+        EntFire("security_camera", "Enable")
+        EntFire("security_camera", "DisableDraw", "", 0.01)
+        EntFire("security_camera", "Disable", "", 0.01)
         break;
     case "sp_a2_core":
         EntFire("death_fade", "Kill");
@@ -763,12 +777,16 @@ function CelesteLoad(){
     case "sp_a4_finale4":
         EntFire("ending_suction_relay", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:ForceBerryDisplay(1):10:1")
         EntFire("ending_suction_relay", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:ForceBerryDisplay(0):15:1")
-        EntFire("ending_suction_relay", "AddOutput", "OnTrigger @command:Command:changelevel celeste_lastberry:15.5:1")
+        EntFire("ending_suction_relay", "AddOutput", "OnTrigger @command:Command:changelevel celeste_moonroom:15.5:1")
         break;
     }
 
     UpgradeDashes(dashes);
     CreateBerries();
+
+    if(smsm.GetModeParam(ModeParams.WarpToMoonRoom)){
+        MapPlayOrder = ["", GetMapName(), "celeste_moonroom"];
+    }
 }
 
 rainbowColorState <- 0;
@@ -893,4 +911,391 @@ function ForceBerryDisplay(force){
     smsm.SetModeParam(ModeParams.DisplayBerriesForce, force)
 }
 
-if("AddModeFunctions" in this)AddModeFunctions("celeste", CelestePostSpawn, CelesteLoad, CelesteUpdate, CelestePrecache)
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////
+//moved from celeste_moonroom.nut//
+///////////////////////////////////
+
+//i really need to refactor this code in the future
+
+if(GetMapName()=="celeste_moonroom"){
+    OriginalCelesteUpdate <- CelesteUpdate;
+    function CelesteUpdate(){
+        OriginalCelesteUpdate();
+        if(!WowDisplayed && BERRIES_counter == BERRIES_max && BERRIES_max!=0){
+            DisplayWow();
+            print(BERRIES_counter + "," +BERRIES_max+"\n")
+        }
+    }
+
+
+    //word display functions
+    LETTERS <- [];
+
+    FONT <- " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.'/()-_+=?,:[]{}*#";
+    FONT_LOOKUP <- {};
+    foreach(i,fontLetter in FONT){
+        FONT_LOOKUP[fontLetter] <- i;
+    }
+    FONT_W <- [0.7,1,1,1,1,0.8,0.8,1,1,0.5,0.5,1,0.9,1.1,1,1,1,1,1,0.9,0.8,1,1,1.1,0.9,0.9,1, //uppercase letters
+               0.9,0.8,0.9,0.9,0.9,0.7,1,1,0.5,0.5,0.9,0.6,1.1,0.8,0.9,0.85,1,0.7,0.8,0.7,0.9,0.9,1.1,0.8,0.9,0.9, //lowercase letters
+               0.9,0.7,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9, //numbers
+               0.5,0.5,0.5,0.5,0.5,1,1,1,1,0.7,0.5,0.5, //characters
+               1,1,1,1,1,1]; //berries
+
+    LETTER_MAKER <- EntityGroup[0];
+
+    function DisplayClear(){
+        local ent = null;
+        while(ent = Entities.FindByName(ent, "letter_brush*"))EntFireByHandle(ent,"Kill","",0,null,null);
+        ent = null;
+        while(ent = Entities.FindByName(ent, "letter_toggle*"))EntFireByHandle(ent,"Kill","",0,null,null);
+    }
+
+    function DisplayUpdateLetter(id, x,y,z,letter,r,g,b){
+        local letterEnt = Entities.FindByNameNearest("letter_brush*", Vector(x,y,z), 16);
+        local letterSuffix = id;
+        local letterToggle = Entities.FindByNameNearest("letter_toggle*", Vector(x,y,z), 16);
+        EntFireByHandle(letterEnt,"Color",floor(r*255)+" "+floor(g*255)+" "+floor(b*255),0,null,null);
+        //EntFireByHandle(letterToggle,"AddOutput","targetname letter_toggle"+letterSuffix,0,null,null);
+        //EntFireByHandle(letterToggle, "AddOutput", "target letter"+letterSuffix,0,null,null);
+        EntFireByHandle(letterToggle, "SetTextureIndex", letter+"",0,null,null);
+    }
+
+    function DisplayWord(x, y, z, word, color=Vector(1,1,1), scale=1.0){
+        local xpos = x;
+        foreach(i,letter in word){
+            local f = 0;
+            if(letter in FONT_LOOKUP)f = FONT_LOOKUP[letter];
+            local letterPos = LETTER_MAKER.GetOrigin()+Vector(xpos*16,-y*16,z);
+            LETTER_MAKER.SpawnEntityAtLocation(letterPos, Vector(0,0,0));
+            EntFireByHandle(self, "RunScriptCode", "DisplayUpdateLetter("+i+","+letterPos.x+","+letterPos.y+","+letterPos.z+","+f+","+color.x+","+color.y+","+color.z+")", 0.00, null, null);
+            xpos += FONT_W[f] * scale;
+        }
+    }
+
+
+
+    //screen display functions
+
+    MAPS <- [
+        {filename="sp_a1_intro1",name="Container Ride"},
+        {filename="sp_a1_intro2",name="Portal Carousel"},
+        {filename="sp_a1_intro3",name="Portal Gun"},
+        {filename="sp_a1_intro4",name="Smooth Jazz"},
+        {filename="sp_a1_intro5",name="Cube Momentum"},
+        {filename="sp_a1_intro6",name="Future Starter"},
+        {filename="sp_a1_intro7",name="Secret Panel"},
+        {filename="sp_a1_wakeup",name="Wakeup"},
+        {filename="sp_a2_intro",name="Incinerator"},
+        {filename="sp_a2_laser_intro",name="Laser Intro"},
+        {filename="sp_a2_laser_stairs",name="Laser Stairs"},
+        {filename="sp_a2_dual_lasers",name="Dual Lasers"},
+        {filename="sp_a2_laser_over_goo",name="Laser Over Goo"},
+        {filename="sp_a2_catapult_intro",name="Catapult Intro"},
+        {filename="sp_a2_trust_fling",name="Trust Fling"},
+        {filename="sp_a2_pit_flings",name="Pit Flings"},
+        {filename="sp_a2_fizzler_intro",name="Fizzler Intro"},
+        {filename="sp_a2_sphere_peek",name="Ceiling Catapult"},
+        {filename="sp_a2_ricochet",name="Ricochet"},
+        {filename="sp_a2_bridge_intro",name="Bridge Intro"},
+        {filename="sp_a2_bridge_the_gap",name="Bridge The Gap"},
+        {filename="sp_a2_turret_intro",name="Turret Intro"},
+        {filename="sp_a2_laser_relays",name="Laser Relays"},
+        {filename="sp_a2_turret_blocker",name="Turret Blocker"},
+        {filename="sp_a2_laser_vs_turret",name="Laser Vs Turret"},
+        {filename="sp_a2_pull_the_rug",name="Pull The Rug"},
+        {filename="sp_a2_column_blocker",name="Column Blocker"},
+        {filename="sp_a2_laser_chaining",name="Laser Chaining"},
+        {filename="sp_a2_triple_laser",name="Triple Laser"},
+        {filename="sp_a2_bts1",name="Jailbreak"},
+        {filename="sp_a2_bts2",name="Escape"},
+        {filename="sp_a2_bts3",name="Turret Factory"},
+        {filename="sp_a2_bts4",name="Turret Sabotage"},
+        {filename="sp_a2_bts5",name="Neurotoxin Sabotage"},
+        {filename="sp_a2_core",name="Core"},
+        {filename="sp_a3_01",name="Underground"},
+        {filename="sp_a3_03",name="Cave Johnson"},
+        {filename="sp_a3_jump_intro",name="Repulsion Intro"},
+        {filename="sp_a3_bomb_flings",name="Bomb Flings"},
+        {filename="sp_a3_crazy_box",name="Crazy Box"},
+        {filename="sp_a3_transition01",name="PotatOS"},
+        {filename="sp_a3_speed_ramp",name="Propulsion Intro"},
+        {filename="sp_a3_speed_flings",name="Propulsion Flings"},
+        {filename="sp_a3_portal_intro",name="Conversion Intro"},
+        {filename="sp_a3_end",name="Three Gels"},
+        {filename="sp_a4_intro",name="Test"},
+        {filename="sp_a4_tb_intro",name="Funnel Intro"},
+        {filename="sp_a4_tb_trust_drop",name="Ceiling Button"},
+        {filename="sp_a4_tb_wall_button",name="Wall Button"},
+        {filename="sp_a4_tb_polarity",name="Polarity"},
+        {filename="sp_a4_tb_catch",name="Funnel Catch"},
+        {filename="sp_a4_stop_the_box",name="Stop The Box"},
+        {filename="sp_a4_laser_catapult",name="Laser Catapult"},
+        {filename="sp_a4_laser_platform",name="Laser Platform"},
+        {filename="sp_a4_speed_tb_catch",name="Propulsion Catch"},
+        {filename="sp_a4_jump_polarity",name="Repulsion Polarity"},
+        {filename="sp_a4_finale1",name="Finale 1"},
+        {filename="sp_a4_finale2",name="Finale 2"},
+        {filename="sp_a4_finale3",name="Finale 3"},
+        {filename="sp_a4_finale4",name="Finale 4"},
+        {filename="celeste_moonroom",name="Moon Room"},
+    ];
+
+
+    CURRENT_MAP <- -1;
+
+    function DisplayBerryList(mapID){
+        DisplayClear();
+        local map = {filename="???",name="(undefined)"};
+        if(mapID>=0 && mapID<MAPS.len())map = MAPS[mapID];
+        DisplayWord(-11,-5.3,50,(map.name+":"));
+        if(map.filename in BERRIES){
+            foreach(i,berry in BERRIES[map.filename]){
+            local color = Vector(1,1,0.6);
+            if(!berry.collected)color = Vector(0.5,0.5,0.5);
+            local scale = 1;
+            if(berry.name.len()>25)scale=0.9;
+            DisplayWord(-11.5,-4.5+i*1.6,0,berry.name, color, scale);
+            //[]{}*#
+            local berryChar = "[";
+            if(berry.collected){
+                if(berry.golden)berryChar = "#";
+                else if(berry.quantum)berryChar = "}";
+                else berryChar = "]";
+            }else{
+                if(berry.golden)berryChar = "*";
+                else if(berry.quantum)berryChar = "{";
+            }
+            DisplayWord(-9.8,-3.6+i*1.2,60,berryChar);
+            }
+        }else{
+            DisplayWord(-11.5,-4.5,0,"(no berries detected)", Vector(0.5, 0.5, 0.5));
+        }
+        CURRENT_MAP = mapID;
+    }
+
+    BerryScanningInProgress <- false;
+
+    function DisplayPrevBerryList(){
+        if(BerryScanningInProgress)return;
+        CURRENT_MAP--;
+        if(CURRENT_MAP<0)CURRENT_MAP=0;
+        DisplayBerryList(CURRENT_MAP);
+    }
+
+    function DisplayNextBerryList(){
+        if(BerryScanningInProgress)return;
+        CURRENT_MAP++;
+        if(CURRENT_MAP>=MAPS.len())CURRENT_MAP=MAPS.len()-1;
+        DisplayBerryList(CURRENT_MAP);
+    }
+
+    function DisplayTestScreen(){
+        DisplayClear();
+        DisplayWord(-13,-4,0,"ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        DisplayWord(-13,-2,0,"abcdefghijklmnopqrstuvwxyz");
+        DisplayWord(-13,0,0,"0123456789");
+        DisplayWord(-13,2,0,".'/()-_+=?,:");
+        DisplayWord(-13,4,0,"[]{}*#");
+    }
+
+    function DisplayBerryOSLogo(){
+        DisplayClear();
+        DisplayWord(-3.8,-1.5,150,"Berry",Vector(1,0.2,0.2));
+        DisplayWord(0.4,-1.5,150,"OS");
+        DisplayWord(1.5,-1.2,190,"]");
+        DisplayWord(-13.1,3,0,"Your Personal Berry Collection Assistant",Vector(1,1,1), 0.85);
+    }
+
+    function DisplayUnlockProgress(state){
+        if(WowDisplayed)return;
+        DisplayClear();
+        BerryScanningInProgress = (state != 7);
+        local texts = [
+            "Initiating berry count...",
+            "Counting red berries...",
+            "Red berries counted.",
+            "Counting quantum berries...",
+            "Quantum berries counted.",
+            "Counting golden berries...",
+            "Golden berries counted.",
+            "Counting completed."
+        ];
+        DisplayWord(-10,-5,50,texts[state]);
+
+        if(state>=1){
+            DisplayWord(-3,-1.5,140,"]");
+            if(state>=2){
+            local countText = "x "+BERRIES_count_red_collected+" / "+BERRIES_count_red;
+            local color = Vector(1,1,1);
+            if(state>=3){
+                if(BERRIES_count_red_collected==BERRIES_count_red)color=Vector(0.5,1,0.5);
+                else color=Vector(1,0.5,0.5);
+            }
+            DisplayWord(-3,-2.2,50,countText,color);
+            }
+        }
+        if(state>=3){
+            DisplayWord(-3,-0.1,140,"}");
+            if(state>=4){
+            local countText = "x "+BERRIES_count_quantum_collected+" / "+BERRIES_count_quantum;
+            local color = Vector(1,1,1);
+            if(state>=5){
+                if(BERRIES_count_quantum_collected==BERRIES_count_quantum)color=Vector(0.5,1,0.5);
+                else color=Vector(1,0.5,0.5);
+            }
+            DisplayWord(-3,0.4,50,countText,color);
+            }
+        } 
+        if(state>=5){
+            DisplayWord(-3,1.3,140,"#");
+            if(state>=6){
+            local countText = "x "+BERRIES_count_golden_collected+" / "+BERRIES_count_golden;
+            local color = Vector(1,1,1);
+            if(state>=7){
+                if(BERRIES_count_golden_collected==BERRIES_count_golden)color=Vector(0.5,1,0.5);
+                else color=Vector(1,0.5,0.5);
+            }
+            DisplayWord(-3,3.2,50,countText,color);
+            }
+        }
+        UnlockChambers(state);
+    }
+
+    AlreadyUnlocked <- false;
+
+    function UnlockChambers(state){
+        local entToCall = null;
+        local sound = 0;
+        if(state==3){
+            entToCall = "chamber1_";
+            if(BERRIES_count_red_collected==BERRIES_count_red)entToCall += "success";
+            else entToCall += "failure";
+        }
+        if(state==5){
+            entToCall = "chamber2_";
+            if(BERRIES_count_quantum_collected==BERRIES_count_quantum)entToCall += "success";
+            else entToCall += "failure";
+        }
+        if(state==7){
+            entToCall = "chamber3_";
+            if(BERRIES_count_golden_collected==BERRIES_count_golden)entToCall += "success";
+            else entToCall += "failure";
+        }
+        if(entToCall && !AlreadyUnlocked)EntFire(entToCall, "Trigger");
+        else EntFire("computer_count", "PlaySound");
+        
+        if(state==7)AlreadyUnlocked = true;
+    }
+
+    WowDisplayed <- false;
+    function DisplayWow(){
+        DisplayClear();
+        DisplayWord(-1.5,-0.8,200,"W",Vector(1,0.5,0));
+        DisplayWord(-0.3,-0.8,210,"]");
+        DisplayWord(0.9,-0.8,200,"W",Vector(0,0.5,1));
+        WowDisplayed = true;
+        BerryScanningInProgress = true;
+        EntFire("computer_wee", "PlaySound");
+    }
+
+    //DisplayUnlockProgress(7);
+    //DisplayTestScreen();
+    DisplayBerryOSLogo();
+    //DisplayWow();
+
+
+    //warping functions
+    WARPING_MAP <- "";
+
+    function DisplayWarpLocation(){
+        DisplayClear();
+        if(WARPING_MAP != ""){
+            DisplayWord(-7.2,-3.5,100,"Warper activated.");
+            local mapname = "";
+            foreach(i,m in MAPS){
+                if(m.filename==WARPING_MAP){
+                    mapname = m.name;
+                    break;
+                }
+            }
+            DisplayWord(-10,-2,50,"Location: ");
+            DisplayWord(-2.5,-2,50,mapname,Vector(1,1,0.5));
+
+            //drawing berries
+            foreach(i, berry in BERRIES[WARPING_MAP]){
+                local berryChar = "[";
+                if(berry.collected){
+                    if(berry.golden)berryChar = "#";
+                    else if(berry.quantum)berryChar = "}";
+                    else berryChar = "]";
+                }else{
+                    if(berry.golden)berryChar = "*";
+                    else if(berry.quantum)berryChar = "{";
+                }
+                DisplayWord(-4.5+i,0.5,150,berryChar);
+            }
+            
+
+        }else{
+            DisplayWord(-10.5,-2,50,"Warper cannot be activated.", Vector(1,0.5,0.5));
+            DisplayWord(-14,0,0,"Berry Search Exeption: All berries found.", Vector(1,0.6,0.6), 0.9);
+        }
+        
+    }
+
+    function CheckWarperEntry(){
+        if(smsm.GetModeParam(ModeParams.WarpToMoonRoom)){
+            EntFire("end_warp", "Trigger");
+
+            local introcar = CreateProp("prop_physics", Vector(-200, -264, -880), "models/srmod/introcar.mdl", 1);
+            EntFireByHandle(introcar, "AddOutput", "targetname introcar", 0, null, null)
+            EntFireByHandle(introcar, "AddOutput", "solid 6", 0, null, null)
+            introcar.SetAngles(5,225,-5)
+        }
+        //from now on, always fix map list to allow returning to moon room
+        smsm.SetModeParam(ModeParams.WarpToMoonRoom, 1);
+    }
+
+    function RequestLevelWarp(){
+        if(BerryScanningInProgress)return;
+        local unfinishedMaps = {};
+        local mapCount = 0;
+        local currentMap = -1;
+        foreach( i, map in MAPS){
+            if(map.filename!="celeste_moonroom" && map.filename in BERRIES)foreach(index, berry in BERRIES[map.filename]){
+                if(!berry.collected){
+                    unfinishedMaps[mapCount] <- map.filename;
+                    if(map.filename==WARPING_MAP)currentMap = mapCount;
+                    mapCount++;
+                    break;
+                }
+            }
+        }
+        if(currentMap>=mapCount-1)currentMap = -1;
+        if(mapCount > 0){
+            WARPING_MAP = unfinishedMaps[currentMap+1];
+            EntFire("warper_prepare", "Trigger");
+        }
+
+        DisplayWarpLocation();
+    }
+
+    function WarpToLevel(){
+        SendToConsole("changelevel "+WARPING_MAP);
+    }
+}
+
+
+
+AddModeFunctions("celeste", CelestePostSpawn, CelesteLoad, CelesteUpdate, CelestePrecache)
