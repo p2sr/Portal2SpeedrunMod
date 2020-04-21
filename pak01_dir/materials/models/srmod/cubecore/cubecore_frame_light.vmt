@@ -1,0 +1,15 @@
+VertexLitGeneric
+{
+$basetexture "models\srmod\cubecore\cubecore_frame_light"
+
+$selfillum 1
+Proxies
+{
+TextureScroll
+{
+texturescrollvar $basetexturetransform
+texturescrollrate .1
+texturescrollangle 90
+}
+}
+}

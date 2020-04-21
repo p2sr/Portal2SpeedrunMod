@@ -94,6 +94,7 @@ SPEEDRUN_MODES <- {};
 SPEEDRUN_MODES[0] <- ["default"];
 SPEEDRUN_MODES[1] <- ["default", "fog_percent"];
 SPEEDRUN_MODES[2] <- ["default", "celeste"];
+SPEEDRUN_MODES[3] <- ["default", "cubecore"];
 
 //import proper scripts
 if(IsSMSMActive()){
@@ -101,6 +102,7 @@ if(IsSMSMActive()){
   switch(smsm.GetMode()){
     case 1: DoIncludeScript("modes/fog", self.GetScriptScope()); break;
     case 2: DoIncludeScript("modes/celeste", self.GetScriptScope()); break;
+    case 3: DoIncludeScript("modes/cubecore", self.GetScriptScope()); break;
   }
 }
 
