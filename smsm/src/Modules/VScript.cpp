@@ -13,6 +13,8 @@ DETOUR_STD(IScriptVM*, VScript::CreateVM, ScriptLanguage_t language) {
     g_pScriptVM->RegisterClass(GetScriptDescForClass(SMSM));
     g_pScriptVM->RegisterInstance(&smsm, "smsm");
 
+    vscript->g_pScriptVM = g_pScriptVM;
+
     return g_pScriptVM;
 }
 

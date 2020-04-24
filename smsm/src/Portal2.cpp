@@ -54,6 +54,10 @@ void Portal2::LoadOffsets()
     gpGlobals = 14; // UTIL_PlayerByIndex
     Think = 31; // CServerGameDLL
     m_hGroundEntity = 344; // CBaseEntity
+    GetIServerEntity = 1; // CServerTools
+    m_EntPtrArray = 61; // CServerTools::GetIServerEntity
+    CBaseEntityActivate = 37;
+    CBaseEntitySpawn = 24;
 
     // vstdlib.dll
 

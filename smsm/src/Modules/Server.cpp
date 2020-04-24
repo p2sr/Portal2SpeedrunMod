@@ -26,10 +26,23 @@ void* Server::GetPlayer(int index) {
     return this->UTIL_PlayerByIndex(index);
 }
 
+void* Server::GetEntityHandleByIndex(int index) {
+    auto size = sizeof(CEntInfo2);
+    CEntInfo* info = reinterpret_cast<CEntInfo*>((uintptr_t)server->m_EntPtrArray + size * index);
+    return info->m_pEntity;
+}
+
 Server::Server()
     : Module() {
 }
 bool Server::Init() {
+
+    if (auto g_ServerTools = Interface::Create(this->Name(), "VSERVERTOOLS0")) {
+        auto GetIServerEntity = g_ServerTools->Original(Offsets::GetIServerEntity);
+        Memory::Deref(GetIServerEntity + Offsets::m_EntPtrArray, &this->m_EntPtrArray);
+        Interface::Delete(g_ServerTools);
+    }
+
     this->g_GameMovement = Interface::Create(this->Name(), "GameMovement0");
     if (this->g_GameMovement) {
         this->g_GameMovement->Hook(Server::ProcessMovement_Hook, Server::ProcessMovement, Offsets::ProcessMovement);

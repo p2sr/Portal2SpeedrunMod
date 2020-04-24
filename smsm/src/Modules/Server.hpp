@@ -22,8 +22,10 @@ public:
     _UTIL_PlayerByIndex UTIL_PlayerByIndex = nullptr;
 
     void* GetPlayer(int index);
+    void* GetEntityHandleByIndex(int index);
 
     CGlobalVars* gpGlobals = nullptr;
+    CEntInfo* m_EntPtrArray = nullptr;
 };
 
 extern Server* server;

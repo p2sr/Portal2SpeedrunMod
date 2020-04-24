@@ -57,7 +57,7 @@ function DialogueMute_Update(){
         local defaults = [0.7, 0.4, 0.7, 0.7, 0.75, 0.88];
         local command = "";
         foreach (id, mixer in mixers){
-          command += "snd_setmixer "+mixer+" vol "+(newState ? defaults[id] : 0)+";";
+          command += "snd_setmixer "+mixer+" vol "+(newState ? defaults[id] : 0.001)+";";
         }
         //modlog(command);
         SendToConsole(command);

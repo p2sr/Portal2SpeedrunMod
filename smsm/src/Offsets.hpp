@@ -93,6 +93,9 @@ extern int RenderParticles;
 // IEngineVGuiInternal
 extern int Paint;
 
+// CServerTools
+extern int GetIServerEntity;
+
 // Others
 extern int GetClientStateFunction;
 extern int cl;
@@ -107,4 +110,7 @@ extern int FindElement;
 extern int ProcessMovement;
 extern int UTIL_PlayerByIndex;
 extern int gpGlobals;
+extern int m_EntPtrArray;
+extern int CBaseEntityActivate;
+extern int CBaseEntitySpawn;
 }

@@ -87,7 +87,7 @@ function SpeedrunModeLoad(){
       local ghostAnim = GetEntity("ghostAnim")
       ghostAnim.SetOrigin(Vector(-1190,4456,2724))
       ghostAnim.SetAngles(0,180,0)
-      
+
       EntFire("good_morning_vcd", "Kill", 0)
       EntFire("enter_chamber_trigger", "Kill", 0)
       EntFire("glass_floor_brush", "Kill", 0)
@@ -111,6 +111,12 @@ function SpeedrunModeLoad(){
       EntFire("fog_intro_ride", "SetEndDist", 2500)
 
       EntFire("radio", "AddOutput", "OnPlayerPickup "+self.GetName()+":RunScriptCode:IntroRadioPlay():0:1")
+
+      if(true){ //developer feature - make wakeup anim faster
+        GetPlayer().SetOrigin(Vector(-1190,4456,2724));
+        EntFire("camera_intro","Kill")
+        EntFire("cryo_fade_in_from_white", "Kill")
+      }
       break
     case "sp_a1_intro2":
       //that one is not really needed since ele is already waiting, but im gonna leave it lol

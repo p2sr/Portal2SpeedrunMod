@@ -7,6 +7,7 @@ class VScript : public Module {
 public:
     Interface* scriptmanager = nullptr;
 
+    IScriptVM* g_pScriptVM;
 public:
     VScript();
     bool Init() override;

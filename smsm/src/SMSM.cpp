@@ -38,6 +38,7 @@ DEFINE_SCRIPTFUNC(GetBackupKey, "Gets currently set key used by script to recove
 DEFINE_SCRIPTFUNC(SetBackupKey, "Sets backup key used by script to recover parameters.")
 DEFINE_SCRIPTFUNC(GetModeParamsNumber, "Maximum number of parameters you can assign.")
 DEFINE_SCRIPTFUNC(AreModeParamsChanged, "Used by backup system. Returns true once if change to mode-specifc params was made.")
+DEFINE_SCRIPTFUNC(RefreshEntity, "Executes 'Activate()' function for given entity.")
 END_SCRIPTDESC()
 
 SMSM::SMSM()
@@ -206,6 +207,20 @@ void SMSM::SetScreenCoverColor(int r, int g, int b, int a) {
 bool SMSM::IsDialogueEnabled() {
     return puzzlemaker_play_sounds.GetBool();
 }
+
+void SMSM::RefreshEntity(HSCRIPT hScript) {
+    void* ent = (hScript) ? (void*)vscript->g_pScriptVM->GetInstanceValue(hScript) : NULL;
+    if (ent) {
+        using _Activate = void(__func*)(void* thisptr);
+        using _Spawn = void(__func*)(void* thisptr);
+        _Activate Activate = Memory::VMT<_Activate>(ent, Offsets::CBaseEntityActivate);
+        _Spawn Spawn = Memory::VMT<_Spawn>(ent, Offsets::CBaseEntityActivate);
+        Activate(ent);
+        Spawn(ent);
+    }
+}
+
+
 
 void SMSM::StartMainThread() {
     this->ForceAct5MenuBackground();
