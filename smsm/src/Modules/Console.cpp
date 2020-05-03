@@ -15,6 +15,7 @@ bool Console::Init()
         this->Warning = Memory::GetSymbolAddress<_Warning>(tier0, WARNING_SYMBOL);
         this->DevMsg = Memory::GetSymbolAddress<_DevMsg>(tier0, DEVMSG_SYMBOL);
         this->DevWarning = Memory::GetSymbolAddress<_DevWarning>(tier0, DEVWARNINGMSG_SYMBOL);
+        this->CommandLine = Memory::GetSymbolAddress<_CommandLine>(tier0, COMMANDLINE_SYMBOL);
 
         Memory::CloseModuleHandle(tier0);
     }
@@ -24,7 +25,8 @@ bool Console::Init()
         && this->ColorMsg
         && this->Warning
         && this->DevMsg
-        && this->DevWarning;
+        && this->DevWarning
+        && this->CommandLine;
 }
 void Console::Shutdown()
 {

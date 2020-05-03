@@ -23,7 +23,7 @@ function CreditsThink(){
     local camera = Entities.FindByName(null,"camera");
 
     local cameraPos = camera.GetOrigin()
-    if(cameraPos.z>THANKS_ZPOS)cameraPos.z -= 0.62;
+    if(cameraPos.z>THANKS_ZPOS)cameraPos.z -= 0.64;
     camera.SetAbsOrigin(cameraPos)
 
     return 0.01;

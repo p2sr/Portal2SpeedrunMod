@@ -17,6 +17,7 @@
 
 #define MSG_SYMBOL "Msg"
 #define WARNING_SYMBOL "Warning"
+#define COMMANDLINE_SYMBOL "CommandLine"
 
 #define CHAOS_PRINT_COLOR Color(4, 197, 211)
 #define CHAOS_PRINT_ACTIVE_COLOR Color(110, 247, 76)
@@ -28,12 +29,14 @@ public:
     using _ColorMsg = void(__cdecl*)(const Color& clr, const char* pMsgFormat, ...);
     using _DevMsg = void(__cdecl*)(const char* pMsgFormat, ...);
     using _DevWarning = void(__cdecl*)(const char* pMsgFormat, ...);
+    using _CommandLine = ICommandLine * (__cdecl*)();
 
     _Msg Msg = nullptr;
     _ColorMsg ColorMsg = nullptr;
     _Warning Warning = nullptr;
     _DevMsg DevMsg = nullptr;
     _DevWarning DevWarning = nullptr;
+    _CommandLine CommandLine = nullptr;
 
     Console();
     bool Init() override;

@@ -886,13 +886,19 @@ private:
 #pragma endregion
 
 
+enum MotionBlurMode_t {
+    MOTION_BLUR_DISABLE = 1,
+    MOTION_BLUR_GAME = 2,
+    MOTION_BLUR_SFM = 3
+};
+
 class CViewSetup {
 public:
-    int x, y, width, height;
-    //TODO: all of the stuff below is most likely wrong.
-    //find a way to properly use it. It might be useful for future mirror% mode.
-
-    /*bool		m_bOrtho;
+    int			x;
+    int			y;
+    int			width;
+    int			height;
+    bool		m_bOrtho;
     float		m_OrthoLeft;
     float		m_OrthoTop;
     float		m_OrthoRight;
@@ -915,7 +921,7 @@ public:
     float		m_flNearBlurRadius;
     float		m_flFarBlurRadius;
     int			m_nDoFQuality;
-    int	m_nMotionBlurMode;
+    MotionBlurMode_t	m_nMotionBlurMode;
     float	m_flShutterTime;
     Vector	m_vShutterOpenPosition;
     QAngle	m_shutterOpenAngles;
@@ -933,7 +939,7 @@ public:
     bool		m_bDrawWorldNormal : 1;
     bool		m_bCullFrontFaces : 1;
     bool		m_bCacheFullSceneState : 1;
-    bool		m_bRenderFlashlightDepthTranslucents : 1;*/
+    bool		m_bRenderFlashlightDepthTranslucents : 1;
 };
 
 #pragma region vscript
@@ -3720,4 +3726,22 @@ public:
 struct CNewParticleEffect {
     void* valveYouAbsoluteDumbFucksIWishYouAllGetHitByAnIcecreamTruck[4];
     CParticleCollection collection;
+};
+
+struct ICommandLine
+{
+public:
+    virtual void		CreateCmdLine(const char* commandline) = 0;
+    virtual void		CreateCmdLine(int argc, char** argv) = 0;
+    virtual const char* GetCmdLine(void) const = 0;
+    virtual	const char* CheckParm(const char* psz, const char** ppszValue = 0) const = 0;
+    virtual void		RemoveParm(const char* parm) = 0;
+    virtual void		AppendParm(const char* pszParm, const char* pszValues) = 0;
+    virtual const char* ParmValue(const char* psz, const char* pDefaultVal = 0) const = 0;
+    virtual int			ParmValue(const char* psz, int nDefaultVal) const = 0;
+    virtual float		ParmValue(const char* psz, float flDefaultVal) const = 0;
+    virtual int			ParmCount() const = 0;
+    virtual int			FindParm(const char* psz) const = 0;
+    virtual const char* GetParm(int nIndex) const = 0;
+    virtual void SetParm(int nIndex, char const* pNewParm) = 0;
 };

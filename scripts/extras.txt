@@ -34,13 +34,13 @@
 		"pic"		"srmod/menu_modes/fog"
 		"command"	"sm_mode 1;map sp_a1_intro1"
 	}
-	"cubecore"
-	{
-		"title"		"Save The Cube"
-		"subtitle"	"Help the cube core to fullfill its dreams!"
-		"pic"		"srmod/menu_modes/normal"
-		"command"	"sm_mode 3;map sp_a1_intro1"
-	}
+	//"cubecore"
+	//{
+	//	"title"		"Save The Cube"
+	//	"subtitle"	"Help the cube core to fullfill its dreams!"
+	//	"pic"		"srmod/menu_modes/normal"
+	//	"command"	"sm_mode 3;map sp_a1_intro1"
+	//}
 	"space"{}
 	"extras"
 	{

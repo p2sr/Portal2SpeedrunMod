@@ -112,7 +112,7 @@ function SpeedrunModeLoad(){
 
       EntFire("radio", "AddOutput", "OnPlayerPickup "+self.GetName()+":RunScriptCode:IntroRadioPlay():0:1")
 
-      if(true){ //developer feature - make wakeup anim faster
+      if(false){ //developer feature - make wakeup anim faster
         GetPlayer().SetOrigin(Vector(-1190,4456,2724));
         EntFire("camera_intro","Kill")
         EntFire("cryo_fade_in_from_white", "Kill")

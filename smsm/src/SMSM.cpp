@@ -140,15 +140,9 @@ void SMSM::Cleanup() {
     SAFE_UNLOAD(console);
 }
 
-//patches string in client library in order to force space main menu background
+//adds console line parameter in order to override background
 void SMSM::ForceAct5MenuBackground() {
-    auto clientHandle = Memory::GetModuleHandleByName(client->Name());
-    if (clientHandle) {
-        Memory::PatchString((uintptr_t)clientHandle + 0x7D2B72, "05.bik\0\0", 8); // background video
-        Memory::PatchString((uintptr_t)clientHandle + 0x7D2553, "05.wav\0\0\0\0", 10); //background music
-        Memory::PatchString((uintptr_t)clientHandle + 0x7D2E8B, "05\0\0\0\0", 6); //background image
-    }
-    Memory::CloseModuleHandle(clientHandle);
+    console->CommandLine()->AppendParm("-background", "5");
 }
 
 

@@ -26,10 +26,14 @@ function AddOutput(entityname,event,func){
 }
 
 //Easier way of obtaining entity handle.
-//finding entity by name, and then by class
+//finding entity by name, then by class
+//if old is vector, find by coordinates
 function GetEntity(name, old=null){
   local entity = Entities.FindByName(old,name);
-  if(!entity)entity = Entities.FindByClassname(old,name);
+  if(!entity){
+    if((typeof old) == "Vector")entity = Entities.FindByClassnameNearest(name,old,32);
+    else entity = Entities.FindByClassname(old,name);
+  }
   return entity;
 }
 
@@ -94,7 +98,7 @@ SPEEDRUN_MODES <- {};
 SPEEDRUN_MODES[0] <- ["default"];
 SPEEDRUN_MODES[1] <- ["default", "fog_percent"];
 SPEEDRUN_MODES[2] <- ["default", "celeste"];
-SPEEDRUN_MODES[3] <- ["default", "cubecore"];
+//SPEEDRUN_MODES[3] <- ["default", "cubecore"];
 
 //import proper scripts
 if(IsSMSMActive()){
@@ -102,7 +106,7 @@ if(IsSMSMActive()){
   switch(smsm.GetMode()){
     case 1: DoIncludeScript("modes/fog", self.GetScriptScope()); break;
     case 2: DoIncludeScript("modes/celeste", self.GetScriptScope()); break;
-    case 3: DoIncludeScript("modes/cubecore", self.GetScriptScope()); break;
+    //case 3: DoIncludeScript("modes/cubecore", self.GetScriptScope()); break;
   }
 }
 

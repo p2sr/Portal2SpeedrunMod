@@ -1,3 +1,8 @@
+//  /===========================\
+//  |   MAIN MOD SOUNDSCRIPTS   |
+//  \===========================/
+
+
 "music.sp_a2_dual_lasers_r1"
 {
 	"wave"			"*music/hoppin.mp3"
@@ -49,6 +54,11 @@
 		}
 	}
 }
+
+
+//  /==================\
+//  |   CELESTE MODE   |
+//  \==================/
 
 "celeste.dash"
 {
@@ -142,4 +152,18 @@
 	"soundlevel"	"SNDLVL_NONE"
 	"volume"		"1.0"
 	"wave"			")celeste/space_whistle.mp3"
+}
+
+
+//  /===============\
+//  |   CUBE CORE   |
+//  \===============/
+
+"cubecore.fuckthisgame"
+{
+	"channel"		"CHAN_AUTO"
+	"pitch"      	"PITCH_NORM"
+	"soundlevel"	"SNDLVL_70db"
+	"volume"		"1.0"
+	"wave"			")cubecore/fuckthisgame.mp3"
 }

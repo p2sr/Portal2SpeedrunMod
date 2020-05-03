@@ -2,16 +2,4 @@ VertexlitGeneric
 {
 $basetexture "models\srmod\cubecore\cubecore_light"
 $selfillum 1
-
-
-
-
-
-Proxies
-{
-LightedMouth
-{
-resultVar $selfillumtint
-}
-}
 }
