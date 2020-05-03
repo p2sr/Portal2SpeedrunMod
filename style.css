@@ -12,7 +12,7 @@ body{
     overflow-y:scroll;
     font-family: "D-Din", Arial, Helvetica, sans-serif;
     font-size: 1.6em;
-    
+    padding-bottom:1em;
 }
 @media (max-width: 767px) {
     body{font-size:1.3em;}
@@ -144,6 +144,7 @@ a{
 
 .download-info{
     text-align: center;
+    padding-bottom:1em;
 }
 
 .download-info>.release-info{
@@ -178,9 +179,8 @@ a{
     color:white;
 }
 
-.downloadbtn.gh-release{
+.downloadbtn.gh-release, .downloadbtn.gh-source{
     margin-top:0.3em;
-    margin-bottom:1em;
     font-size:1.2em;
     background: #222;
 }

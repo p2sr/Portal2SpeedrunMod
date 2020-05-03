@@ -40,6 +40,11 @@
             </div>
         </nav>
     </div>
+    <div class="container p2sm-content js-disabled">
+        <div class="p2box col-12"> 
+            If you see this message then your browser [UNKNOWN] is too old<br>(or you have JavaScript disabled or sth, honestly I have no idea)
+        </div>
+    </div>
     <div class="container p2sm-content about hidden">
         <div class="p2box col-12"> 
             <h1>You don't have to go THAT slowly!</h1>
@@ -56,7 +61,7 @@
             <p>
                 This project wouldn't be possible without help of these individuals:
                 <ul>
-                    <li><b>NeKz</b> - creating a base for the plugin (<a target="_blank" href="https://github.com/NeKzor/chaos">Chaos mod</a>) and massive support during its development.</li>
+                    <li><b>NeKz</b> - creating a base (<a target="_blank" href="https://github.com/NeKzor/chaos">Chaos mod</a>) for the plugin and massive support during its development.</li>
                     <li><b>Blenderiste</b> - Chapter 9 scripting & testing.</li>
                     <li><b>Big D</b> - motivation so large that it deserves a separate credit</li>
                     <li><b>Valve</b> - creating original game.</li>
@@ -77,9 +82,55 @@
     </div>
     <div class="container p2sm-content modes hidden">
         <div class="p2box col-12"> 
-            WIP
+            <div class="mode">
+                <div class="mode-header">
+                    <h1>Normal mode</h1>
+                </div>
+                <p>
+                    The main and original mode of Speedrun Mod. It's also a base to all other modes.
+                    <ul>
+                        <li>Most of the game's downtime is removed or shortened (like elevators, doors etc.)</li>
+                        <li>Most of cutscenes were removed or shortened (like Tube Ride, Core etc.)</li>
+                        <li>A full list of every change can be found <a target="_blank" href="https://github.com/Krzyhau/Portal2SpeedrunMod/tree/master/doc/normalpercentlist.md">here</a>.</li>
+                    </ul>
+                </p>
+            </div>
+            <div class="mode">
+                <div class="mode-header">
+                    <h1>Celeste 2</h1>
+                </div>
+                <p>
+                    A bunch of berries were scattered around Aperture. Dash your way through test chambers to collect them all!
+                    <ul>
+                        <li>Celeste-like movement added on top of current one (dash, wave dash, wallclimb and many more).</li>
+                        <li>Certain test chambers were modified in order to fit into the gameplay/teach mode's mechanics.</li>
+                        <li>125 unique collectable berries hidden all around the levels:
+                            <ul>
+                                <li><b>Red Berries</b> - difficult to find or difficult to get... sometimes both, sometimes none.</li>
+                                <li><b>Quantum Berries</b> - they don't seem to like portals...</li>
+                                <li><b>Golden Berries</b> - <b>no.</b></li>
+                            </ul>
+                        </li>
+                        <li>Special ending allowing you to easily identify and collect berries you missed.</li>
+                    </ul>
+                    It is recommended to know the source material (Celeste) before playing the mod.
+                </p>
+            </div>
+            <div class="mode">
+                <div class="mode-header">
+                    <h1>fog% (beta)</h1>
+                </div>
+                <p>
+                    Put your muscle memory into test. Can you run the game with limited sight?
+                    <ul>
+                        <li>Dense fog makes you unable to see distant areas.</li>
+                        <li>If you don't move for 20 seconds, you can see through fog until you move again.</li>
+                        <li>Some say this mode will never exit beta testing...</li>
+                    </ul>
+                </p>
+            </div>
+            <h1>...and many more (in the future)</h1>
         </div>
-        
     </div>
     <div class="container p2sm-content download hidden">
         <div class="p2box col-sm-12">
@@ -93,7 +144,10 @@
                 <a class="downloadbtn gh-binary">
                     Download P2SM <span class="gh-version"></span> (<span class="gh-size"></span>)
                 </a>
-                <p class="info">Windows only (sorry Linux and MacOS users :/)</p>
+                <p class="info">Windows only (forgive me Linux and MacOS users :/)</p>
+                <a class="downloadbtn gh-source">
+                    Source code
+                </a>
                 <a class="downloadbtn gh-release" target="_blank">
                     GitHub release page
                 </a>
@@ -108,6 +162,20 @@
                 <li>A new game, called "Portal 2 Speedrun Mod" should appear in your library.</li>
 
             </ol>
+
+            <h1>"janky hack mate!"</h1>
+            <p>
+                Keep in mind that this mod is a compilation of <b>dirty hacks</b> that this poor 2011 engine was not prepared for. 
+                In case the game crashes or bugs itself in unexplainable way, try one of these things:
+                <ul>
+                    <li>Launching the <b>main game</b>, then the mod</li>
+                    <li>Not using any other extensions (like SAR, for instance) because they might not like each other</li>
+                    <li>Updating other extensions (like SAR), because they might be the one causing trouble</li>
+                    <li>Taking a hot bath and <s>at least 30 minutes of walk in fresh air</s><code>#stayathome</code></li>
+                    <li>committing a jump from a ground floor window</li>
+                </ul>
+                If none of these things work, try contacting me. But I'm not leaving any contact info here, so if you reach me, I know you're worthy of my attention.
+            </p>
         </div>
     </div>
 
@@ -148,12 +216,14 @@
             let version = ghJson.tag_name;
             let updateUrl = ghJson.html_url;
             let downloadUrl = ghJson.assets[0].browser_download_url;
+            let sourceUrl = ghJson.zipball_url;
             let date = ghJson.created_at.substring(0,10);
-            let size = (ghJson.assets[0].size / (1024*1024)).toFixed(2) + "MB"
+            let size = (ghJson.assets[0].size / (1024*1024)).toFixed(2) + "MB";
 
             $(".gh-version").html(version);
             $(".gh-binary").attr("href",downloadUrl);
             $(".gh-release").attr("href",updateUrl);
+            $(".gh-source").attr("href",sourceUrl);
             $(".gh-date").html(date);
             $(".gh-size").html(size);
             
