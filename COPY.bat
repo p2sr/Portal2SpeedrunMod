@@ -2,7 +2,7 @@
 
 SET "name=Portal 2 Speedrun Mod"
 SET "dest=C:\Program Files (x86)\Steam\steamapps\sourcemods\%name%"
-SET "vpk=C:\Users\Betsruner\Documents\Search\vpk.exe"
+SET "vpk=D:\Gry\Steem\steamapps\common\Portal 2\bin\vpk.exe"
 
 ECHO.
 ECHO ====== Attempting to create directory at %dest%... ======
