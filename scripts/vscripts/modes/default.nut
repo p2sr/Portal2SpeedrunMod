@@ -95,6 +95,7 @@ function SpeedrunModeLoad(){
       GetPlayer().SetOrigin(Vector(-1335,4166,2945))
       
       DialogueMute_ForceFor(15);
+      EntFire("@exit_door-testchamber_door", "Open")
       EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro01\")", 3)
       EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro04\")", 7.2)
 
@@ -441,6 +442,8 @@ function SpeedrunModeLoad(){
       FixCelesteModeWindow(Vector(128, -649, 192), Vector(0,270,0));
       break;
     case "sp_a2_column_blocker":
+      local catTarget = GetEntity("catapult_target_2")
+      catTarget.SetOrigin(Vector(896.000000, 257.000000, 245))  //Cube RNG
       EntFire("blackout_teleport_player_to_surprise", "Kill", 0)
       EntFire("surprise_room_lightswitch_sound", "Kill", 0)
       EntFire("blackout_lights_off_fade", "Kill", 0)
@@ -843,6 +846,9 @@ function SpeedrunModeLoad(){
       break
     case "sp_a3_portal_intro":
       FastUndergroundTransition(-1,null)
+      EntFire("highdoor_door_upper", "Open")
+      EntFire("highdoor_door_lower", "Open")  //Open area after super reportal
+      EntFire("highdoor_areaportal", "Open")
       EntFire("sphere_entrance_lift_train", "SetMaxSpeed", "300")
       EntFire("sphere_entrance_lift_door_bottom", "AddOutput", "OnFullyClosed sphere_entrance_lift_train:StartForward::0:1")
       local poscode = 
@@ -945,6 +951,7 @@ function SpeedrunModeLoad(){
       break
     case "sp_a4_speed_tb_catch":
       //EntFire("wheatley_monitor-proxy", "Kill")
+      EntFire("departure_elevator-source_elevator_door_open_trigger", "kill")   //No Elevator repeat
       EntFire("shake_chamber", "Kill")
       EntFire("chamber_exit", "SetSpeed", 10000) //RAMMING SPEED
       EntFire("chamber_exit", "Open")
@@ -965,7 +972,24 @@ function SpeedrunModeLoad(){
     case "sp_a4_jump_polarity":
       local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(2336, -64, 192), 10)
       EntFireByHandle(trigger, "Kill", "0", 0, null, null)
+      local door = GetEntity("exit_door_to_elevator")
+      local enddoortrigger = Entities.FindByClassnameNearest("trigger_once", Vector(2560.01, -4016, 432), 100)
 
+      local ang = door.GetAngles()
+      local pos = door.GetOrigin()
+      //Delete door and make a new non-solid one
+      EntFireByHandle(door, "Kill", "", 0, null, null)
+      //Thank Mr Blender for this solution :D DisableCollision doesn't work
+      local d = Entities.CreateByClassname("prop_dynamic");
+      d.SetModel("models/props/portal_door_combined.mdl")
+      d.SetOrigin(pos)
+      EntFireByHandle(d, "SetAnimation", "close", 0, null, null)
+      EntFireByHandle(d, "AddOutput", "targetname d_fix", 0, null, null)
+      EntFireByHandle(d, "AddOutput", "solid 0", 0, null, null)
+      d.SetAngles(ang.x, ang.y, ang.z)
+      
+      EntFireByHandle(enddoortrigger, "AddOutput" "OnStartTouch d_fix:SetAnimation:Open", 0, null, null)
+      
       EntFire("antechamber-paint_meSilly", "Start")
       EntFire("antechamber-paint_meSilly", "Stop", 0, 3)
       EntFire("antechamber_exit", "SetAnimation", "Open")
