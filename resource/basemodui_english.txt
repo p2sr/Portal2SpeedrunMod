@@ -200,16 +200,11 @@
 "Valve_Hint_USEPickup"		"Pick up object"
 
 // PORTAL 2 INSTRUCTOR HINTS
-"Instructor_Create_Blue_Portal"		"Create Blue Portal"
-"Instructor_Create_Orange_Portal"	"Create Orange Portal"
-"Instructor_Walk"					"Walk"
-"Instructor_Push_Button"			"Activate"
-"Instructor_Pick_Up"				"Pick Up"
-"Instructor_Drop"					"Drop"
-"Instructor_Jump"					"Jump"
-"Instructor_Unzoom"					"Unzoom"
-"Instructor_Zoom"					"Zoom"
-"Paint_Instructor_teach_bounce_suppression"				"Hold to prevent bouncing"
+// ======================================
+// WHO EVEN CARES ABOUT THIS SECTION?
+// ANYONE KNOWS HOW TO PRESS THE W KEY,
+// WE DON'T NEED L4D2 INSTRUCTOR STUFF
+// ======================================
 
 "cheaptitles_sphere03.bw_finale04_portal_opens03"	"Wheatley: AHHHHHHH!"
 "cheaptitles_sphere03.bw_finale04_portal_opens13"	"Wheatley: Yeghh!"
