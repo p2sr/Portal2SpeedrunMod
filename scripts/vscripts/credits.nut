@@ -8,7 +8,8 @@ function Precache(){
 
 function StartCredits(){
     EntFire("music", "PlaySound", "", 1)
-    EntFire(self.GetName(), "RunScriptCode", "EndCredits()", 50)
+    EntFire("fadein", "FadeReverse", "", 50)
+    EntFire(self.GetName(), "RunScriptCode", "EndCredits()", 53.5)
     if(("smsm" in this) && smsm.GetMode() == 2){
         CelesteEnding();
     }

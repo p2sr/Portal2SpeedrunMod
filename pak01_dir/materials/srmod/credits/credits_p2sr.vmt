@@ -1,6 +1,6 @@
 UnlitGeneric
 {
-$basetexture "srmod/credits/credits_donors_11"
+$basetexture "srmod/credits/credits_p2sr"
 $translucent 1
 $vertexcolor 1
 $vertexalpha 1
