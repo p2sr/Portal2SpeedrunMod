@@ -821,6 +821,7 @@ struct CGameTrace : public CBaseTrace {
     int hitgroup;
     short physicsbone;
     unsigned short worldSurfaceIndex;
+    void* m_pEnt;
     int hitbox;
 };
 

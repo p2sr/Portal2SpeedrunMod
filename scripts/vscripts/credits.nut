@@ -31,7 +31,7 @@ function CreditsThink(){
 }
 
 function EndCredits(){
-    SendToConsole("disconnect")
+    SendToConsole("map credits_museum")
 }
 
 function CelesteEnding(){

@@ -1,0 +1,7 @@
+VertexLitGeneric
+{
+$basetexture "models/srmod/donors/donorpic_05"
+$alphatest 1
+$alphatestreference .7
+$allowalphatocoverage 1
+}

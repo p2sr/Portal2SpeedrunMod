@@ -1,0 +1,10 @@
+UnlitGeneric
+{
+$basetexture "srmod/credits/museum_labels"
+$translucent 1
+$vertexcolor 1
+$vertexalpha 1
+$additive 0
+$no_fullbright 1
+$SHADERSRGBREAD360 1
+}

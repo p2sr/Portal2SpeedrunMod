@@ -63,4 +63,11 @@
 		"pic"		"vgui/backgrounds/background05"
 		"command"	"sm_mode 0;map credits"
 	}
+	"museum"
+	{
+		"title"		"Hall of Fame"
+		"subtitle"	"For special people."
+		"pic"		"srmod/menu_modes/donors"
+		"command"	"sm_mode 0;map credits_museum"
+	}
 }

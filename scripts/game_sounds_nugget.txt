@@ -25,6 +25,23 @@
 	}
 }
 
+"music.credits_museum"
+{
+	"channel"		"CHAN_STATIC"
+	"soundlevel"	"SNDLVL_NONE"
+	"volume"		"1.0"
+	"wave"			"*music/caramia.mp3"
+
+	"soundentry_version" "2"
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"import_stack" 	"update_music_stereo"
+		}
+	}
+}
+
 "music.itsaspeedrun"
 {
 	"channel"		"CHAN_STATIC"
