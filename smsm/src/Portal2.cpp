@@ -107,7 +107,7 @@ void Portal2::LoadOffsets()
     ClientCmd = 7; // CEngineClient
     GetClientStateFunction = 11; // CEngineClient::ClientCmd
     Cbuf_AddText = 45; // CEngineClient::ClientCmd
-    s_CommandBuffer = 69; // Cbuf_AddText
+    s_CommandBuffer = 71; // Cbuf_AddText
     CCommandBufferSize = 9556; // Cbuf_AddText
     m_bWaitEnabled = 8265; // CCommandBuffer::AddText
     GetActiveSplitScreenPlayerSlot = 127; // CEngineClient
@@ -191,5 +191,9 @@ const char* Portal2::Version()
 }
 const char* Portal2::Process()
 {
+#ifdef _WIN32
     return "portal2.exe";
+#else
+    return "portal2_linux";
+#endif
 }
