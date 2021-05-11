@@ -36,7 +36,11 @@ int StaminaHud::GetStaminaTexture() {
 void StaminaHud::Draw() {
     //get width and height for gui drawing
     int width, height;
+#ifdef _WIN32
     engine->GetScreenSize(width, height);
+#else
+    engine->GetScreenSize(nullptr, width, height);
+#endif
 
     //drawing covering color
     Color cColor = this->staminaColor;
@@ -232,7 +236,11 @@ void CelesteBerryHud::Draw() {
     if (posOffset == 0.0)return;
 
     int width, height;
+#ifdef _WIN32
     engine->GetScreenSize(width, height);
+#else
+    engine->GetScreenSize(nullptr, width, height);
+#endif
 
     int drawX = width + (pow((1.0 - posOffset), 2) *300.0) - 20;
     int drawY = 30;

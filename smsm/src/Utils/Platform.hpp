@@ -64,8 +64,8 @@
 #endif
 
 #define DECL_DETOUR_STD(type, name, ...)             \
-    using _##name = type(__stdcall*)(##__VA_ARGS__); \
+    using _##name = type(__stdcall*)(__VA_ARGS__); \
     static _##name name;                             \
-    static type __stdcall name##_Hook(##__VA_ARGS__);
+    static type __stdcall name##_Hook(__VA_ARGS__);
 #define DETOUR_STD(type, name, ...) \
-    type __stdcall name##_Hook(##__VA_ARGS__)
+    type __stdcall name##_Hook(__VA_ARGS__)

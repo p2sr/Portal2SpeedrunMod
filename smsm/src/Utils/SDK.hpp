@@ -1,11 +1,16 @@
 #pragma once
 #include <cmath>
 #include <cstring>
+#include <cstdint>
+#include <cstring>
 
 #ifdef _WIN32
 #define __funcc __thiscall
+#define ALIGNED(x) __declspec(align(x))
 #else
 #define __funcc __attribute__((__cdecl__))
+#define ALIGNED(x) __attribute__((aligned(x)))
+#define __cdecl __attribute__((__cdecl__))
 #endif
 
 struct Vector {
@@ -825,11 +830,11 @@ struct CGameTrace : public CBaseTrace {
     int hitbox;
 };
 
-struct __declspec(align(16)) VectorAligned : public Vector {
+struct VectorAligned : public Vector {
     VectorAligned() : Vector(), w(0) {};
     VectorAligned(float x, float y, float z) : Vector(x, y, z) , w(0) {}
     float w;
-};
+} ALIGNED(16);
 
 struct matrix3x4_t {
     float m_flMatVal[3][4];
@@ -1223,7 +1228,7 @@ void CUtlVector<T, A>::Sort(int(__cdecl* pfnCompare)(const T*, const T*))
         for (int i = m_Size - 1; i >= 0; --i) {
             for (int j = 1; j <= i; ++j) {
                 if (pfnCompare(&Element(j - 1), &Element(j)) < 0) {
-                    swap(Element(j - 1), Element(j));
+                    std::swap(Element(j - 1), Element(j));
                 }
             }
         }
@@ -1356,8 +1361,8 @@ template <typename T, class A>
 void CUtlVector<T, A>::Swap(CUtlVector<T, A>& vec)
 {
     m_Memory.Swap(vec.m_Memory);
-    swap(m_Size, vec.m_Size);
-    swap(m_pElements, vec.m_pElements);
+    std::swap(m_Size, vec.m_Size);
+    std::swap(m_pElements, vec.m_pElements);
 }
 template <typename T, class A>
 int CUtlVector<T, A>::AddVectorToTail(CUtlVector const& src)
@@ -1536,9 +1541,9 @@ void CUtlMemory<T, I>::Init(int nGrowSize /*= 0*/, int nInitSize /*= 0*/)
 template <class T, class I>
 void CUtlMemory<T, I>::Swap(CUtlMemory<T, I>& mem)
 {
-    swap(m_nGrowSize, mem.m_nGrowSize);
-    swap(m_pMemory, mem.m_pMemory);
-    swap(m_nAllocationCount, mem.m_nAllocationCount);
+    std::swap(m_nGrowSize, mem.m_nGrowSize);
+    std::swap(m_pMemory, mem.m_pMemory);
+    std::swap(m_nAllocationCount, mem.m_nAllocationCount);
 }
 template <class T, class I>
 void CUtlMemory<T, I>::ConvertToGrowableMemory(int nGrowSize)
@@ -1791,7 +1796,6 @@ void CUtlMemory<T, I>::Purge(int numElements)
     m_pMemory = (T*)realloc(m_pMemory, m_nAllocationCount * sizeof(T));
 }
 
-#define Assert(_exp) ((void)0)
 #define AssertMsg(_exp, _msg) ((void)0)
 
 #define FUNC_SOLO_TEMPLATE_ARG_PARAMS_0
@@ -2282,7 +2286,7 @@ DECLARE_NAMED_FIELDTYPE(char, "character");
 DECLARE_NAMED_FIELDTYPE(HSCRIPT, "hscript");
 DECLARE_NAMED_FIELDTYPE(ScriptVariant_t, "variant");
 
-inline const char* ScriptFieldTypeName(__int16 eType)
+inline const char* ScriptFieldTypeName(int16_t eType)
 {
     switch (eType) {
     case FIELD_VOID:
@@ -2449,7 +2453,7 @@ struct ScriptVariant_t {
             m_pszString = val;
         }
         else {
-            m_pszString = _strdup(val);
+            m_pszString = strdup(val);
             m_flags |= SV_FREE;
         }
     }
@@ -2669,7 +2673,7 @@ struct ScriptVariant_t {
             pDest->m_flags |= SV_FREE;
         }
         else if (m_type == FIELD_CSTRING) {
-            pDest->m_pszString = _strdup(m_pszString);
+            pDest->m_pszString = strdup(m_pszString);
             pDest->m_flags |= SV_FREE;
         }
         else {
@@ -2688,8 +2692,8 @@ struct ScriptVariant_t {
         HSCRIPT m_hScript;
     };
 
-    __int16 m_type;
-    __int16 m_flags;
+    int16_t m_type;
+    int16_t m_flags;
 
 private:
 };

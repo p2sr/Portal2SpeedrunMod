@@ -61,12 +61,20 @@ void Surface::DrawRectAndCenterTxt(Color clr, int x0, int y0, int x1, int y1, HF
 }
 int Surface::GetWidth() {
     int width, height;
+#ifdef _WIN32
     engine->GetScreenSize(width, height);
+#else
+    engine->GetScreenSize(nullptr, width, height);
+#endif
     return width;
 }
 int Surface::GetHeight() {
     int width, height;
+#ifdef _WIN32
     engine->GetScreenSize(width, height);
+#else
+    engine->GetScreenSize(nullptr, width, height);
+#endif
     return height;
 }
 

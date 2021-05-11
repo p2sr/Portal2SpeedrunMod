@@ -169,13 +169,6 @@ uintptr_t Memory::Scan(const char* moduleName, const char* pattern, int offset)
     return result;
 }
 
-void Memory::PatchString(uintptr_t address, const char* chars, int size) {
-    DWORD old;
-    VirtualProtect((LPVOID)address, size, PAGE_EXECUTE_READWRITE, &old);
-    memcpy((LPVOID)address, chars, size);
-    VirtualProtect((LPVOID)address, size, old, nullptr);
-}
-
 #ifdef _WIN32
 Memory::Patch::~Patch()
 {

@@ -63,7 +63,7 @@ private:
     float walljumpCooldown = 0;
     float wallclimbCooldown = 0; //fuck you
 public:
-    const enum ModeParams {
+    enum ModeParams {
         InitialValue = 0,
         MaxDashes = 1,
         MaxStamina = 2,

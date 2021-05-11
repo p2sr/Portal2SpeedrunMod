@@ -1,9 +1,9 @@
-#include "SMSM.hpp"
-
 #include <algorithm>
 #include <chrono>
 #include <cstring>
 #include <stdarg.h>
+
+#include "SMSM.hpp"
 
 #include "Modules/Client.hpp"
 #include "Modules/Server.hpp"
