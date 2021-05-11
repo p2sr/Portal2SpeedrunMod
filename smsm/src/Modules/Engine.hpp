@@ -18,7 +18,7 @@ public:
     using _GetActiveSplitScreenPlayerSlot = int (*)();
 #else
     using _GetScreenSize = int(__cdecl*)(void* thisptr, int& width, int& height);
-    using _PrecacheModel = void(__cdecl*)(const char* pName, bool bPreload);
+    using _PrecacheModel = void(__cdecl*)(void* thisptr, const char* pName, bool bPreload);
     using _GetActiveSplitScreenPlayerSlot = int (*)(void* thisptr);
 #endif
     using _ClientCommand = int(*)(void* thisptr, void* pEdict, const char* szFmt, ...);

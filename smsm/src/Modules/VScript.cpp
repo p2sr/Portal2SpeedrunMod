@@ -7,8 +7,16 @@
 #include "SMSM.hpp"
 
 REDECL(VScript::CreateVM);
+#ifdef _WIN32
 DETOUR_STD(IScriptVM*, VScript::CreateVM, ScriptLanguage_t language) {
+#else
+DETOUR_T(IScriptVM*, VScript::CreateVM, ScriptLanguage_t language) {
+#endif
+#ifdef _WIN32
     auto g_pScriptVM = VScript::CreateVM(language);
+#else
+    auto g_pScriptVM = VScript::CreateVM(thisptr, language);
+#endif
 
     g_pScriptVM->RegisterClass(GetScriptDescForClass(SMSM));
     g_pScriptVM->RegisterInstance(&smsm, "smsm");

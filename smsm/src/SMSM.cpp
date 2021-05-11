@@ -160,7 +160,11 @@ void SMSM::ResetModeVariables() {
 }
 
 void SMSM::PrecacheModel(const char* pName, bool bPreload) {
+#ifdef _WIN32
     engine->PrecacheModel(pName, bPreload);
+#else
+    engine->PrecacheModel(nullptr, pName, bPreload);
+#endif
 }
 
 void SMSM::SetBackupKey(const char* key) {
