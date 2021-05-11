@@ -8,13 +8,6 @@
 #include "Modules/Console.hpp"
 #include "Modules/VGui.hpp"
 
-//REDECL(Client::HudUpdate);
-//DETOUR(Client::HudUpdate, unsigned int a2) {
-//    
-//    return client->HudUpdate(thisptr, a2);
-//}
-
-
 REDECL(Client::RenderView);
 DETOUR(Client::RenderView, const CViewSetup& view, int nClearFlags, int whatToDraw) {
     vgui->AllowCustomHudThisFrame();
@@ -72,7 +65,6 @@ bool Client::Init()
     this->g_ClientDLL = Interface::Create(this->Name(), "VClient0");
     if (this->g_ClientDLL) {
         this->g_ClientDLL->Hook(Client::RenderView_Hook, Client::RenderView, Offsets::RenderView);
-        //this->g_ClientDLL->Hook(Client::HudUpdate_Hook, Client::HudUpdate, Offsets::HudUpdate);
     }
 
     auto leaderboard = Command("+leaderboard");

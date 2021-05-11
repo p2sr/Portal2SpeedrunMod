@@ -92,8 +92,6 @@ bool Surface::Init()
         this->DisableClipping = matsurface->Original<_DisableClipping>(Offsets::DisableClipping);
         this->DrawTextLen = matsurface->Original<_DrawTextLen>(Offsets::DrawTextLen);
 
-        this->DrawGetTextureId = matsurface->Original<_DrawGetTextureId>(Offsets::DrawGetTextureId);
-        this->DrawGetTextureFile = matsurface->Original<_DrawGetTextureFile>(Offsets::DrawGetTextureFile);
         this->DrawSetTextureFile = matsurface->Original<_DrawSetTextureFile>(Offsets::DrawSetTextureFile);
         this->DrawSetTextureRGBA = matsurface->Original<_DrawSetTextureRGBA>(Offsets::DrawSetTextureRGBA);
         this->DrawSetTexture = matsurface->Original<_DrawSetTexture>(Offsets::DrawSetTexture);

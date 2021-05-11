@@ -13,7 +13,6 @@ int GetScreenSize;
 int ClientCmd;
 int GetActiveSplitScreenPlayerSlot;
 int RenderView;
-int HudUpdate;
 
 // ConVar
 int InternalSetValue;
@@ -34,8 +33,6 @@ int DisableClipping;
 int StartDrawing;
 int FinishDrawing;
 
-int DrawGetTextureId;
-int DrawGetTextureFile;
 int DrawSetTextureFile;
 int DrawSetTextureRGBA;
 int DrawSetTexture;
@@ -61,7 +58,6 @@ int TraceRay;
 
 // IEngineTool
 int PrecacheModel;
-int GetWorldToScreenMatrixForView;
 
 // CSchemeManager
 int GetIScheme;
@@ -110,6 +106,4 @@ int ProcessMovement;
 int UTIL_PlayerByIndex;
 int gpGlobals;
 int m_EntPtrArray;
-int CBaseEntityActivate;
-int CBaseEntitySpawn;
 }

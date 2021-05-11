@@ -205,12 +205,13 @@ bool SMSM::IsDialogueEnabled() {
 void SMSM::RefreshEntity(HSCRIPT hScript) {
     void* ent = (hScript) ? (void*)vscript->g_pScriptVM->GetInstanceValue(hScript) : NULL;
     if (ent) {
+        // FIXME: to make linux support easier I've just commented this out, which
+        // means this super doesn't work
+        /*
         using _Activate = void(__func*)(void* thisptr);
-        using _Spawn = void(__func*)(void* thisptr);
         _Activate Activate = Memory::VMT<_Activate>(ent, Offsets::CBaseEntityActivate);
-        _Spawn Spawn = Memory::VMT<_Spawn>(ent, Offsets::CBaseEntityActivate);
         Activate(ent);
-        Spawn(ent);
+        */
     }
 }
 

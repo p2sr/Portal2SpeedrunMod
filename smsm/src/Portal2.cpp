@@ -38,7 +38,6 @@ void Portal2::LoadOffsets()
     m_hUseEntity = 2960; // CBaseEntity
     GetScreenSize = 5; // CEngineClient
     PrecacheModel = 62; // IEngineTool
-    GetWorldToScreenMatrixForView = 80; // IEngineTool
 
     // client.dll
 
@@ -46,7 +45,6 @@ void Portal2::LoadOffsets()
     FindElement = 135; // cc_leaderboard_enable
     ChatPrintf = 22; // CBaseHudChat
     RenderView = 26;
-    HudUpdate = 11;
 
     // server.dll
     m_hActiveWeapon = 2140; // CBaseEntity
@@ -57,8 +55,7 @@ void Portal2::LoadOffsets()
     m_hGroundEntity = 344; // CBaseEntity
     GetIServerEntity = 1; // CServerTools
     m_EntPtrArray = 61; // CServerTools::GetIServerEntity
-    CBaseEntityActivate = 37;
-    CBaseEntitySpawn = 24;
+    //CBaseEntityActivate = 37;
 
     // vstdlib.dll
 
@@ -92,8 +89,6 @@ void Portal2::LoadOffsets()
     DisableClipping = 156; // CMatSystemSurface
     Paint = 14; // CEngineVGui
 
-    DrawGetTextureId = 33; // CMatSystemSurface
-    DrawGetTextureFile = 34; // CMatSystemSurface
     DrawSetTextureFile = 35; // CMatSystemSurface
     DrawSetTextureRGBA = 36; // CMatSystemSurface
     DrawSetTexture = 37; // CMatSystemSurface
@@ -124,12 +119,11 @@ void Portal2::LoadOffsets()
     TraceRay = 5; // IEngineTrace
     NextParticleSystem = ; //IClientTools
     ProcessMovement = 2; // CGameMovement
-    m_nTickBase = ; // CBaseEntity
+    m_nTickBase = 3816; // CBaseEntity
     m_bDucking = 81; // CBaseEntity
     m_hUseEntity = 2984; // CBaseEntity
     GetScreenSize = 5; // CEngineClient
     PrecacheModel = 61; // IEngineTool
-    GetWorldToScreenMatrixForView = ; // IEngineTool
 
     // client.so
 
@@ -137,7 +131,6 @@ void Portal2::LoadOffsets()
     FindElement = 120; // cc_leaderboard_enable
     ChatPrintf = 25; // CBaseHudChat
     RenderView = ;
-    HudUpdate = ;
 
     // server.so
     m_hActiveWeapon = 2164; // CBaseEntity
@@ -147,9 +140,8 @@ void Portal2::LoadOffsets()
     Think = 31; // CServerGameDLL
     m_hGroundEntity = 352; // CBaseEntity
     GetIServerEntity = 2; // CServerTools
-    m_EntPtrArray = ; // CServerTools::GetIServerEntity
-    CBaseEntityActivate = ;
-    CBaseEntitySpawn = ;
+    m_EntPtrArray = 48; // CServerTools::GetIServerEntity
+    //CBaseEntityActivate = ;
 
     // libvstdlib.so
 
@@ -183,7 +175,6 @@ void Portal2::LoadOffsets()
     DisableClipping = ; // CMatSystemSurface
     Paint = 15; // CEngineVGui
 
-    DrawGetTextureId = ; // CMatSystemSurface
     DrawGetTextureFile = ; // CMatSystemSurface
     DrawSetTextureFile = 35; // CMatSystemSurface
     DrawSetTextureRGBA = 36; // CMatSystemSurface

@@ -13,7 +13,6 @@ extern int GetScreenSize;
 extern int ClientCmd;
 extern int GetActiveSplitScreenPlayerSlot;
 extern int RenderView;
-extern int HudUpdate;
 
 // ConVar
 extern int InternalSetValue;
@@ -34,8 +33,6 @@ extern int DisableClipping;
 extern int StartDrawing;
 extern int FinishDrawing;
 
-extern int DrawGetTextureId;
-extern int DrawGetTextureFile;
 extern int DrawSetTextureFile;
 extern int DrawSetTextureRGBA;
 extern int DrawSetTexture;
@@ -61,7 +58,6 @@ extern int TraceRay;
 
 // IEngineTool
 extern int PrecacheModel;
-extern int GetWorldToScreenMatrixForView;
 
 // CSchemeManager
 extern int GetIScheme;
@@ -110,6 +106,4 @@ extern int ProcessMovement;
 extern int UTIL_PlayerByIndex;
 extern int gpGlobals;
 extern int m_EntPtrArray;
-extern int CBaseEntityActivate;
-extern int CBaseEntitySpawn;
 }
