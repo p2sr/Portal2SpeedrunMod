@@ -117,7 +117,7 @@ void Portal2::LoadOffsets()
     AutoCompletionFunc = 37; // listdemo_CompletionFunc
     ClientCommand = 39; // CVEngineServer
     TraceRay = 5; // IEngineTrace
-    NextParticleSystem = ; //IClientTools
+    NextParticleSystem = 55; //IClientTools
     ProcessMovement = 2; // CGameMovement
     m_nTickBase = 3816; // CBaseEntity
     m_bDucking = 81; // CBaseEntity
@@ -130,7 +130,7 @@ void Portal2::LoadOffsets()
     GetHud = 104; // cc_leaderboard_enable
     FindElement = 120; // cc_leaderboard_enable
     ChatPrintf = 25; // CBaseHudChat
-    RenderView = ;
+    RenderView = 26;
 
     // server.so
     m_hActiveWeapon = 2164; // CBaseEntity
@@ -152,7 +152,7 @@ void Portal2::LoadOffsets()
 
     // vscript.so
 
-    CreateVM = ;
+    CreateVM = 8;
 
     // vgui2.so
 
@@ -172,10 +172,9 @@ void Portal2::LoadOffsets()
     FinishDrawing = 627; // CMatSystemSurface::PaintTraverseEx
     DrawColoredText = 160; // CMatSystemSurface
     DrawTextLen = 163; // CMatSystemSurface
-    DisableClipping = ; // CMatSystemSurface
+    DisableClipping = 156; // CMatSystemSurface
     Paint = 15; // CEngineVGui
 
-    DrawGetTextureFile = ; // CMatSystemSurface
     DrawSetTextureFile = 35; // CMatSystemSurface
     DrawSetTextureRGBA = 36; // CMatSystemSurface
     DrawSetTexture = 37; // CMatSystemSurface
