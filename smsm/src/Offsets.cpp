@@ -73,7 +73,6 @@ int GetFont;
 int NextParticleSystem;
 
 // CBaseEntity
-int m_fFlags;
 int m_nTickBase;
 int m_bDucking;
 int m_hActiveWeapon;

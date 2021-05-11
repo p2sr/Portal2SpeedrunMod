@@ -33,7 +33,6 @@ void Portal2::LoadOffsets()
     TraceRay = 5; // IEngineTrace
     NextParticleSystem = 54; //IClientTools
     ProcessMovement = 1; // CGameMovement
-    m_fFlags = 204; // CBaseEntity
     m_nTickBase = 3792; // CBaseEntity
     m_bDucking = 2272; // CBaseEntity
     m_hUseEntity = 2960; // CBaseEntity
@@ -117,7 +116,7 @@ void Portal2::LoadOffsets()
     CCommandBufferSize = 9556; // Cbuf_AddText
     m_bWaitEnabled = 8265; // CCommandBuffer::AddText
     GetActiveSplitScreenPlayerSlot = 127; // CEngineClient
-    SetSignonState = ; // CClientState
+    SetSignonState = 36; // CClientState
     HostState_OnClientConnected = 1523; // CClientState::SetSignonState
     hoststate = 9; // HostState_OnClientConnected
     AutoCompletionFunc = 37; // listdemo_CompletionFunc
@@ -125,10 +124,9 @@ void Portal2::LoadOffsets()
     TraceRay = 5; // IEngineTrace
     NextParticleSystem = ; //IClientTools
     ProcessMovement = 2; // CGameMovement
-    m_fFlags = ; // CBaseEntity
     m_nTickBase = ; // CBaseEntity
-    m_bDucking = ; // CBaseEntity
-    m_hUseEntity = ; // CBaseEntity
+    m_bDucking = 81; // CBaseEntity
+    m_hUseEntity = 2984; // CBaseEntity
     GetScreenSize = 5; // CEngineClient
     PrecacheModel = 61; // IEngineTool
     GetWorldToScreenMatrixForView = ; // IEngineTool
@@ -142,12 +140,12 @@ void Portal2::LoadOffsets()
     HudUpdate = ;
 
     // server.so
-    m_hActiveWeapon = ; // CBaseEntity
-    m_bCanFirePortal1 = ; // CBaseEntity
+    m_hActiveWeapon = 2164; // CBaseEntity
+    m_bCanFirePortal1 = 1524; // CBaseEntity
     UTIL_PlayerByIndex = 61; // CServerGameDLL::Think
     gpGlobals = 12; // UTIL_PlayerByIndex
     Think = 31; // CServerGameDLL
-    m_hGroundEntity = ; // CBaseEntity
+    m_hGroundEntity = 352; // CBaseEntity
     GetIServerEntity = 2; // CServerTools
     m_EntPtrArray = ; // CServerTools::GetIServerEntity
     CBaseEntityActivate = ;

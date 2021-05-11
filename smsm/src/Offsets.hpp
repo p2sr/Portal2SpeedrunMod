@@ -73,7 +73,6 @@ extern int GetFont;
 extern int NextParticleSystem;
 
 // CBaseEntity
-extern int m_fFlags;
 extern int m_nTickBase;
 extern int m_bDucking;
 extern int m_hActiveWeapon;
