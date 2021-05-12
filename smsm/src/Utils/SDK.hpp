@@ -2901,6 +2901,27 @@ FUNC_GENERATE_ALL(DEFINE_CONST_MEMBER_FUNC_TYPE_DEDUCER);
 template <typename FUNCPTR_TYPE>
 inline void* ScriptConvertFuncPtrToVoid(FUNCPTR_TYPE pFunc)
 {
+#ifndef _WIN32
+    static_assert(sizeof (FUNCPTR_TYPE) == sizeof (void*) * 2 || sizeof (FUNCPTR_TYPE) == sizeof (void*));
+    if (sizeof (FUNCPTR_TYPE) == 4) {
+        union {
+            FUNCPTR_TYPE pFunc;
+            void *v;
+        } u = { pFunc };
+        return u.v;
+    } else {
+        union {
+            FUNCPTR_TYPE pFunc;
+            struct {
+                void *v;
+                int32_t iToc;
+            } fn8;
+        } u = { pFunc };
+        if (!u.fn8.iToc) return u.fn8.v;
+        Assert(0);
+    }
+#endif
+
     if ((sizeof(FUNCPTR_TYPE) == sizeof(void*))) {
         union FuncPtrConvert {
             void* p;
@@ -2981,6 +3002,28 @@ inline void* ScriptConvertFuncPtrToVoid(FUNCPTR_TYPE pFunc)
 template <typename FUNCPTR_TYPE>
 inline FUNCPTR_TYPE ScriptConvertFuncPtrFromVoid(void* p)
 {
+#ifndef _WIN32
+    static_assert(sizeof (FUNCPTR_TYPE) == sizeof (void*) * 2 || sizeof (FUNCPTR_TYPE) == sizeof (void*));
+    if (sizeof (FUNCPTR_TYPE) == 4) {
+        union {
+            void *v;
+            FUNCPTR_TYPE pFunc;
+        } u = { p };
+        return u.pFunc;
+    } else {
+        union {
+            struct {
+                void *v;
+                int32_t iToc;
+            } fn8;
+            FUNCPTR_TYPE pFunc;
+        } u;
+        u.pFunc = 0;
+        u.fn8.v = p;
+        u.fn8.iToc = 0;
+        return u.pFunc;
+    }
+#endif
     if ((sizeof(FUNCPTR_TYPE) == sizeof(void*))) {
         union FuncPtrConvert {
             void* p;
