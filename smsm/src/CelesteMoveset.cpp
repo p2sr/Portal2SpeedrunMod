@@ -463,14 +463,19 @@ void CelesteMoveset::ProcessMovementWallclimb(void* pPlayer, CMoveData* pMove, f
     //visually grab the wall by internally replacing convar variables
     float originalVmOffset = std::stof(viewmodel_offset_z.ThisPtr()->m_pszString);
     float currentVmOffset = viewmodel_offset_z.ThisPtr()->m_fValue;
+    static int oldCrosshair = -1;
     if (holdingWall) {
-        crosshair.ThisPtr()->m_nValue = 0;
+        if (oldCrosshair == -1) oldCrosshair = crosshair.GetInt();
+        crosshair.SetValue(0);
         const float lowerEnd = -15;
         if (currentVmOffset > lowerEnd)currentVmOffset -= 1.5;
         if (currentVmOffset < lowerEnd)currentVmOffset = lowerEnd;
         viewmodel_offset_z.ThisPtr()->m_fValue = currentVmOffset;
     }else{
-        crosshair.ThisPtr()->m_nValue = (int)crosshair.ThisPtr()->m_fValue;
+        if (oldCrosshair != -1) {
+            crosshair.SetValue(oldCrosshair);
+            oldCrosshair = -1;
+        }
         if (currentVmOffset < originalVmOffset)currentVmOffset += 2.0;
         if (currentVmOffset > originalVmOffset)currentVmOffset = originalVmOffset;
     }
