@@ -30,7 +30,7 @@ VScript::VScript()
     : Module() {
 }
 bool VScript::Init() {
-    this->scriptmanager = Interface::Create(MODULE("vscript"), "VScriptManager0");
+    this->scriptmanager = Interface::Create(MODULE("vscript"), "VScriptManager009");
     if (this->scriptmanager) {
         this->scriptmanager->Hook(VScript::CreateVM_Hook, VScript::CreateVM, Offsets::CreateVM);
     }

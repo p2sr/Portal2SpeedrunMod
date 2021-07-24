@@ -62,7 +62,7 @@ Client::Client()
 bool Client::Init()
 {
 
-    this->g_ClientDLL = Interface::Create(this->Name(), "VClient0");
+    this->g_ClientDLL = Interface::Create(this->Name(), "VClient016");
     if (this->g_ClientDLL) {
         this->g_ClientDLL->Hook(Client::RenderView_Hook, Client::RenderView, Offsets::RenderView);
     }

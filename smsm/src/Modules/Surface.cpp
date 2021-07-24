@@ -80,7 +80,7 @@ int Surface::GetHeight() {
 
 bool Surface::Init()
 {
-    this->matsurface = Interface::Create(this->Name(), "VGUI_Surface0", false);
+    this->matsurface = Interface::Create(this->Name(), "VGUI_Surface031", false);
     if (this->matsurface) {
         this->DrawSetColor = matsurface->Original<_DrawSetColor>(Offsets::DrawSetColor);
         this->DrawFilledRect = matsurface->Original<_DrawFilledRect>(Offsets::DrawFilledRect);

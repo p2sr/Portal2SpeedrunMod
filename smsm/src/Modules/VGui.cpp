@@ -53,12 +53,12 @@ bool VGui::Init()
     huds.push_back(staminaHud = new StaminaHud());
     huds.push_back(celesteBerryHud = new CelesteBerryHud());
 
-    this->enginevgui = Interface::Create(this->Name(), "VEngineVGui0");
+    this->enginevgui = Interface::Create(this->Name(), "VEngineVGui001");
     if (this->enginevgui) {
         this->enginevgui->Hook(VGui::Paint_Hook, VGui::Paint, Offsets::Paint);
     }
 
-    if (auto g_pVGuiSchemeManager = Interface::Create(MODULE("vgui2"), "VGUI_Scheme0", false)) {
+    if (auto g_pVGuiSchemeManager = Interface::Create(MODULE("vgui2"), "VGUI_Scheme010", false)) {
         using _GetIScheme = void* (__func*)(void* thisptr, unsigned long scheme);
         auto GetIScheme = g_pVGuiSchemeManager->Original<_GetIScheme>(Offsets::GetIScheme);
 

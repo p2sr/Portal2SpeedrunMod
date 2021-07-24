@@ -99,7 +99,7 @@ void* Interface::GetPtr(const char* filename, const char* interfaceSymbol)
         return nullptr;
     }
 
-    auto CreateInterface = Memory::GetSymbolAddress(handle, "CreateInterface");
+    auto CreateInterface = Memory::GetSymbolAddress<CreateInterfaceFn>(handle, "CreateInterface");
     Memory::CloseModuleHandle(handle);
 
     if (!CreateInterface) {
@@ -107,21 +107,12 @@ void* Interface::GetPtr(const char* filename, const char* interfaceSymbol)
         return nullptr;
     }
 
-    auto CreateInterfaceInternal = Memory::Read((uintptr_t)CreateInterface + CreateInterfaceInternal_Offset);
-    auto s_pInterfaceRegs = **reinterpret_cast<InterfaceReg***>(CreateInterfaceInternal + s_pInterfaceRegs_Offset);
+    int ret;
+    void *fn = CreateInterface(interfaceSymbol, &ret);
 
-    void* result = nullptr;
-    for (auto& current = s_pInterfaceRegs; current; current = current->m_pNext) {
-        if (std::strncmp(current->m_pName, interfaceSymbol, std::strlen(interfaceSymbol)) == 0) {
-            result = current->m_CreateFn();
-            //console->DevMsg("smsm: Found interface %s at %p in %s!\n", current->m_pName, result, filename);
-            break;
-        }
-    }
-
-    if (!result) {
+    if (ret) {
         console->DevWarning("smsm: Failed to find interface with symbol %s in %s!\n", interfaceSymbol, filename);
         return nullptr;
     }
-    return result;
+    return fn;
 }

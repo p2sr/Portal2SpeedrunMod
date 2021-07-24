@@ -15,7 +15,7 @@ Engine::Engine()
 }
 bool Engine::Init()
 {
-    this->engineClient = Interface::Create(this->Name(), "VEngineClient0", false);
+    this->engineClient = Interface::Create(this->Name(), "VEngineClient015", false);
 
     if (this->engineClient) {
         this->GetScreenSize = this->engineClient->Original<_GetScreenSize>(Offsets::GetScreenSize);
@@ -28,11 +28,19 @@ bool Engine::Init()
         if (cl) {
             auto SetSignonState = cl->Original(Offsets::SetSignonState);
             auto HostState_OnClientConnected = Memory::Read(SetSignonState + Offsets::HostState_OnClientConnected);
+#ifdef _WIN32
             this->hoststate = Memory::Deref<CHostState*>(HostState_OnClientConnected + Offsets::hoststate);
+#else
+            this->hoststate = (CHostState *)(HostState_OnClientConnected + 5 + *(uint32_t *)(HostState_OnClientConnected + 6) + *(uint32_t *)(HostState_OnClientConnected + 15));
+#endif
         }
 
         Memory::Read<_Cbuf_AddText>(ClientCmd + Offsets::Cbuf_AddText, &this->Cbuf_AddText);
+#ifdef _WIN32
         Memory::Deref<void*>((uintptr_t)this->Cbuf_AddText + Offsets::s_CommandBuffer, &this->s_CommandBuffer);
+#else
+        this->s_CommandBuffer = (void *)((uintptr_t)this->Cbuf_AddText + 9 + *(uint32_t *)((uintptr_t)this->Cbuf_AddText + 11) + *(uint32_t *)((uintptr_t)this->Cbuf_AddText + 71));
+#endif
 
         if (this->s_CommandBuffer) {
             auto m_bWaitEnabled = reinterpret_cast<bool*>((uintptr_t)s_CommandBuffer + Offsets::m_bWaitEnabled);
@@ -46,7 +54,7 @@ bool Engine::Init()
         }
     }
 
-    if (auto g_VEngineServer = Interface::Create(this->Name(), "VEngineServer0", false)) {
+    if (auto g_VEngineServer = Interface::Create(this->Name(), "VEngineServer022", false)) {
         this->ClientCommand = g_VEngineServer->Original<_ClientCommand>(Offsets::ClientCommand);
     }
 
