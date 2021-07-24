@@ -125,7 +125,7 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
 
     //check for dashing
     if (dashRequested > 0) {
-        int health = *reinterpret_cast<int*>((uintptr_t)pPlayer + 528);
+        int health = *reinterpret_cast<int*>((uintptr_t)pPlayer + Offsets::m_iHealth);
         if (dashesLeft>0 && dashing==0 && dashingCooldown==0 && health>0) {
             if (grounded) dashedOnGround = true;
             else dashedOnGround = false;

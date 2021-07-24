@@ -75,6 +75,7 @@ extern int m_hActiveWeapon;
 extern int m_bCanFirePortal1;
 extern int m_hUseEntity;
 extern int m_hGroundEntity;
+extern int m_iHealth;
 
 // CServerGameDLL
 extern int Think;

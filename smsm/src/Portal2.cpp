@@ -53,6 +53,7 @@ void Portal2::LoadOffsets()
     gpGlobals = 14; // UTIL_PlayerByIndex
     Think = 31; // CServerGameDLL
     m_hGroundEntity = 344; // CBaseEntity
+    m_iHealth = 528; // CBaseEntity
     GetIServerEntity = 1; // CServerTools
     m_EntPtrArray = 61; // CServerTools::GetIServerEntity
     //CBaseEntityActivate = 37;
@@ -139,6 +140,7 @@ void Portal2::LoadOffsets()
     gpGlobals = 12; // UTIL_PlayerByIndex
     Think = 31; // CServerGameDLL
     m_hGroundEntity = 352; // CBaseEntity
+    m_iHealth = 536; // CBaseEntity
     GetIServerEntity = 2; // CServerTools
     m_EntPtrArray = 48; // CServerTools::GetIServerEntity
     //CBaseEntityActivate = ;

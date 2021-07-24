@@ -75,6 +75,7 @@ int m_hActiveWeapon;
 int m_bCanFirePortal1;
 int m_hUseEntity;
 int m_hGroundEntity;
+int m_iHealth;
 
 // CServerGameDLL
 int Think;
