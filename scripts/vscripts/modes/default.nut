@@ -944,7 +944,7 @@ function SpeedrunModeLoad(){
       break
     case "sp_a4_laser_platform":
       //make platform annoyingly fast YOURE WELCOME BAILEY
-      local speed = 1000;
+      local speed = 175;
       EntFire("laser_02_train", "SetMaxSpeed", speed)
       EntFire("laser_02_train_start_logic", "AddOutput", "OnTrigger laser_02_train:SetSpeedReal:"+speed+":0.01:-1");
 
