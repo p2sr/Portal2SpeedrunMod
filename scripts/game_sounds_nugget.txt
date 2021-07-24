@@ -5,7 +5,7 @@
 
 "music.sp_a2_dual_lasers_r1"
 {
-	"wave"			"*music/hoppin.mp3"
+	"wave"			"*music/hoppin.wav"
 }
 
 "music.sp_a5_credits"
@@ -13,7 +13,7 @@
 	"channel"		"CHAN_STATIC"
 	"soundlevel"	"SNDLVL_NONE"
 	"volume"		"1.0"
-	"wave"			"*music/credits.mp3"
+	"wave"			"*music/credits.wav"
 
 	"soundentry_version" "2"
 	"operator_stacks"
@@ -30,7 +30,7 @@
 	"channel"		"CHAN_STATIC"
 	"soundlevel"	"SNDLVL_NONE"
 	"volume"		"1.0"
-	"wave"			"*music/caramia.mp3"
+	"wave"			"*music/caramia.wav"
 
 	"soundentry_version" "2"
 	"operator_stacks"
@@ -48,7 +48,7 @@
 	"soundlevel"	"SNDLVL_65dB"
 	"volume"		"1.0"
 
-	"wave"	"*music/speedrun.mp3"
+	"wave"	"*music/speedrun.wav"
 
 	"soundentry_version" "2"
 	"operator_stacks"
@@ -168,7 +168,7 @@
 	"pitch"      	"PITCH_NORM"
 	"soundlevel"	"SNDLVL_NONE"
 	"volume"		"1.0"
-	"wave"			")celeste/space_whistle.mp3"
+	"wave"			")celeste/space_whistle.wav"
 }
 
 
@@ -182,5 +182,5 @@
 	"pitch"      	"PITCH_NORM"
 	"soundlevel"	"SNDLVL_70db"
 	"volume"		"1.0"
-	"wave"			")cubecore/fuckthisgame.mp3"
+	"wave"			")cubecore/fuckthisgame.wav"
 }
