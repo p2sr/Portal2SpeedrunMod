@@ -3,8 +3,8 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 
 
 ## Installation:
-0. Note: for now, this mod is for Windows only. Sorry, Linux and Mac users :/ Also, make sure you have original game (Portal 2, duh) installed on Steam.
-1. Download newest release archive from [releases tab](https://github.com/Krzyhau/Portal2SpeedrunMod/releases). Do **NOT** download the repository: it contains uncompiled version of plugin and resource files, so it most likely won't work (if even launch) properly.
+0. Note: for now, this mod is for Windows and Linux users only. Sorry, Mac users :/ Also, make sure you have original game (Portal 2, duh) installed on Steam.
+1. Download newest release archive from [releases tab](https://github.com/p2sr/Portal2SpeedrunMod/releases). Do **NOT** download the repository: it contains uncompiled version of plugin and resource files, so it most likely won't work (if even launch) properly.
 2. Unzip `Portal 2 Speedrun Mod` folder into `sourcemods` directory (its default location is `Steam/steamapps/sourcemods/`).
 3. Restart Steam.
 4. A new game, called "Portal 2 Speedrun Mod" should appear in your library.
