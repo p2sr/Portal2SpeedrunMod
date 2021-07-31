@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <cmath>
 #include <cstring>
 #include <cstdint>
@@ -7,6 +8,7 @@
 #ifdef _WIN32
 #define __funcc __thiscall
 #define ALIGNED(x) __declspec(align(x))
+#define strdup _strdup
 #else
 #define __funcc __attribute__((__cdecl__))
 #define ALIGNED(x) __attribute__((aligned(x)))
