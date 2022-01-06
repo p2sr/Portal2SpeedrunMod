@@ -8,6 +8,5 @@ smsm/src/Release
 smsm/obj
 smsm/smsm.so
 smsm/config.mk
-gameinfo.txt
 RUN.bat
 .gitconfig
