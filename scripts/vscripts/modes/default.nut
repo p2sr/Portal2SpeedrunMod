@@ -93,6 +93,10 @@ function SpeedrunModeLoad(){
       EntFire("glass_floor_brush", "Kill", 0)
       //GetPlayer().SetOrigin(Vector(-1232,4440,2770))
       GetPlayer().SetOrigin(Vector(-1335,4166,2945))
+
+      // stop everything being dark as shit
+      EntFire("@rl_poststasis_exposure_reload", "Enable")
+      EntFire("@rl_poststasis_exposure_reload", "Trigger")
       
       DialogueMute_ForceFor(15);
       EntFire("@exit_door-testchamber_door", "Open")
