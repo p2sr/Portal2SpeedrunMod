@@ -1053,8 +1053,10 @@ if(GetMapName()=="celeste_moonroom"){
 
 
     CURRENT_MAP <- -1;
+    IS_WARPING <- false;
 
     function DisplayBerryList(mapID){
+        IS_WARPING = false
         DisplayClear();
         local map = {filename="???",name="(undefined)"};
         if(mapID>=0 && mapID<MAPS.len())map = MAPS[mapID];
@@ -1121,6 +1123,7 @@ if(GetMapName()=="celeste_moonroom"){
         if(WowDisplayed)return;
         DisplayClear();
         BerryScanningInProgress = (state != 7);
+        CURRENT_MAP = -1;
         local texts = [
             "Initiating berry count...",
             "Counting red berries...",
@@ -1215,25 +1218,16 @@ if(GetMapName()=="celeste_moonroom"){
     //DisplayWow();
 
 
-    //warping functions
-    WARPING_MAP <- "";
-
     function DisplayWarpLocation(){
         DisplayClear();
-        if(WARPING_MAP != ""){
+        if(CURRENT_MAP != -1){
             DisplayWord(-7.2,-3.5,100,"Warper activated.");
-            local mapname = "";
-            foreach(i,m in MAPS){
-                if(m.filename==WARPING_MAP){
-                    mapname = m.name;
-                    break;
-                }
-            }
+            local mapname = MAPS[CURRENT_MAP].name;
             DisplayWord(-10,-2,50,"Location: ");
             DisplayWord(-2.5,-2,50,mapname,Vector(1,1,0.5));
 
             //drawing berries
-            foreach(i, berry in BERRIES[WARPING_MAP]){
+            foreach(i, berry in BERRIES[MAPS[CURRENT_MAP].filename]){
                 local berryChar = "[";
                 if(berry.collected){
                     if(berry.golden)berryChar = "#";
@@ -1272,27 +1266,39 @@ if(GetMapName()=="celeste_moonroom"){
         local unfinishedMaps = {};
         local mapCount = 0;
         local currentMap = -1;
-        foreach( i, map in MAPS){
-            if(map.filename!="celeste_moonroom" && map.filename in BERRIES)foreach(index, berry in BERRIES[map.filename]){
-                if(!berry.collected){
-                    unfinishedMaps[mapCount] <- map.filename;
-                    if(map.filename==WARPING_MAP)currentMap = mapCount;
-                    mapCount++;
-                    break;
+
+        if (IS_WARPING || CURRENT_MAP < 0 || MAPS[CURRENT_MAP].filename == "celeste_moonroom") {
+            local nextMap = -1;
+            local firstMap = -1;
+            foreach(i, map in MAPS) {
+                if (map.filename != "celeste_moonroom" && map.filename in BERRIES) {
+                    local unfinished = false;
+                    foreach (index, berry in BERRIES[map.filename]) {
+                        if (!berry.collected) {
+                            unfinished = true;
+                            break;
+                        }
+                    }
+
+                    if (firstMap == -1 && unfinished) firstMap = i;
+                    if (i > CURRENT_MAP && unfinished) nextMap = i;
+
+										if (nextMap != -1) break;
                 }
             }
+            if (nextMap == -1 && firstMap != -1) nextMap = firstMap;
+            CURRENT_MAP = nextMap;
         }
-        if(currentMap>=mapCount-1)currentMap = -1;
-        if(mapCount > 0){
-            WARPING_MAP = unfinishedMaps[currentMap+1];
-            EntFire("warper_prepare", "Trigger");
-        }
+
+				IS_WARPING = true;
+
+        EntFire("warper_prepare", "Trigger");
 
         DisplayWarpLocation();
     }
 
     function WarpToLevel(){
-        SendToConsole("changelevel "+WARPING_MAP);
+        SendToConsole("changelevel "+MAPS[CURRENT_MAP].filename);
     }
 }
 
