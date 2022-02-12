@@ -978,6 +978,25 @@ function SpeedrunModeLoad(){
 
       EntFire("start_chamber_destruction", "Kill")
 
+      // kill brush entities that make portal placement suck
+
+      // these brush entities have 0,0,0 as their origin so we have to
+      // iterate and check their centers
+
+      for (local ent = Entities.FindByClassname(null, "func_portal_bumper"); ent; ent = Entities.FindByClassname(ent, "func_portal_bumper")) {
+        if (ent.GetCenter().ToKVString() == Vector(-944, 1088, -188).ToKVString()) {
+          EntFireByHandle(ent, "Kill", "0", 0, null, null)
+          break
+        }
+      }
+
+      for (local ent = Entities.FindByClassname(null, "func_noportal_volume"); ent; ent = Entities.FindByClassname(ent, "func_noportal_volume")) {
+        if (ent.GetCenter().ToKVString() == Vector(-974, 1136, -188).ToKVString()) {
+          EntFireByHandle(ent, "Kill", "0", 0, null, null)
+          break
+        }
+      }
+
       //fix dialogue -4448_01
       EntFire("@glados", "RunScriptCode", "delete SceneTable[SceneTable[SceneTableLookup[-4448]].next].next")
       break
