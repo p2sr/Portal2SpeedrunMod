@@ -44,6 +44,7 @@ In the final version, these changes will be available:
 - **Singleplayer co-op** - Co-op but your partner went to the toilet and never came back.
 
 ## Credits:
+- Krzyhau - main developer.
 - Blenderiste 09 - Chapter 9 scripting.
 - Big D - constantly motivating me to finish this mod.
 - NeKz - **HUGE** help with Speedrun Mod Simple Modifier plugin.
