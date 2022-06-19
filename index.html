@@ -35,7 +35,7 @@
             </div>
             <div class="side-links col-sm-12 col-md-3">
                 <a href="https://discordapp.com/invite/hRwE4Zr" title="Join the discord server!" target="_blank"><i class="fa fa-discord"></i></a>
-                <a href="https://github.com/Krzyhau/Portal2SpeedrunMod" title="GitHub repository" target="_blank"><i class="fa fa-github"></i></a>
+                <a href="https://github.com/p2sr/Portal2SpeedrunMod" title="GitHub repository" target="_blank"><i class="fa fa-github"></i></a>
             </div>
         </nav>
     </div>
@@ -91,7 +91,7 @@
                     <ul>
                         <li>Most of the game's downtime is removed or shortened (like elevators, doors etc.)</li>
                         <li>Most of cutscenes were removed or shortened (like Tube Ride, Core etc.)</li>
-                        <li>A full list of every change can be found <a target="_blank" href="https://github.com/Krzyhau/Portal2SpeedrunMod/tree/master/doc/normalpercentlist.md">here</a>.</li>
+                        <li>A full list of every change can be found <a target="_blank" href="https://github.com/p2sr/Portal2SpeedrunMod/tree/master/doc/normalpercentlist.md">here</a>.</li>
                     </ul>
                 </p>
             </div>
@@ -207,7 +207,7 @@
         //creating download link using github api
         $(".download-info").addClass("loading");
         let http = new XMLHttpRequest();
-        let githuburl = 'https://api.github.com/repos/Krzyhau/Portal2SpeedrunMod/releases/latest';
+        let githuburl = 'https://api.github.com/repos/p2sr/Portal2SpeedrunMod/releases/latest';
         http.open("GET", githuburl);
         http.send();
         http.onreadystatechange = (e) => { try{
