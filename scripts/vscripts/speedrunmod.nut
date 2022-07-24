@@ -99,14 +99,29 @@ SPEEDRUN_MODES[0] <- ["default"];
 SPEEDRUN_MODES[1] <- ["default", "fog_percent"];
 SPEEDRUN_MODES[2] <- ["default", "celeste"];
 //SPEEDRUN_MODES[3] <- ["default", "cubecore"];
+SPEEDRUN_MODES[4] <- ["reverse"];
 
 //import proper scripts
 if(IsSMSMActive()){
-  DoIncludeScript("modes/default", self.GetScriptScope());
   switch(smsm.GetMode()){
-    case 1: DoIncludeScript("modes/fog", self.GetScriptScope()); break;
-    case 2: DoIncludeScript("modes/celeste", self.GetScriptScope()); break;
-    //case 3: DoIncludeScript("modes/cubecore", self.GetScriptScope()); break;
+    case 0:
+      DoIncludeScript("modes/default", self.GetScriptScope());
+      break;
+    case 1:
+      DoIncludeScript("modes/default", self.GetScriptScope());
+      DoIncludeScript("modes/fog", self.GetScriptScope());
+      break;
+    case 2:
+      DoIncludeScript("modes/default", self.GetScriptScope());
+      DoIncludeScript("modes/celeste", self.GetScriptScope());
+      break;
+    /* case 3:
+      DoIncludeScript("modes/default", self.GetScriptScope());
+      DoIncludeScript("modes/cubecore", self.GetScriptScope());
+      break; */
+    case 4:
+      DoIncludeScript("modes/reverse", self.GetScriptScope());
+      break;
   }
 }
 
@@ -194,4 +209,3 @@ function SpeedrunModThink(){
 function DeltaTime(){
   return NEW_TIME-OLD_TIME
 }
-

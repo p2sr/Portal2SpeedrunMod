@@ -21,6 +21,20 @@
 		"command"	"sm_mode 2;map sp_a1_intro1"
 	}
 	"space"{}
+	"p2r3_cat"
+	{
+		"title"	"PORTALRUNNER MODS:"
+		"subtitle"	"Mods created by PortalRunner."
+		"pic"	"srmod/portalrunner-mods"
+	}
+	"reverse"
+	{
+		"title"		"Reverse Mod"
+		"subtitle"	"Chell goes back to sleep."
+		"pic"		"srmod/menu_modes/reverse"
+		"command"	"sm_mode 4;map sp_a4_finale4"
+	}
+	"space"{}
 	"ext_cat"
 	{
 		"title"		"MISCELLANEOUS:"
