@@ -34,6 +34,13 @@
 		"pic"		"srmod/menu_modes/reverse"
 		"command"	"sm_mode 4;map sp_a4_finale4"
 	}
+	"floorislava"
+	{
+		"title"		"Floor is Lava"
+		"subtitle"	"Don't stop hopping!"
+		"pic"		"srmod/menu_modes/floorislava"
+		"command"	"sm_mode 5;map sp_a1_intro1"
+	}
 	"space"{}
 	"ext_cat"
 	{
