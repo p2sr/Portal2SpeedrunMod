@@ -100,6 +100,7 @@ SPEEDRUN_MODES[1] <- ["default", "fog_percent"];
 SPEEDRUN_MODES[2] <- ["default", "celeste"];
 //SPEEDRUN_MODES[3] <- ["default", "cubecore"];
 SPEEDRUN_MODES[4] <- ["reverse"];
+SPEEDRUN_MODES[5] <- ["default", "floorislava"];
 
 //import proper scripts
 if(IsSMSMActive()){
@@ -121,6 +122,10 @@ if(IsSMSMActive()){
       break; */
     case 4:
       DoIncludeScript("modes/reverse", self.GetScriptScope());
+      break;
+    case 5:
+      DoIncludeScript("modes/default", self.GetScriptScope());
+      DoIncludeScript("modes/floorislava", self.GetScriptScope());
       break;
   }
 }
