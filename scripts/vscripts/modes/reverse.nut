@@ -339,7 +339,7 @@ if("Entities" in this) {
 			    SendToConsole("mat_ambient_light_g 0");
 			    SendToConsole("mat_ambient_light_b 0");
 			    // local msg = "Thanks for playing Reverse mod!";
-			    SendToConsole("disconnect");
+			    SendToConsole("changelevel credits");
 			  }
 			}
 			reverse_maps["sp_a1_intro2"] <- function() {
@@ -3951,10 +3951,14 @@ if("Entities" in this) {
 
 					// particles
 					EntFire("sprinkler_system", "Start");
-					EntFire("background_fire1", "Start");
-					EntFire("background_fire2", "Start");
-					EntFire("background_fire3", "Start");
-					EntFire("background_fire4", "Start");
+					EntFire("background_fire1", "Start", "", 1);
+					EntFire("background_fire2", "Start", "", 1);
+					EntFire("background_fire3", "Start", "", 1);
+					EntFire("background_fire4", "Start", "", 1);
+					EntFire("background_fire1_sound", "PlaySound");
+					EntFire("background_fire2_sound", "PlaySound");
+					EntFire("background_fire3_sound", "PlaySound");
+					EntFire("background_fire4_sound", "PlaySound");
 
 					// release the player. and so it begins
 					EntFire("ending_vehicle", "unlock", "", 17.0);
