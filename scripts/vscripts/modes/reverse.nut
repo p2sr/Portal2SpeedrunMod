@@ -339,7 +339,7 @@ if("Entities" in this) {
 			    SendToConsole("mat_ambient_light_g 0");
 			    SendToConsole("mat_ambient_light_b 0");
 			    // local msg = "Thanks for playing Reverse mod!";
-			    SendToConsole("changelevel credits");
+			    SendToConsole("changelevel sp_a5_credits");
 			  }
 			}
 			reverse_maps["sp_a1_intro2"] <- function() {
