@@ -248,7 +248,7 @@ void CelesteBerryHud::Draw() {
     int font = vgui->GetDefaultFont() + 90;
 
     char counterText[128];
-    sprintf(counterText, "%d\0", displayBerryCount);
+    sprintf(counterText, "%d", displayBerryCount);
     const char* xText = "x ";
 
     int counterTextWidth = surface->GetFontLength(font, counterText) + 20;

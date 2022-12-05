@@ -147,7 +147,7 @@ void CelesteMoveset::ProcessMovementDashing(void* pPlayer, CMoveData* pMove, flo
             dir.x *= cos(pitch);
 
             //applying yaw rotation
-            Vector newDir{ dir.x * cos(yaw) + dir.y * sin(yaw), -dir.y * cos(yaw) + dir.x * sin(yaw), dir.z };
+            Vector newDir{ (float)(dir.x * cos(yaw) + dir.y * sin(yaw)), (float)(-dir.y * cos(yaw) + dir.x * sin(yaw)), (float)(dir.z) };
 
             //hyperdashing
             //if (newDir.z < 0) {
@@ -306,7 +306,6 @@ bool CelesteMoveset::IsPlaceSuitableForWallgrab(void * player, Vector pos, float
     Vector posProj(posMid.x + pn.x * d, posMid.y + pn.y * d, posMid.z + pn.z * d);
 
     //checking if grabbed surface is flat
-    Vector pnUp = (pn ^ Vector(0, 0, 1)) ^ pn;
     Vector pnSide = (pn ^ Vector(1, 0, 0)) ^ pn;
 
     short grabPlaces = 0;

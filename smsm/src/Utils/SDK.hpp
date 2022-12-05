@@ -2271,6 +2271,7 @@ template <typename T>
 inline const char* ScriptFieldTypeName()
 {
     T::using_unknown_script_type();
+    return "unknown_script_type";
 }
 
 #define DECLARE_NAMED_FIELDTYPE(fieldType, strName) \
