@@ -106,15 +106,15 @@ void Portal2::LoadOffsets()
     InternalSetFloatValue = 20; // ConVar
     InternalSetIntValue = 21; // ConVar
     ClientCmd = 7; // CEngineClient
-    GetClientStateFunction = 16; // CEngineClient::ClientCmd
-    Cbuf_AddText = 45; // CEngineClient::ClientCmd
-    s_CommandBuffer = 71; // Cbuf_AddText
+    GetClientStateFunction = 9; // CEngineClient::ClientCmd
+    Cbuf_AddText = 35; // CEngineClient::ClientCmd
+    s_CommandBuffer = 52; // Cbuf_AddText
     CCommandBufferSize = 9556; // Cbuf_AddText
     m_bWaitEnabled = 8265; // CCommandBuffer::AddText
     GetActiveSplitScreenPlayerSlot = 127; // CEngineClient
     SetSignonState = 36; // CClientState
-    HostState_OnClientConnected = 1503; // CClientState::SetSignonState
-    hoststate = 9; // HostState_OnClientConnected
+    HostState_OnClientConnected = 1275; // CClientState::SetSignonState
+    hoststate = 28; // HostState_OnClientConnected
     AutoCompletionFunc = 46; // listdemo_CompletionFunc
     ClientCommand = 39; // CVEngineServer
     TraceRay = 5; // IEngineTrace
@@ -128,16 +128,16 @@ void Portal2::LoadOffsets()
 
     // client.so
 
-    GetHud = 146; // cc_leaderboard_enable
-    FindElement = 161; // cc_leaderboard_enable
+    GetHud = 130; // cc_leaderboard_enable
+    FindElement = 143; // cc_leaderboard_enable
     ChatPrintf = 25; // CBaseHudChat
     RenderView = 26;
 
     // server.so
     m_hActiveWeapon = 2164; // CBaseEntity
     m_bCanFirePortal1 = 1524; // CBaseEntity
-    UTIL_PlayerByIndex = 70; // CServerGameDLL::Think
-    gpGlobals = 12; // UTIL_PlayerByIndex
+    UTIL_PlayerByIndex = 53; // CServerGameDLL::Think
+    gpGlobals = 9; // UTIL_PlayerByIndex
     Think = 31; // CServerGameDLL
     m_hGroundEntity = 352; // CBaseEntity
     m_iHealth = 536; // CBaseEntity
@@ -170,8 +170,8 @@ void Portal2::LoadOffsets()
     DrawSetTextColor = 24; // CMatSystemSurface
     GetFontTall = 72; // CMatSystemSurface
     PaintTraverseEx = 117; // CMatSystemSurface
-    StartDrawing = 559; // CMatSystemSurface::PaintTraverseEx
-    FinishDrawing = 430; // CMatSystemSurface::PaintTraverseEx
+    StartDrawing = 1341; // CMatSystemSurface::PaintTraverseEx
+    FinishDrawing = 355; // CMatSystemSurface::PaintTraverseEx
     DrawColoredText = 160; // CMatSystemSurface
     DrawTextLen = 163; // CMatSystemSurface
     DisableClipping = 156; // CMatSystemSurface
