@@ -13,7 +13,7 @@ Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedr
 ### Normal%
 - Most of the game's downtime is removed or shortened (like elevators, doors etc.)
 - Most of cutscenes were removed or shortened (like Tube Ride, Core etc.)
-- A full list of every change can be found [here](https://github.com/Krzyhau/Portal2SpeedrunMod/tree/master/doc/normalpercentlist.md).
+- A full list of every change can be found [here](https://github.com/p2sr/Portal2SpeedrunMod/blob/master/doc/normalpercentlist.md).
 
 ### Fog% (in beta testing)
 - Everything from Normal%.
