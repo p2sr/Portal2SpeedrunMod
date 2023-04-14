@@ -10,6 +10,7 @@ function StartCredits(){
     EntFire("music", "PlaySound", "", 1)
     EntFire("fadein", "FadeReverse", "", 50)
     EntFire(self.GetName(), "RunScriptCode", "EndCredits()", 53.5)
+    SendToConsole("mat_fullbright 0"); // dumb hack, idk why this happens
     if(("smsm" in this) && smsm.GetMode() == 2){
         CelesteEnding();
     }
