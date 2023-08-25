@@ -1,0 +1,19 @@
+"VertexLitGeneric"
+{
+	$basetexture "models/nintendo/marios_cap/hat.vtf"
+	$surfaceprop flesh
+	$model 1
+	
+	$basemapalphaphongmask 1
+	
+		"$phong" "1"
+	"$phongexponent" "1"
+	"$phongboost" ".1"	
+	"$phongfresnelranges"	"[.3 1 8]"
+	"$halflambert" "0"
+
+	"$rimlight" "1"												
+	"$rimlightexponent" "2"	
+	"$rimlightboost" "2"	
+	
+}

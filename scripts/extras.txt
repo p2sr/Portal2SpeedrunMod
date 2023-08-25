@@ -41,6 +41,13 @@
 		"pic"		"srmod/menu_modes/floorislava"
 		"command"	"sm_mode 5;map sp_a1_intro1"
 	}
+	"odyssey"
+	{
+		"title"		"Odyssey Mod"
+		"subtitle"	"Capture props, collect moons."
+		"pic"		"srmod/menu_modes/odyssey"
+		"command"	"sm_mode 6;map sp_a1_intro1"
+	}
 	"space"{}
 	"ext_cat"
 	{
