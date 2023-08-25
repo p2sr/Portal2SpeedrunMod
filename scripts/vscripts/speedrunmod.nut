@@ -101,6 +101,7 @@ SPEEDRUN_MODES[2] <- ["default", "celeste"];
 //SPEEDRUN_MODES[3] <- ["default", "cubecore"];
 SPEEDRUN_MODES[4] <- ["reverse"];
 SPEEDRUN_MODES[5] <- ["default", "floorislava"];
+SPEEDRUN_MODES[6] <- ["default", "smo"];
 
 //import proper scripts
 if(IsSMSMActive()){
@@ -126,6 +127,10 @@ if(IsSMSMActive()){
     case 5:
       DoIncludeScript("modes/default", self.GetScriptScope());
       DoIncludeScript("modes/floorislava", self.GetScriptScope());
+      break;
+    case 6:
+      DoIncludeScript("modes/default", self.GetScriptScope());
+      DoIncludeScript("modes/smo", self.GetScriptScope());
       break;
   }
 }

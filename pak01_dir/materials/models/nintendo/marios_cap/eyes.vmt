@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	$basetexture "models/nintendo/marios_cap/eyes.vtf"
+	$surfaceprop plastic
+	$model 1	
+	
+}
