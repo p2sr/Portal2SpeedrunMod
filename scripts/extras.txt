@@ -45,7 +45,7 @@
 	{
 		"title"		"Odyssey Mod"
 		"subtitle"	"Capture props, collect moons."
-		"pic"		"srmod/menu_modes/odyssey"
+		"pic"		"srmod/menu_modes/smo"
 		"command"	"sm_mode 6;map sp_a1_intro1"
 	}
 	"space"{}
