@@ -46,6 +46,7 @@ function spTransitionListFix(){
 
 function SpeedrunModePrecache(){
   //loading glass window model replacement ("removing" prop_static model for celeste mode)
+  smsm.PrecacheModel("models/props/vert_door/vert_door_frame.mdl", true);
   smsm.PrecacheModel("models/props_destruction/glass_broken_128x128_d_copy.mdl", true);
   self.PrecacheSoundScript("music.itsaspeedrun");
 }
@@ -122,6 +123,10 @@ function SpeedrunModeLoad(){
         EntFire("camera_intro","Kill")
         EntFire("cryo_fade_in_from_white", "Kill")
       }
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a1_intro2":
       //that one is not really needed since ele is already waiting, but im gonna leave it lol
@@ -145,6 +150,10 @@ function SpeedrunModeLoad(){
       EntFire("logic_make_blue_3", "AddOutput", "OnTrigger portal_blue_3:SetActivatedState:1:0.01:-1")
       EntFire("logic_make_blue_3", "AddOutput", "OnTrigger emitter_blue_3:Skin:1:0.01:-1")
       EntFire("logic_make_blue_3", "AddOutput", "OnTrigger shake_portal_spawn_room1a:StartShake::0.01:-1")
+      
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a1_intro3":
       //same as above, completely unnecessary stuff, but oh well
@@ -170,8 +179,10 @@ function SpeedrunModeLoad(){
 
       //dialogue fix
       //EntFire("glados_trigger", "Kill")
-      
 
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a1_intro4":
       //open portal in third room earlier
@@ -186,12 +197,15 @@ function SpeedrunModeLoad(){
       EntFire("fizzler1_disable_rl", "AddOutput", "OnTrigger section_2_portal_a1_rm3a:SetActivatedState:1:0:1")
       EntFire("fizzler1_disable_rl", "AddOutput", "OnTrigger section_2_portal_emitter_a1_rm3a:Skin:2:0:1")
       EntFire("fizzler1_disable_rl", "AddOutput", "OnTrigger section_2_shake_portal_spawn_a1_rm3a:StartShake::0:1")
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a1_intro5":
-      //faster portal
-      //EntFire("room_1_portal_activate_rl", "Trigger")
-      //EntFire("room_1_portal_activate_rl", "Kill", 0, 30)
-      //apparently not because bets is fat
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a1_intro6":
       //faster portal
@@ -203,6 +217,10 @@ function SpeedrunModeLoad(){
 
       //make door 3 open faster
       EntFire("room_1_door_close_rl" "AddOutput", "OnTrigger room_2_entry_door-door_open_relay:Trigger::0:1")
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a1_intro7":
       //spawn portal earlier
@@ -228,6 +246,16 @@ function SpeedrunModeLoad(){
       EntFire("sphere_filter", "Kill")
       break
     case "sp_a1_wakeup": 
+      // Delete starting door and replace with a non-solid open one
+      local door = GetEntity("transition_entry_door-door_1")
+      local pos = Vector(6976, 642, 452)
+      local ang = door.GetAngles()
+      local newDoor = Entities.CreateByClassname("prop_dynamic");
+
+      EntFireByHandle(door, "Kill", "", 0, null, null)
+      newDoor.SetOrigin(pos)
+      newDoor.SetAngles(ang.x, ang.y, ang.z)
+      newDoor.SetModel("models/props/vert_door/vert_door_frame.mdl")
       //HEKCING MESS, I DONT EVEN KNOW WHAT DOES WHAT, FORGOT TO COMMENT THIS AAAAAAAAGHGHH
       EntFire("@sphere", "Kill")
       EntFire("transition_entry_door-door_1", "SetPlaybackRate", 10)
@@ -248,31 +276,13 @@ function SpeedrunModeLoad(){
       EntFire("@FallingTrigger", "AddOutput", "OnStartTouch @music_piece_of_work:StopSound::0:1")
       EntFire("basement_breakers_prop_0", "SetAnimation", "breaker_shaft_open_hatch", 2)
 
-      /* 
-      //recreation of powerup initialization cutscene, but faster
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_prop_0:SetAnimation:breaker_shaft_rotate_90:1:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_bootup_wav:PlaySound::0:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger music_breakers_start:PlaySound::0:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_malfunction_1_wav:PlaySound::0:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger breaker_train:MoveToPathNode:breaker_train_path_4:1.2:1",0.0)
-      //EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger @glados:RunScriptCode:GladosPlayVcd(\"sp_a1_wakeupWakeupOops01\"):1.5:1",0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_prop_rotate:PlaySound::1:1",0.0)
-      //EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger @glados:RunScriptCode:GladosPlayVcd(\"sp_a1_wakeupWakeupOops03\"):6.3:1",0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger breaker_train:SetMaxSpeed:52:3.3:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_up:Trigger::3.3:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_cap_brush:Kill::4.3:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger shaft_blocker:Disable::4.3:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_aperture_door:Open::5.3:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger platform_areaportal:Open::5.3:1", 0.0)
-      //EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger glados_start:Trigger::13.3:1", 0.0)
-      */
+      //Give Betsrighter but not for Celeste mode because Bridge Intro would be made massively easier :(
+      if(smsm.GetMode() != 2){
+        local transitionTrigger = Entities.FindByClassnameNearest("trigger_once", Vector(6144, 3456, 904), 10)
+        EntFireByHandle(transitionTrigger, "AddOutput", "OnTrigger camera_ghostanim_2:Enable:0:0.4:1", 0, null, null)
+      }
 
       EntFire("basement_breakers_start", "Disable") //disabling old cutscene
-      /*
-      //allow player to get to the incinerator on their own
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger basement_breakers_upper_blocker:Disable::1:1", 0.0)
-      EntFire("do_not_touch_anything_trigger", "AddOutput" "OnTrigger relay_incinerator_open:Trigger::18:1", 0.0)
-      */
 
       //making portal disappear before level transition
       EntFire("@transition_from_map", "AddOutput", "OnTrigger viewmodel:DisableDraw::0:1", 0.0)
@@ -286,21 +296,19 @@ function SpeedrunModeLoad(){
       EntFire("incinerator_entry_portal_1", "SetLocalOrigin", "8976 1088 -616")
       EntFire("incinerator_entry_portal_1", "SetPartner", "incinerator_entry_portal_2")
       EntFire("incinerator_entry_portal_1", "Open")
-
-      //make beginning doors faster
-      FasterVertDoor("transition_entry_door")
-
       break
     case "sp_a2_intro":
-      //new spawn position
-      EntFire("camera_ghostAnim", "Disable", 0, 0.1)
-      EntFire("ghostAnim", "Kill", 0, 0.1)
+      // Have to minorly delay otherwise it just happens at the same time as the camera takes over
+      EntFire("camera_ghostAnim", "Disable", 0, 0.11)
+      //Have to murder the camera or else it will teleport the player later
+      EntFire("camera_ghostAnim", "kill", 0, 0.3)
+
       EntFire("@incinerator_entry_teleport", "Kill", 0)
       EntFire("relay_shake", "Trigger", null, 3)
       EntFire("ss_incinerator_fall", "FadeOut", 1, 3)
-      EntFire("!player", "RunScriptCode", "GetPlayer().SetAbsOrigin(Vector(-2784, 603, -6780))", 0.1)
+      EntFire("!player", "RunScriptCode", "GetPlayer().SetAbsOrigin(Vector(-2767, 540, -6780))", 0.1)
       EntFire("!player", "RunScriptCode", "GetPlayer().SetVelocity(Vector(0,0,-1100))", 0.1)
-      EntFire("!player", "RunScriptCode", "GetPlayer().SetAngles(89, -90, 0)", 0.1)
+      EntFire("!player", "RunScriptCode", "GetPlayer().SetAngles(89, -90, 0)", 0.2)
       SendToConsole("fadein")
       //fix portal
       EntFire("robo_light_flicker_01","AddOutput","OnTrigger portalgun_button:Unlock::0:0.1")
@@ -308,6 +316,10 @@ function SpeedrunModeLoad(){
       EntFire("departure_elevator-blocked_elevator_tube_anim", "Kill", 0)
       EntFire("door_0-door_close_relay", "AddOutput", "OnTrigger departure_elevator-elevator_arrive:Trigger::0:1", 0)
       GivePlayerPortalgun()
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_laser_intro":
       EntFire("start", "Kill")
@@ -320,6 +332,15 @@ function SpeedrunModeLoad(){
       EntFire("laser_catcher_door", "Close", 0, 1)
       EntFire("func_door", "SetSpeed", 1000)
       EntFire("lift_a", "SetSpeed", 200, 1.0)
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
+      break
+    case "sp_a2_laser_stairs":
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_dual_lasers":
       //make "Dual lasers floor non-cancer"
@@ -327,6 +348,10 @@ function SpeedrunModeLoad(){
       EntFire("rotating_wall_noportal_volume", "Kill")
       //also fire lasers because why not
       EntFire("env_portal_laser", "TurnOn")
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_laser_over_goo":
       local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(4000, -2832, 96), 10)
@@ -339,6 +364,10 @@ function SpeedrunModeLoad(){
       EntFire("entry_landing_close_relay", "Kill", 0.1)
       EntFire("entry_landing_open_relay", "Kill", 0.1)
       EntFire("door_1-door_open_relay", "Trigger", 0.2)
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_catapult_intro":
       EntFire("door_1-door_open_relay", "Trigger")
@@ -346,6 +375,10 @@ function SpeedrunModeLoad(){
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Kill::1.1:1", 0)
       EntFire("hallway_sim_blocker", "Kill")
       EntFire("catapult_target_relay", "Trigger")
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_trust_fling":
       //hide panels at the beginning
@@ -368,6 +401,10 @@ function SpeedrunModeLoad(){
       EntFire("open_button_escape_panels", "Trigger", 0, 8)
       EntFire("close_button_escape_panels", "Kill", 0, 8)
       EntFire("open_button_escape_panels", "Kill", 0, 10)
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_pit_flings":
       EntFire("companion_cube_skin_trigger", "Kill", 0)
@@ -377,6 +414,15 @@ function SpeedrunModeLoad(){
       EntFire("start_platform_relay", "Trigger", 0)
       EntFire("@summon_elevator","Enable")
       EntFire("@summon_elevator","Trigger",0,0.1)
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
+      break
+    case "sp_a2_fizzler_intro":
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_sphere_peek":
       EntFire("@trigger_this_to_fix_ceiling", "Trigger", 1)
@@ -391,19 +437,40 @@ function SpeedrunModeLoad(){
       EntFire("landing_01-proxy", "Kill")
 
       EntFire("HACK_clip", "Kill", 0.1)
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_ricochet":
       EntFire("cube_retrieved_relay", "Trigger")
       EntFire("cube_retrieved_relay", "Kill", 0, 1)
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_bridge_intro":
       EntFire("departure_elevator-elevator_turret_wife", "Kill", 1)
+
+      // Button Now sucks cube to it 👍
+      local cubeZucc = Entities.CreateByClassname("point_push")  
+      cubeZucc.__KeyValueFromInt("SpawnFlags", 16)
+      cubeZucc.__KeyValueFromString("targetname", "cubeZucker")
+      cubeZucc.__KeyValueFromInt("magnitude", -20)
+      cubeZucc.__KeyValueFromInt("radius", 150)
+      EntFire("cubeZucker", "Enable")
+      cubeZucc.SetOrigin(Vector(-479, -448, 100))
 
       //sometimes I just wonder why I hate someone without apparent reason
       //anyway so fuck you bets
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger door_52-door_open_relay:Trigger::0:1")
       EntFire("floor_up_relay", "Trigger")
       EntFire("floor_up_relay", "Kill", 0, 0.1)
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_bridge_the_gap":
       //EntFire("trick_door_start_relay_3", "Disable", 0)
@@ -414,6 +481,9 @@ function SpeedrunModeLoad(){
       local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(-1074, -640, 1224), 100)
       EntFireByHandle(trigger, "Kill", "", 0, null, null)
 
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_turret_intro":
       EntFire("exit_airlock_door-open_door_slow", "Trigger")
@@ -433,6 +503,14 @@ function SpeedrunModeLoad(){
       local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(1008, -704, -118), 100)
       EntFireByHandle(trigger, "SetLocalOrigin", "884 -704 -116", 0, null, null)
 
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
+      break
+    case "sp_a2_turret_blocker":
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_laser_vs_turret":
       //make turrets explode faster if portals are in right position and laser is activated
@@ -441,9 +519,17 @@ function SpeedrunModeLoad(){
 
       //remove all small turret parts (and stuff in BtS, because who walks there anyway)
       EntFire("npc_portal_turret_floor", "AddOutput", "OnExplode prop_physics:Kill::0.01:1")
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break;
     case "sp_a2_pull_the_rug":
       FixCelesteModeWindow(Vector(128, -649, 192), Vector(0,270,0));
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break;
     case "sp_a2_column_blocker":
       //Maybe-fixed Cube RNG (from Bets)
@@ -459,9 +545,20 @@ function SpeedrunModeLoad(){
 
       //dialogue
       EntFire("@glados", "RunScriptCode", "SceneTableLookup[-400] = SceneTable[SceneTableLookup[-400]].next")
+
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
+      break
+    case "sp_a2_laser_chaining":
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_triple_laser":
-
+      // Remove Top from departure elevator
+      local endEle = GetEntity("departure_elevator-elevator_1")
+      endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_bts1":
       EntFire("chamber_door-door_open_relay", "Trigger")
@@ -500,6 +597,8 @@ function SpeedrunModeLoad(){
       EntFire("jailbreak_chamber_lit-jailbreak_trigger","AddOutput","OnStartTouch jailbreak_chamber_lit-test_chamber_bridge:Enable::1:1")
       break
     case "sp_a2_bts2":
+      // Create Bread
+      EntFire("spherebot_train_1_chassis_1", "kill")
       EntFire("controlroom_gate_a_rotating", "AddOutput", "OnFullyClosed exit_elevator_move_relay:Trigger::0:1")
       EntFire("controlroom_gate_a_rotating", "AddOutput", "OnFullyClosed exit_elevator_move_relay:Disable::1:1")
       EntFire("controlroom_gate_a_rotating", "SetSpeed", 300)
@@ -531,17 +630,11 @@ function SpeedrunModeLoad(){
       EntFire("exit_airlock_door-open_door", "Trigger")
       EntFire("exit_airlock_door-open_door", "Kill",0,1)
       EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
-
-      //better fog for better visibility
-      //EntFire("env_fog_controller", "SetStartDist", 0, 0.5)
-      //EntFire("env_fog_controller", "SetColor", "50 80 110", 0.2)
       break
     case "sp_a2_bts4":
       FasterVertDoor("entry_airlock_door")
       EntFire("entry_airlock_door-open_door", "Trigger",0,0.3)
       EntFire("entry_airlock_door-open_door", "Kill",0,1)
-
-      
 
       //always spawn broken turrets
       EntFire("turret_conveyor_1_pre_switch_case", "Kill")
@@ -551,6 +644,8 @@ function SpeedrunModeLoad(){
       
       EntFire("switch_turret_acceptance_relay", "AddOutput", "OnTrigger factory_controlroom_exit_door_relay:Trigger::0:1");
       
+      EntFire("initial_template_turret", "AddOutput", "OnPhysGunPickup !self:SelfDestructimmediately::0:0")
+
       //CreateSceneEntity("scenes/npc/announcer/sp_sabotage_factory_line04.vcd") //template missing
       //CreateSceneEntity("scenes/npc/announcer/sp_sabotage_factory_line05.vcd") //new template accepted
       EntFire("exit_airlock_door-open_door", "Trigger")
@@ -568,7 +663,16 @@ function SpeedrunModeLoad(){
 
       break
     case "sp_a2_bts5":
-      FasterVertDoor("exit_airlock_door")
+      //Just delete the door and replace it with an open one so it's non-solid
+      local door = GetEntity("exit_airlock_door-door_1")
+      local pos = Vector(3650, -1728, 3460)
+      local ang = door.GetAngles()
+      local newDoor = Entities.CreateByClassname("prop_dynamic");
+
+      EntFireByHandle(door, "Kill", "", 0, null, null)
+      newDoor.SetOrigin(pos)
+      newDoor.SetAngles(ang.x, ang.y, ang.z)
+      newDoor.SetModel("models/props/vert_door/vert_door_frame.mdl")
 
       //make 2nd floor door open faster
       EntFire("security_door-open_door_slow", "Kill")
@@ -893,7 +997,19 @@ function SpeedrunModeLoad(){
       EntFire("lightsout_spotlights", "Kill")
       EntFire("lightsout_sound", "Kill")
       EntFire("vault_door_sound_open", "Kill")
-      EntFire("big_door_open_relay", "Trigger")
+      EntFire("big_door_open_relay", "Kill")
+      EntFire("big_door", "SetAnimation" "vault_door_rotate_open_anim")
+      EntFire("big_door_portal", "Open")
+      EntFire("big_door", "SetPlayBackRate", 10)
+      EntFire("big_door_pipeconnect_movelinear", "Open")
+      EntFire("pumproom_lift_tracktrain", "StartForward")
+      EntFire("pumproom_lift_slide_movelinear", "Open")
+      EntFire("pumproom_lift_rotate", "Open")
+      EntFire("pumproom_lift_rope1", "SetParent", "pumproom_lift_rotate")
+      EntFire("pumproom_lift_rope2", "SetParent", "pumproom_lift_rotate")
+      EntFire("pumproom_lift_rope3", "SetParent", "pumproom_lift_rotate")
+      EntFire("pumproom_lift_rope4", "SetParent", "pumproom_lift_rotate")
+      EntFire("exit_door", "SetAnimation", "open_idle")
       EntFire("departure_elevator-logic_source_elevator_door_open", "Enable", 0, 2.9)
       EntFire("departure_elevator-logic_source_elevator_door_open", "Trigger", 0, 3)
       EntFire("departure_elevator-source_elevator_door_open_trigger", "Kill", 0, 0)
@@ -906,7 +1022,6 @@ function SpeedrunModeLoad(){
       EntFire("big_door_button", "Kill") //lmao
       break
     case "sp_a4_intro":
-
       EntFire("button_1_solved", "Kill")
       /* EntFire("wheatley_monitor1-coverpanel_bottom", "Close",0,1)
       EntFire("wheatley_monitor1-coverpanel_top", "Close",0,1)
@@ -926,6 +1041,14 @@ function SpeedrunModeLoad(){
       EntFire("test1_end_trigger", "AddOutput", "OnTrigger room2_wall_open:Trigger::0:1")
       EntFire("test2_end_trigger", "AddOutput", "OnTrigger @exit_door-door_open_relay:Trigger::0:1")
       break
+    case "sp_a4_tb_intro":
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(2784, 736, -100), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
+      break
+    case "sp_a4_tb_trust_drop":
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(1120, 448, 788), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
+      break
     case "sp_a4_tb_wall_button":
       EntFire("wheatley_monitor-proxy", "Kill")
       EntFire("move_wall", "SetSpeed", 10000)
@@ -939,12 +1062,30 @@ function SpeedrunModeLoad(){
       EntFire("tractorbeam_emitter", "Enable")
       EntFire("diag_tb_wall_button_start_yet", "AddOutput", "OnTrigger music_post_destruction:PlaySound::0:1")
       EntFire("shake_chamber_end", "Kill")
+      // When you grab the cube it won't grab close 
+      // 1.5 -> Fails 1/20ish 1.6 -> Fails 1/100ish 1.7 -> Never failed 1.8 should be mega safe
+      local boxDropperRelay = GetEntity("AutoInstance2-cube_dropper_drop")
+      EntFireByHandle(boxDropperRelay, "AddOutput", "OnTrigger autoinstance2-cube_dropper_box:becomemonster:0:1.8:0", 0, null, null)
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(1280, 960, -12), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
+      break
+    case "sp_a4_tb_catch":
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(1440, 896, 148), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
+      break
+    case "sp_a4_tb_polarity":
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(-128, -704, 116), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_stop_the_box":
       EntFire("wheatley_monitor-proxy", "Kill")
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(896, -800, 756), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_laser_catapult":
       EntFire("wheatley_monitor_1-proxy", "Kill")
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(1248, -512, 372), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_laser_platform":
       //make platform annoyingly fast YOURE WELCOME BAILEY
@@ -999,6 +1140,8 @@ function SpeedrunModeLoad(){
 
       //fix dialogue -4448_01
       EntFire("@glados", "RunScriptCode", "delete SceneTable[SceneTable[SceneTableLookup[-4448]].next].next")
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(-2240, -208, -140), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_jump_polarity":
       local trigger = Entities.FindByClassnameNearest("trigger_once", Vector(2336, -64, 192), 10)
@@ -1022,6 +1165,8 @@ function SpeedrunModeLoad(){
       EntFire("antechamber-paint_meSilly", "Start")
       EntFire("antechamber-paint_meSilly", "Stop", 0, 3)
       EntFire("antechamber_exit", "SetAnimation", "Open")
+      local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(2560, -3072, 228), 10)
+      Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_finale1":
       EntFire("final_door-open_door", "Trigger")
@@ -1218,8 +1363,9 @@ function SpeedrunModeLoad(){
       EntFire("socket2_start_relay", "AddOutput", "OnTrigger wedge2-proxy:OnProxyRelay2::2.2:1", 2.1)
       EntFire("socket2_start_relay", "AddOutput", "OnTrigger core2_start_relay:CancelPending::2.2:1", 2.1)
 
-      EntFire("socket3_start_relay", "AddOutput", "OnTrigger claw3_movelinear:SetSpeed:200:2:1", 2.2)
-      EntFire("socket3_start_relay", "AddOutput", "OnTrigger claw3_movelinear:Open::2:1", 2.2)
+      // EntFire("wheatley_stun_relay_3", "AddOutput", )
+      EntFire("socket3_start_relay", "AddOutput", "OnTrigger claw3_movelinear:SetSpeed:400::1")
+      EntFire("socket3_start_relay", "AddOutput", "OnTrigger claw3_movelinear:Open::0:1")
       EntFire("wedge11-panel_bottom_model", "Kill", 0, 2.2)
       EntFire("wedge11-panel_bottom", "Kill", 0, 2.2)
 
@@ -1378,6 +1524,22 @@ function FastTransition(){
     EntFire("@transition_with_survey","Trigger","",1.5);
 }
 
+function Chapter8ElevatorFix(elevatorTrigger){
+  local oldTriggerMaxs = elevatorTrigger.GetBoundingMaxs()
+  local oldTriggerMins = elevatorTrigger.GetBoundingMins()
+  local oldTriggerOrigin = elevatorTrigger.GetOrigin()
+  local newTriggerMaxs = Vector(oldTriggerMaxs.x, oldTriggerMaxs.y, oldTriggerMaxs.z+50)
+  local newTrigger = Entities.CreateByClassname("trigger_multiple") 
+  newTrigger.SetOrigin(oldTriggerOrigin)
+  newTrigger.SetSize(oldTriggerMins, newTriggerMaxs)
+  newTrigger.__KeyValueFromInt("Solid",  3)
+  newTrigger.__KeyValueFromInt("SpawnFlags",  4097)
+  newTrigger.__KeyValueFromInt("CollisionGroup",  1)
+  EntFireByHandle(newTrigger, "AddOutput", "OnEndTouch departure_elevator-in_elevator:SetValue:0:0", 0,null,null)
+  EntFireByHandle(newTrigger, "AddOutput", "OnStartTouch departure_elevator-in_elevator:SetValue:1:0", 0,null,null)
+  EntFireByHandle(newTrigger, "Enable", "", 0,null,null)
+  EntFireByHandle(elevatorTrigger, "Kill", "", 0, null, null)
+}
 
 
 //LvT faster turret explosion sequence... fuck me
