@@ -443,6 +443,15 @@ function SpeedrunModeLoad(){
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_ricochet":
+
+      local cubeZucc = Entities.CreateByClassname("point_push")  
+      cubeZucc.__KeyValueFromInt("SpawnFlags", 16)
+      cubeZucc.__KeyValueFromString("targetname", "cubeZucker")
+      cubeZucc.__KeyValueFromInt("magnitude", -20)
+      cubeZucc.__KeyValueFromInt("radius", 150)
+      EntFire("cubeZucker", "Enable")
+      cubeZucc.SetOrigin(Vector(3488, 959, -480))
+
       EntFire("cube_retrieved_relay", "Trigger")
       EntFire("cube_retrieved_relay", "Kill", 0, 1)
 
@@ -661,6 +670,11 @@ function SpeedrunModeLoad(){
 
       EntFire("turret_vo_manager", "RunScriptCode", turretCode, 0.1)
 
+      //Give the player a one turn lead on Wheatley to avoid players getting stuck
+      local wheatleyMoveTrigger1 = Entities.FindByClassnameNearest("trigger_multiple", Vector(-2208, -7456, 6720), 100)
+      EntFireByHandle(wheatleyMoveTrigger1, "Kill", "", 0, null, null)
+      local wheatleyMoveTrigger2 = Entities.FindByClassnameNearest("trigger_multiple", Vector(-2560, -7552, 6576), 100)
+      EntFireByHandle(wheatleyMoveTrigger2, "Kill", "", 0, null, null)
       break
     case "sp_a2_bts5":
       //Just delete the door and replace it with an open one so it's non-solid
