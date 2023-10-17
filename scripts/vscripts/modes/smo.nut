@@ -887,7 +887,7 @@ smo.cap.setup <- function() {
 }
 
 smo.cap.create <- function(func = function(){}) {
-  ppmod.create("nintendo/marios_cap.mdl", function(ent, func = func) {
+  ppmod.create("player/items/eggbot/eggbot_beanie.mdl", function(ent, func = func) {
     ent.SetOrigin(GetPlayer().GetOrigin());
     ent.SetAngles(0, 90, 0);
     ppmod.keyval(ent, "Targetname", "smo_cap");
