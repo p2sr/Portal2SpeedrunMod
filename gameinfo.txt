@@ -18,6 +18,7 @@
 		SearchPaths
 		{
 			Game				|gameinfo_path|.
+			Game				portal2
 			Game				"|gameinfo_path|../../common/Portal 2/portal2"
 		}
 	}
