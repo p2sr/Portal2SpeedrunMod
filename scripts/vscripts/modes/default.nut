@@ -276,8 +276,8 @@ function SpeedrunModeLoad(){
       EntFire("@FallingTrigger", "AddOutput", "OnStartTouch @music_piece_of_work:StopSound::0:1")
       EntFire("basement_breakers_prop_0", "SetAnimation", "breaker_shaft_open_hatch", 2)
 
-      //Give Betsrighter but not for Celeste mode because Bridge Intro would be made massively easier :(
-      if(smsm.GetMode() != 2){
+      //Give Betsrighter but not for Celeste mode because Bridge Intro would be made massively easier, and Floor is Lava mode for... obvious reasons
+      if(smsm.GetMode() != 2 && smsm.GetMode() != 5) {
         local transitionTrigger = Entities.FindByClassnameNearest("trigger_once", Vector(6144, 3456, 904), 10)
         EntFireByHandle(transitionTrigger, "AddOutput", "OnTrigger camera_ghostanim_2:Enable:0:0.4:1", 0, null, null)
       }
