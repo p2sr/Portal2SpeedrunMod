@@ -15,7 +15,7 @@
 
 #define SMSM_VERSION "1.2"
 #define SMSM_BUILD __TIME__ " " __DATE__
-#define SMSM_WEB "https://github.com/Krzyhau/Portal2SpeedrunMod"
+#define SMSM_WEB "https://github.com/p2sr/Portal2SpeedrunMod"
 
 #define SAFE_UNLOAD(ptr) \
     if (ptr) {           \
