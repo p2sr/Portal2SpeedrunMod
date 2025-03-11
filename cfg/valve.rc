@@ -6,5 +6,3 @@ exec autoexec.cfg
 stuffcmds
 
 startupmenu
-
-sv_lan 1

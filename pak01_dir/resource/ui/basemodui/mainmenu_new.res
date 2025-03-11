@@ -24,8 +24,8 @@
 		"xpos"						"63"	[$GAMECONSOLE && (!$GAMECONSOLEWIDE || $ANAMORPHIC)]	
 		"xpos"						"88"	[!$GAMECONSOLE && $WIN32WIDE]
 		"xpos"						"63"	[!$GAMECONSOLE && !$WIN32WIDE]	
-		"ypos"						"310"	[$GAMECONSOLE]  
-		"ypos"						"288"	[!$GAMECONSOLE]  
+		"ypos"						"280"	[$GAMECONSOLE]  
+		"ypos"						"258"	[!$GAMECONSOLE]  
 		"wide"						"280"
 		"tall"						"20"
 		"autoResize"				"1"
@@ -38,6 +38,31 @@
 		"labelText"					"Speedrun Mod"
 		"style"						"MainMenuButton"
 		"command"					"Extras"
+		"ActivationType"			"1"
+	}
+
+	"BtnCoOp"
+	{
+		"ControlName"				"BaseModHybridButton"
+		"fieldName"					"BtnCoOp"
+		"xpos"						"88"	[$GAMECONSOLE && ($GAMECONSOLEWIDE && !$ANAMORPHIC)]
+		"xpos"						"63"	[$GAMECONSOLE && (!$GAMECONSOLEWIDE || $ANAMORPHIC)]	
+		"xpos"						"88"	[!$GAMECONSOLE && $WIN32WIDE]
+		"xpos"						"63"	[!$GAMECONSOLE && !$WIN32WIDE]	
+		"ypos"						"310"	[$GAMECONSOLE]  
+		"ypos"						"288"	[!$GAMECONSOLE] 
+		"wide"						"280"	
+		"tall"						"20"
+		"autoResize"				"1"
+		"pinCorner"					"0"
+		"visible"					"1"
+		"enabled"					"1"
+		"tabPosition"				"0"
+		"navUp"						"BtnPlaySolo"
+		"navDown"					"BtnOptions"
+		"labelText"					"Speedrun Mod Coop"
+		"style"						"MainMenuButton"
+		"command"					"CoopPlay"
 		"ActivationType"			"1"
 	}
 	

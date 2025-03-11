@@ -282,6 +282,6 @@ int SMSM::ClientConnect(bool* bAllowConnect, void* pEntity, const char* pszName,
     return 0;
 }
 void SMSM::ServerActivate(void* pEdictList, int edictCount, int clientMax) {
-
+    engine->Cbuf_AddText(0, "script_execute speedrunmod_coop", 0);
 }
 #pragma endregion
