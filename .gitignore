@@ -8,3 +8,4 @@ smsm/smsm.so
 smsm/config.mk
 COPY.bat
 .gitconfig
+pak01_dir.vpk
