@@ -1,54 +1,58 @@
 # Portal 2 Speedrun Mod
 
-Speedrun Mod for Portal 2. You can call it a family game box for Portal 2 Speedrunning Community. It removes majority of cutscenes and makes the game more entertaining to speedrun. It also introduces several game-changing modes.
+[![CI](https://github.com/p2sr/Portal2SpeedrunMod/actions/workflows/CI.yml/badge.svg)](https://github.com/p2sr/Portal2SpeedrunMod/actions/workflows/CI.yml)
+
+A mod for speedrunning Portal 2 with minimal downtime and support for alternate gamemodes.
 
 ## Installation
 
 0. Note: for now, this mod is for Windows and Linux users only. Sorry, Mac users :/ Also, make sure you have original game (Portal 2, duh) installed on Steam.
 1. Download newest release archive from [releases tab](https://github.com/p2sr/Portal2SpeedrunMod/releases). Do **NOT** download the repository: it contains uncompiled version of plugin and resource files, so it most likely won't work (if even launch) properly.
 2. Unzip `Portal 2 Speedrun Mod` folder into `sourcemods` directory (its default location is `Steam/steamapps/sourcemods/`).
-3. Restart Steam.
+3. Restart Steam by going to the top left under steam then selecting exit.
 4. A new game, called "Portal 2 Speedrun Mod" should appear in your library.
 
 ## Currently implemented modes
 
-### Normal%
+### Singleplayer Speedrun Mod
 
 - Most of the game's downtime is removed or shortened (like elevators, doors etc.)
 - Most of cutscenes were removed or shortened (like Tube Ride, Core etc.)
-- A full list of every change can be found [here](https://github.com/p2sr/Portal2SpeedrunMod/blob/master/doc/normalpercentlist.md).
+- A full list of every change can be found [here](https://github.com/p2sr/Portal2SpeedrunMod/blob/master/doc/SingleplayerSRM.md).
 
-### Fog% (in beta testing)
+### Cooperative Speedrun Mod
 
-- Everything from Normal%.
+- Most of the game's downtime is removed or shortened
+- The player is no longer forced to perform taunts
+
+### Celeste Mode
+
+- Everything from Singleplayer Speedrun Mod.
+- Celeste-like movement added on top of Portal 2 movement (dash, wave dash, wallclimb and many more).
+- Container Ride, Portal Carousel, Portal Gun, Smooth Jazz and PotatOS have been modified to fit Celeste movement into the gameplay.
+- Over 280 moons difficult to find berries!
+
+### Fog%
+
+- Everything from Singleplayer Speedrun Mod.
 - Dense fog makes you unable to see further than 128 units.
 - If you don't move for 20 seconds, you can see through fog until you move again.
 
-### Celeste 2 (in beta testing)
+### Reverse Mod
 
-- Everything from Normal%.
-- Celeste-like movement added on top of current one (dash, wave dash, wallclimb and many more).
-- Container Ride, Portal Carousel, Portal Gun, Smooth Jazz and PotatOS have been modified to fit Celeste movement into the gameplay.
+- Start in Finale 4 and make your way back to Container Ride
+- Unsolve puzzles along the way
 
-In the final version, these changes will be available:
+### Odyssey Mod
 
-- Red berries added and placed all around the facility.
-- Quantum berries - special berries that will disappear once you use a portal.
-- A special ending course for those who manage to collect all berries.
+- Everything from Singleplayer Speedrun Mod.
+- Super Mario Odyssey movement added on top of Portal 2 movement
+- Control objects at the drop of a hat
+- Many various difficult to find Moons!
 
-## Planned Modes
+### The Floor is Lava
 
-- **100 Portals Run** - complete the game with less than 100 portals.
-- **100% Run** - complete the game with all singleplayer achievements.
-- **Randomized Map Order** - randomized map order.
-- **Fat Run** - complete the game while being 1,875x larger.
-- **Potato Challenge** - A copy of SMO's Balloon World.
-- **Minecraft%** - You are able to place and break blocks.
-- **Tag%** - Complete the game with paintgun instead of portal gun.
-- **Mirror%** - Normal game, but mirrored.
-- **Bingo** - ???
-- **Glitchless** - all glitches patched.
-- **Singleplayer co-op** - Co-op but your partner went to the toilet and never came back.
+- Touching the floor damages you
 
 ## Credits
 
@@ -56,5 +60,9 @@ In the final version, these changes will be available:
 - Blenderiste 09 - Chapter 9 scripting.
 - Big D - constantly motivating me to finish this mod.
 - NeKz - **HUGE** help with Speedrun Mod Simple Modifier plugin.
-- Betsruner, Can't Even, Rex, Spidda and many others - beta testing.
-- Valve - not creating Portal 3, damnit
+- Can't Even, Rex, Spidda and many others - beta testing.
+- PortalRunner - Various different mode contributions 
+- Betsruner - Beta testing, maintenance, and content additions
+- AMJ - Maintenance, and content additions
+- Nano - Cooperative Speedrun Mod 
+- Valve - Making the greatest puzzle game 
