@@ -1514,7 +1514,7 @@ smo.moonlist <- [
   { pos = Vector(8772, 565, 830), name = "Peeking into HER Chamber", map = "sp_a1_wakeup" },
   { pos = Vector(9326, 1225, 1320), name = "Atop the Spinning Rings", map = "sp_a1_wakeup" },
   { pos = Vector(10817, 1010, -2), name = "On a Crumbled Catwalk", map = "sp_a1_wakeup" },
-  { pos = Vector(8960, 1300, -160), name = "Going Off the Beaten Catwalk", map = "sp_a1_wakeup" }, 
+  { pos = Vector(8960, 1300, -160), name = "Going Off the Beaten Catwalk", map = "sp_a1_wakeup" },
   { pos = Vector(8977, 1088, 136), name = "Powerup Initiated", map = "sp_a1_wakeup" },
 
   { pos = Vector(-1953, 431, -10102), name = "A Staircase of Bumps", map = "sp_a2_intro" },
@@ -1597,7 +1597,7 @@ smo.moonlist <- [
   { pos = Vector(641, -1233, 28), name = "Cute Window to the Turrets", map = "sp_a2_turret_intro" },
   { pos = Vector(844, -1136, 244), name = "Squeezed under the Beam", map = "sp_a2_turret_intro" },
   { pos = Vector(719, -181, 0), name = "An Imperfect Crossfire", map = "sp_a2_turret_intro" },
-  { pos = Vector(362, 414, 502), name = "A Pocket of Debris", map = "sp_a2_turret_intro" }, // exit hallway, above debris 
+  { pos = Vector(362, 414, 502), name = "A Pocket of Debris", map = "sp_a2_turret_intro" }, // exit hallway, above debris
   { pos = Vector(707, 1088, 194), name = "The Alternative Getaway", map = "sp_a2_turret_intro" },
 
   { pos = Vector(-209, -470, 220), name = "Highly Unstable Ceiling Panels", map = "sp_a2_laser_relays" },
@@ -1631,7 +1631,7 @@ smo.moonlist <- [
   { pos = Vector(483, -1024, 550), name = "Overlooking the Chain", map = "sp_a2_laser_chaining" },
   { pos = Vector(-433, -992, 704), name = "The First Link", map = "sp_a2_laser_chaining" },
   { pos = Vector(127, 64, 695), name = "A Slightly Higher Ceiling", map = "sp_a2_laser_chaining" },
-  { pos = Vector(672, 544, 256), name = "A Group Assasination", map = "sp_a2_laser_chaining" },
+  { pos = Vector(672, 544, 256), name = "A Group Assassination", map = "sp_a2_laser_chaining" },
   { pos = Vector(319, 256, -194), name = "Outspeeding the Ramp", map = "sp_a2_laser_chaining" },
 
   { pos = Vector(8160, -5104, 128), name = "Ridiculously High Catwalk Blocker", map = "sp_a2_triple_laser" },
@@ -1691,10 +1691,10 @@ smo.moonlist <- [
   { pos = Vector(961, 5149, 45), name = "Keeping Out by Keeping Above", map = "sp_a3_01" },
   { pos = Vector(5729, 4632, -504), name = "Anticlimactic Reveal", map = "sp_a3_01" },
 
-  { pos = Vector(-9500, 100, -3000), name = "Barely Within Reach", map = "sp_a3_03" }, 
+  { pos = Vector(-9500, 100, -3000), name = "Barely Within Reach", map = "sp_a3_03" },
   { pos = Vector(-6850, 708, -4590), name = "Brighter Than the Rest", map = "sp_a3_03" },
-  { pos = Vector(-5150, 2275, -1430), name = "Atop the Gel Barrels", map = "sp_a3_03" }, 
-  { pos = Vector(-4070, -866, -3800), name = "The Tunnels of a Salt Mine", map = "sp_a3_03" }, 
+  { pos = Vector(-5150, 2275, -1430), name = "Atop the Gel Barrels", map = "sp_a3_03" },
+  { pos = Vector(-4070, -866, -3800), name = "The Tunnels of a Salt Mine", map = "sp_a3_03" },
   { pos = Vector(-6080, -2432, -4992), name = "An Echoey Stroll Back", map = "sp_a3_03" },
   { pos = Vector(-8735, 706, -4964), name = "Who's Ready to Make Some Science", map = "sp_a3_03" },
   { pos = Vector(-6780, 1072, -4696), name = "Missing Trophies", map = "sp_a3_03" },
@@ -1703,11 +1703,11 @@ smo.moonlist <- [
   { pos = Vector(-61, 615, -119), name = "Our First Mobility Gel", map = "sp_a3_jump_intro" },
   { pos = Vector(150, 280, 600), name = "A Tricky Corner Behind the Supports", map = "sp_a3_jump_intro" },
   { pos = Vector(-1721, 563, 912), name = "Inside the Office", map = "sp_a3_jump_intro" },
-  { pos = Vector(-1750, 560, 820), name = "Not Inside the Office", map = "sp_a3_jump_intro" }, 
+  { pos = Vector(-1750, 560, 820), name = "Not Inside the Office", map = "sp_a3_jump_intro" },
   { pos = Vector(-960, 144, 1975), name = "Atop the Tallest Beam", map = "sp_a3_jump_intro" },
   { pos = Vector(-1343, 1027, 1824), name = "Above the Test Chamber Ceiling", map = "sp_a3_jump_intro" },
 
-  { pos = Vector(-1230, 865, 200), name = "An Abandoned Puzzle Piece", map = "sp_a3_bomb_flings" }, 
+  { pos = Vector(-1230, 865, 200), name = "An Abandoned Puzzle Piece", map = "sp_a3_bomb_flings" },
   { pos = Vector(530, 1335, 960), name = "The Vents With No Start", map = "sp_a3_bomb_flings" },
   { pos = Vector(-1224, 41, -663), name = "Above the Entrance Elevator", map = "sp_a3_bomb_flings" },
   { pos = Vector(-276, 238, 33), name = "Not Making Up Your Own Rules", map = "sp_a3_bomb_flings" },
@@ -1746,7 +1746,7 @@ smo.moonlist <- [
   { pos = Vector(3360, 160, -2880), name = "Behind the Receptionist", map = "sp_a3_portal_intro" },
   { pos = Vector(2028, -951, -2428), name = "Pipe Under the Floor", map = "sp_a3_portal_intro" },
   { pos = Vector(2314, 1088, -1780), name = "Propulsion Pump Control Input Flow", map = "sp_a3_portal_intro" },
-  { pos = Vector(1438, 1084, -1125), name = "Behind the Heavy Crushers", map = "sp_a3_portal_intro" }, 
+  { pos = Vector(1438, 1084, -1125), name = "Behind the Heavy Crushers", map = "sp_a3_portal_intro" },
   { pos = Vector(444, -588, 1440), name = "Routing Up the Conversion Gel", map = "sp_a3_portal_intro" },
   { pos = Vector(3584, 158, 6000), name = "Reward After a Tall Climb", map = "sp_a3_portal_intro" },
   { pos = Vector(1341, 2257, -1985), name = "Working Hard on Pump 02", map = "sp_a3_portal_intro" },
@@ -1760,15 +1760,15 @@ smo.moonlist <- [
   { pos = Vector(-1000, -1144, 3080), name = "Keep Out, They Said", map = "sp_a3_end" },
   { pos = Vector(232, 269, -5010), name = "Holding Up the Gel Tub", map = "sp_a3_end" },
   { pos = Vector(532, 256, -3792), name = "Behind the Bouncy Plate", map = "sp_a3_end" },
-  { pos = Vector(-1456, 592, -3012), name = "A Corner Just Under Eye Level", map = "sp_a3_end" }
+  { pos = Vector(-1456, 592, -3012), name = "A Corner Just Under Eye Level", map = "sp_a3_end" },
   { pos = Vector(-863, -15, -1635), name = "Ventilating", map = "sp_a3_end" },
   { pos = Vector(-1121, -344, 1540), name = "Know Your Paradoxes", map = "sp_a3_end" },
   { pos = Vector(-2657, -482, 1191), name = "A Gel Barrel in the Dark", map = "sp_a3_end" },
 
-  // CHAPTER 8 - 36 moons
+  // CHAPTER 8 - 39 moons
 
   { pos = Vector(-320, 127, 440), name = "Blanketed By a Strange Tube", map = "sp_a4_intro" },
-  { pos = Vector(730, -189, 210), name = "Between Two Types of Vents", map = "sp_a4_intro" }
+  { pos = Vector(730, -189, 210), name = "Between Two Types of Vents", map = "sp_a4_intro" },
   { pos = Vector(2145, 34, 700), name = "Now, Do It Again!", map = "sp_a4_intro" },
   { pos = Vector(1113, -336, 696), name = "Observation Staircase", map = "sp_a4_intro" },
 
@@ -1800,7 +1800,7 @@ smo.moonlist <- [
   { pos = Vector(512, 269, 448), name = "Close to the Funnel Emitter", map = "sp_a4_laser_catapult" },
   { pos = Vector(126, -793, 695), name = "Lit by the Observation Room", map = "sp_a4_laser_catapult" },
 
-  { pos = Vector(-420, -2434, 810), name = "Atop the Diagonal Tubes", map = "sp_a4_laser_platform" }
+  { pos = Vector(-420, -2434, 810), name = "Atop the Diagonal Tubes", map = "sp_a4_laser_platform" },
   { pos = Vector(378, -1922, 696), name = "Flying Freely in the Middle", map = "sp_a4_laser_platform" },
   { pos = Vector(-66, -1138, 672), name = "A Concealed Lamp", map = "sp_a4_laser_platform" },
   { pos = Vector(944, -2435, 426), name = "On the Observation Room Edge", map = "sp_a4_laser_platform" },
@@ -1817,7 +1817,7 @@ smo.moonlist <- [
   { pos = Vector(1415, 1023, 295), name = "Under the Funnel-Conducting Tile", map = "sp_a4_jump_polarity" },
   { pos = Vector(1279, 555, 544), name = "A Small but Cozy Observation Room", map = "sp_a4_jump_polarity" },
 
-  // CHAPTER 9
+  // CHAPTER 9 - 13 moons
 
   { pos = Vector(-3711, -7424, 155), name = "It's a Decoy Button!", map = "sp_a4_finale1" },
   { pos = Vector(-4855, -4306, -633), name = "Deviating From the Trajectory", map = "sp_a4_finale1" },
