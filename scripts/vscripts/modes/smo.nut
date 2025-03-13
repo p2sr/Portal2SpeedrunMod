@@ -2702,9 +2702,9 @@ smo.moon.setcount <- function(amount) {
         }
       }
     }
-    mapscripts[GetMapName().tolower()]();
-    smo.setup();
-    if("con" in smo) SendToConsole("script smo.con()");
+    if (GetMapName().tolower() in mapscripts) mapscripts[GetMapName().tolower()]();
+    if ("setup" in smo) smo.setup();
+    if ("con" in smo) SendToConsole("script smo.con()");
   } catch (e) {
     printl(e);
   }
