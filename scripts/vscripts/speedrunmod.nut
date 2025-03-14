@@ -80,33 +80,10 @@ SPEEDRUN_MODES[6] <- ["default", "smo"];
 
 //import proper scripts
 if(IsSMSMActive()){
-  switch(smsm.GetMode()){
-    case 0:
-      DoIncludeScript("modes/default", self.GetScriptScope());
-      break;
-    case 1:
-      DoIncludeScript("modes/default", self.GetScriptScope());
-      DoIncludeScript("modes/fog", self.GetScriptScope());
-      break;
-    case 2:
-      DoIncludeScript("modes/default", self.GetScriptScope());
-      DoIncludeScript("modes/celeste", self.GetScriptScope());
-      break;
-    /* case 3:
-      DoIncludeScript("modes/default", self.GetScriptScope());
-      DoIncludeScript("modes/cubecore", self.GetScriptScope());
-      break; */
-    case 4:
-      DoIncludeScript("modes/reverse", self.GetScriptScope());
-      break;
-    case 5:
-      DoIncludeScript("modes/default", self.GetScriptScope());
-      DoIncludeScript("modes/floorislava", self.GetScriptScope());
-      break;
-    case 6:
-      DoIncludeScript("modes/default", self.GetScriptScope());
-      DoIncludeScript("modes/smo", self.GetScriptScope());
-      break;
+  if (smsm.GetMode() in SPEEDRUN_MODES){
+    foreach (id, mode in SPEEDRUN_MODES[smsm.GetMode()]){
+      DoIncludeScript("modes/"+mode, self.GetScriptScope());
+    }
   }
 }
 
