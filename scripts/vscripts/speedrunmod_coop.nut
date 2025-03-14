@@ -461,6 +461,9 @@ else if ( pszMapName == "mp_coop_lobby_2" || pszMapName == "mp_coop_lobby_3" )
 }
 else if ( pszMapName == "mp_coop_laser_crusher" )
 {
+    // Stop cube from dropping in the players way
+    EntFire("AutoInstance2-@reflectocube_dropper", "Disable")
+    EntFire("AutoInstance2-@reflectocube_dropper", "Enable", null, 3)
     // Speed up the crushers lifting up, but not closing.
     local pLaserCatcher = Entities.FindByClassnameNearest( "prop_laser_catcher", Vector( 2720, -592, 32 ), 1 );
     if ( pLaserCatcher )
@@ -492,6 +495,21 @@ else if ( pszMapName == "mp_coop_teambts" )
 
     AddDiscTransition( 1164, -3051, 5682 );
 }
+else if ( pszMapName == "mp_coop_infinifling_train" )
+{
+    // Button Starts down :) 
+    EntFire("button_fling_wall_timer_2", "ClearParent");
+    EntFire("button_fling_wall_timer_2", "SetLocalOrigin", "1088.30 -1220.15 457.26", 1)
+    local buttonTrigger = Entities.FindByClassnameNearest("trigger_once", Vector(896, -1856, 576), 10)
+    EntFireByHandle(buttonTrigger, "Kill", "", 2, null, null)
+
+    //End Door starts open without dialogue trigger + dialogue is triggered once the people have been at the ending trigger
+    EntFire("team_door-relay_orange_out", "Kill")
+    EntFire("team_door-relay_blue_out", "Kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
+    EntFire("@exit_door", "Open")
+    EntFire("team_door-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue @glados:RunScriptCode:GladosCoopOpenExitDoor(1)")
+}
 else if ( pszMapName == "mp_coop_catapult_1" )
 {
     // Silently award the taunt for robotDance.
@@ -508,7 +526,7 @@ else if ( pszMapName == "mp_coop_multifling_1" )
     EntFire( "catapult2a", "AddOutput", "physicsSpeed 1800" );
     EntFire( "catapult2a1", "AddOutput", "playerSpeed 800" );
     EntFire( "catapult2a1", "AddOutput", "physicsSpeed 600" );
-    EntFire( "catapult2a2", "AddOutput", "playerSpeed 2300" );
+    EntFire( "catapult2a2", "AddOutput", "playerSpeed 850" );
     EntFire( "catapult2a2", "AddOutput", "physicsSpeed 1000" );
 }
 else if ( pszMapName == "mp_coop_fan" )
@@ -523,6 +541,13 @@ else if ( pszMapName == "mp_coop_fan" )
 }
 else if ( pszMapName == "mp_coop_wall_5" )
 {
+    // Second room ball starts when you put the ball in for the first room
+    //EntFire("camera_door_7-relay_dooropen", "AddOutput", "OnTrigger ball_fake:silentdissolve:0");
+
+    //Second room ball starts when you start the first room ball spawn
+    local firstballTrigger = Entities.FindByClassnameNearest("trigger_once", Vector(-2065.95, -1216, -191.16), 100)
+    EntFireByHandle(firstballTrigger, "AddOutput", "OnTrigger ball_fake:silentdissolve:0", 0, null, null);
+
     FastFall( "blue_dropper-cube_dropper_droptrigger_bottom", "red_dropper-cube_dropper_droptrigger_bottom" ); // Red team can strafe on the word "official".
 
     // Silently award the taunt for teamhug.
@@ -533,11 +558,6 @@ else if ( pszMapName == "mp_coop_wall_5" )
     EntFire( "@relay_come_together", "AddOutput", "OnTrigger success_detector:Kill" );
 
     AddDiscTransition( 2133.35, -1587.71, 297.86 );
-}
-else if ( pszMapName == "mp_coop_tbeam_redirect" )
-{
-    // Make tractor beam faster.
-    EntFireByHandle( Entities.FindByClassnameNearest( "prop_tractor_beam", Vector( 352, -416, 512 ), 1 ), "SetLinearForce", "400", 0, null, null );
 }
 else if ( pszMapName == "mp_coop_tbeam_drill" )
 {
@@ -551,9 +571,6 @@ else if ( pszMapName == "mp_coop_tbeam_catch_grind_1" )
 }
 else if ( pszMapName == "mp_coop_tbeam_laser_1" )
 {
-    // Make tractor beam faster.
-    EntFire( "tbeam_ride", "SetLinearForce", "400" );
-
     // Prevent taunt at start of map, but also trigger the dialogue at the right time and conditions.
     Entities.FindByName( null, "@relay_grant_taunt" ).Destroy();
     Entities.CreateByClassname( "logic_relay" ).__KeyValueFromString( "targetname", "@relay_grant_taunt" );
@@ -571,21 +588,10 @@ else if ( pszMapName == "mp_coop_tbeam_polarity" )
     EntFire( "button_1-button", "AddOutput", "OnUnPressed tbeam:SetLinearForce:600" );
     EntFire( "button_1-button", "AddOutput", "OnUnPressed toggle_indicators:SetTextureIndex:0" );
 }
-else if ( pszMapName == "mp_coop_tbeam_polarity2" )
-{
-    // Make tractor beam faster.
-    EntFire( "tbeam", "SetLinearForce", "600" );
-    EntFire( "button_1_pressed", "Disable" );
-    EntFire( "button_1_unpressed", "Disable" );
-    EntFire( "button_1", "AddOutput", "OnPressed tbeam:SetLinearForce:-600" );
-    EntFire( "button_1", "AddOutput", "OnPressed toggle_indicators:SetTextureIndex:1" );
-    EntFire( "button_1", "AddOutput", "OnUnPressed tbeam:SetLinearForce:600" );
-    EntFire( "button_1", "AddOutput", "OnUnPressed toggle_indicators:SetTextureIndex:0" );
-}
 else if ( pszMapName == "mp_coop_tbeam_polarity3" )
 {
     // Make tractor beam faster.
-    EntFire( "tbeam", "SetLinearForce", "600" );
+    EntFire( "tbeam", "SetLinearForce", "600",1.3 );
     EntFire( "button_1_pressed", "Disable" );
     EntFire( "button_1_unpressed", "Disable", "", 1.5 ); // A logic_auto invokes this, so give ample time for it to trigger.
     EntFire( "button_1-button", "AddOutput", "OnPressed tbeam:SetLinearForce:-600" );
@@ -642,10 +648,18 @@ else if ( pszMapName == "mp_coop_paint_red_racer" )
     // Speed up gel.
     SpeedUpGel();
 
+    // Stop Turret knockback
+    for(local ent;ent = Entities.FindByClassname(ent, "npc_portal_turret_floor");) {
+        ent.__KeyValueFromInt("DamageForce", 0);
+    }
+
     // Make catapult trigger faster.
     EntFire( "catapult_launch_exit", "AddOutput", "lowerThreshold 0.6" );
     EntFire( "catapult_launch_exit", "AddOutput", "upperThreshold 1.56" );
     EntFire( "catapult_launch_exit", "AddOutput", "playerSpeed 1800" );
+
+    // Open ending when turret conditons are met
+    EntFire("counter_kill_all_turrets", "AddOutput", "OnHitMax @relay_exit_door_open:trigger")
 }
 else if ( pszMapName == "mp_coop_paint_speed_catch" )
 {
@@ -696,6 +710,12 @@ else if ( pszMapName == "mp_coop_paint_longjump_intro" )
     AddLongJumpOutput( "paint_speed_mid_main:Start:::1" );
     AddLongJumpOutput( "paint_speed_mid_main:Stop::1.00:1" );
     delete pTargetCoopManager;
+
+    // Game end as soon as both players are in the endzone
+    EntFire("vault-team_trigger_door", "AddOutput", "OnEndTouchBluePlayer vault-coopman_airlock_success:SetStateBFalse")
+    EntFire("vault-team_trigger_door", "AddOutput", "OnEndTouchOrangePlayer vault-coopman_airlock_success:SetStateAFalse")
+    EntFire("vault-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue vault-coopman_taunt:SetStateATrue");
+    EntFire("vault-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue vault-coopman_taunt:SetStateBTrue");
 }
 else if ( pszMapName == "mp_coop_tripleaxis" )
 {
