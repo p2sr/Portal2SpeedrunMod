@@ -37,7 +37,7 @@ DEFINE_SCRIPTFUNC(PrecacheModel, "Precaches model")
 DEFINE_SCRIPTFUNC(GetBackupKey, "Gets currently set key used by script to recover parameters.")
 DEFINE_SCRIPTFUNC(SetBackupKey, "Sets backup key used by script to recover parameters.")
 DEFINE_SCRIPTFUNC(GetModeParamsNumber, "Maximum number of parameters you can assign.")
-DEFINE_SCRIPTFUNC(AreModeParamsChanged, "Used by backup system. Returns true once if change to mode-specifc params was made.")
+DEFINE_SCRIPTFUNC(AreModeParamsChanged, "Used by backup system. Returns true once if change to mode-specific params was made.")
 DEFINE_SCRIPTFUNC(RefreshEntity, "Executes 'Activate()' function for given entity.")
 END_SCRIPTDESC()
 

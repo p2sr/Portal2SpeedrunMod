@@ -131,7 +131,7 @@ function UpdateBirb(){
 
 //berries
 BERRIES <- {};
-//okay, look, i know you think "yaya me me smart" but 
+//okay, look, i know you think "yaya me me smart" but
 //at least try to not spoil berries location for yourself
 BERRIES["sp_a1_intro1"] <- [
     {name="First Steps",pos=Vector(-1075, 4348, 2739)},
@@ -144,10 +144,10 @@ BERRIES["sp_a1_intro3"] <- [
     {name="Up Where You Shouldn't Go",pos=Vector(-1278, 3390, 400)},
 ];
 BERRIES["sp_a1_intro4"] <- [
-    {name="Lab Observator",pos=Vector(848, -704, 340)},
+    {name="Lab Observer",pos=Vector(848, -704, 340)},
 ];
 BERRIES["sp_a1_intro5"] <- [
-    {name="intro car",pos=Vector(-345, -876, 710)},
+    {name="Intro Ride",pos=Vector(-345, -876, 710)},
 ];
 BERRIES["sp_a1_intro6"] <- [
     {name="Following Faulty Momentum",pos=Vector(444, -256, 600)},
@@ -230,13 +230,13 @@ BERRIES["sp_a2_column_blocker"] <- [
     {name="Guarded By A Turret",pos=Vector(-192, 1060, 86)},
 ];
 BERRIES["sp_a2_laser_chaining"] <- [
-    {name="Hanging By Fingers From A Moutain",pos=Vector(448, 64, 704)},
+    {name="Hanging By Fingers From A Mountain",pos=Vector(448, 64, 704)},
     {name="Hidden Yet Exposed",pos=Vector(-432, -860, 704)},
 ];
 BERRIES["sp_a2_triple_laser"] <- [
     {name="Surrounded By Arms",pos=Vector(8231, -5915, 64)},
     //TODO: allow triple laser oob in leaderboards
-    {name="Golden OOB Explorer",pos=Vector(7420, -5732, 100), golden=1}, 
+    {name="Golden OOB Explorer",pos=Vector(7420, -5732, 100), golden=1},
 ];
 BERRIES["sp_a2_bts1"] <- [
     {name="Part Of Non-Existing Test",pos=Vector(-9118, -890, 638)},
@@ -350,7 +350,7 @@ BERRIES["sp_a4_laser_platform"] <- [
 ];
 
 BERRIES["sp_a4_speed_tb_catch"] <- [
-    {name="Appretiating The Chamber's Height",pos=Vector(448, 1192, 898)},
+    {name="Appreciating The Chamber's Height",pos=Vector(448, 1192, 898)},
     {name="A Catwalk To Nowhere",pos=Vector(-2688, 2080, 72)},
     {name="Thinking With P-Body",pos=Vector(-2400, 496, 64), quantum=1},
 ];
@@ -740,7 +740,6 @@ function CelesteLoad(){
         EntFireByHandle(introcar, "AddOutput", "targetname introcar", 0, null, null)
         EntFireByHandle(introcar, "AddOutput", "solid 6", 0, null, null)
         introcar.SetAngles(0,225,0)
-        print("INTRO CAAAR\n")
         break;
     case "sp_a2_bts1":
         local fakeBerryPos = Vector(352,-64,0);
