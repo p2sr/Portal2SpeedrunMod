@@ -4,6 +4,7 @@
 #include "Console.hpp"
 #include "Engine.hpp"
 #include "Server.hpp"
+#include "SMSM.hpp"
 #include "Surface.hpp"
 
 #include "Game.hpp"
@@ -20,6 +21,7 @@ DETOUR(VGui::Paint, int mode)
     // drawing custom gui only once per frame
     // flag is set by RenderView detour in client
     if (vgui->canDrawThisFrame) { 
+        smsm.DialogueMute_Update(); // squeezing this in here
         for (auto hud : vgui->huds) {
             if (!hud->DrawingOnTop()) vgui->DrawCustomHud(hud);
         }

@@ -47,35 +47,10 @@ function IsSMSMActive(){
   return ("smsm" in this);
 }
 
-
-
-//dialogue mute stuff
-DialogueMute_Previous <- -1
-DialogueMute_Forced <- false
-
-function DialogueMute_Update(){
-    local newState = smsm.IsDialogueEnabled();
-    if(DialogueMute_Forced)newState = true;
-    if(DialogueMute_Previous != newState){
-        local mixers = ["gladosVO", "potatosVO", "announcerVO", "wheatleyVO", "coreVO", "caveVO"];
-        local defaults = [0.7, 0.4, 0.7, 0.7, 0.75, 0.88];
-        local command = "";
-        foreach (id, mixer in mixers){
-          command += "snd_setmixer "+mixer+" vol "+(newState ? defaults[id] : 0.001)+";";
-        }
-        //modlog(command);
-        SendToConsole(command);
-        DialogueMute_Previous = newState;
-    }
-}
-
-function DialogueMute_SetForceState(state){
-  DialogueMute_Forced = state;
-}
-
 function DialogueMute_ForceFor(time){
-  DialogueMute_SetForceState(true);
-  EntFire(self.GetName(), "RunScriptCode", "DialogueMute_SetForceState(false)", time);
+  if (!IsSMSMActive()) return;
+  smsm.DialogueMute_SetForceState(true);
+  EntFire(self.GetName(), "RunScriptCode", "smsm.DialogueMute_SetForceState(false)", time);
 }
 
 
@@ -197,7 +172,6 @@ NEW_TIME <- 0
 function SpeedrunModThink(){
   if ( initialized ){
     SLBS_Check();
-    DialogueMute_Update();
 
     OLD_TIME = OLD_TIME==0 ? Time() : NEW_TIME;
     NEW_TIME = Time();  //TICKING AWAY THE MOMENTS THAT MAKE UP A DULL DAY

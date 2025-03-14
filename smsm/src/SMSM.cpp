@@ -39,6 +39,7 @@ DEFINE_SCRIPTFUNC(SetBackupKey, "Sets backup key used by script to recover param
 DEFINE_SCRIPTFUNC(GetModeParamsNumber, "Maximum number of parameters you can assign.")
 DEFINE_SCRIPTFUNC(AreModeParamsChanged, "Used by backup system. Returns true once if change to mode-specific params was made.")
 DEFINE_SCRIPTFUNC(RefreshEntity, "Executes 'Activate()' function for given entity.")
+DEFINE_SCRIPTFUNC(DialogueMute_SetForceState, "Forces dialogue mute state.")
 END_SCRIPTDESC()
 
 SMSM::SMSM()
@@ -204,6 +205,29 @@ void SMSM::SetScreenCoverColor(int r, int g, int b, int a) {
 
 bool SMSM::IsDialogueEnabled() {
     return puzzlemaker_play_sounds.GetBool();
+}
+
+//dialogue mute stuff
+int DialogueMute_Previous = -1;
+bool DialogueMute_Forced = false;
+
+void SMSM::DialogueMute_Update() {
+    bool newState = smsm.IsDialogueEnabled();
+    if (DialogueMute_Forced) newState = true;
+    if (DialogueMute_Previous != (int)newState) {
+        const char* mixers[] = { "gladosVO", "potatosVO", "announcerVO", "wheatleyVO", "coreVO", "caveVO" };
+        const float defaults[] = { 0.7f, 0.4f, 0.7f, 0.7f, 0.75f, 0.88f };
+        char command[512] = "";
+        for (int i = 0; i < 6; i++) {
+            sprintf(command, "%ssnd_setmixer %s vol %f;", command, mixers[i], (newState ? defaults[i] : 0.001f));
+        }
+        engine->Cbuf_AddText(0, command, 0);
+        DialogueMute_Previous = newState;
+    }
+}
+
+void SMSM::DialogueMute_SetForceState(bool state){
+    DialogueMute_Forced = state;
 }
 
 void SMSM::RefreshEntity(HSCRIPT hScript) {
