@@ -205,15 +205,15 @@ if ( pszMapName == "mp_coop_start" )
     EntFireByHandle( Entities.FindByName( null, "@global_no_taunting_blue" ), "TurnOff", "", 0, null, null );
     EntFireByHandle( Entities.FindByName( null, "@global_no_taunting_orange" ), "TurnOff", "", 0, null, null );
 
-    // Enable both triggers that bring players to the top.
-    EntFire( "teleport_start", "Enable" );
-
     // Skip the video from playing on map loads.
     local pRelayStartConnected = Entities.FindByName( null, "@relay_start_both_connected" )
     if ( pRelayStartConnected )
     {
-        EntFireByHandle( pRelayStartConnected, "Disable", "", 0, null, null );
+        // Enable both triggers that bring players to the top.
+        // This also starts SAR timer.
+        EntFireByHandle( pRelayStartConnected, "AddOutput", "OnTrigger teleport_start:Enable", 0, null, null );
     }
+    EntFire( "playmovie_connect_intro", "Kill" );
 
     // Skip the starting dialogue.
     EntFireByHandle( Entities.FindByName( null, "relay_start_glados_coop" ), "Disable", "", 0, null, null );
