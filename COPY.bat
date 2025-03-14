@@ -1,30 +1,21 @@
 @ECHO OFF
 
-SET "name=Portal 2 Speedrun Mod"
-SET "dest=C:\Program Files (x86)\Steam\steamapps\sourcemods\%name%"
-SET "vpk=D:\Gry\Steem\steamapps\common\Portal 2\bin\vpk.exe"
+echo !!! YOU FORGOT TO EDIT COPY.bat !!!
 
-ECHO.
-ECHO ====== Attempting to create directory at %dest%... ======
-MKDIR "%dest%"
+REM vpk.exe is included in Portal 2 Authoring Tools, or you can use your own, IDC
+SET "dest=%ProgramFiles(x86)%\Steam\steamapps\sourcemods\Portal 2 Speedrun Mod"
+SET "vpk=%ProgramFiles(x86)%\Steam\steamapps\common\Portal 2\bin\vpk.exe"
 
-ECHO.
-ECHO ====== Copying raw files... ======
-xcopy /E /V /Y /I "cfg" "%dest%/cfg"
-xcopy /E /V /Y /I "maps" "%dest%\maps"
-xcopy /E /V /Y /I "resource" "%dest%\resource"
-xcopy /E /V /Y /I "scripts" "%dest%\scripts"
-xcopy /E /V /Y /I "media" "%dest%\media"
-copy /Y "gameinfo.txt" "%dest%\gameinfo.txt"
+REM MKDIR "%dest%"
+REM xcopy /E /V /Y /I "cfg"          "%dest%\cfg"
+REM xcopy /E /V /Y /I "maps"         "%dest%\maps"
+REM xcopy /E /V /Y /I "resource"     "%dest%\resource"
+REM xcopy /E /V /Y /I "scripts"      "%dest%\scripts"
+REM xcopy /E /V /Y /I "media"        "%dest%\media"
+REM copy /Y           "gameinfo.txt" "%dest%\gameinfo.txt"
 
-ECHO.
-ECHO ====== Packing pak01_dir... ======
-"%vpk%" pak01_dir
-copy /Y "pak01_dir.vpk" "%dest%\pak01_dir.vpk"
-DEL pak01_dir.vpk
+REM "%vpk%" pak01_dir
+REM copy /Y "pak01_dir.vpk" "%dest%\pak01_dir.vpk"
+REM DEL pak01_dir.vpk
 
-ECHO.
-ECHO ====== Copying smsm.dll... ======
-copy /Y "smsm\bin\smsm.dll" "%dest%\smsm.dll"
-
-ECHO Done.
+REM copy /Y "smsm\bin\smsm.dll" "%dest%\smsm.dll"

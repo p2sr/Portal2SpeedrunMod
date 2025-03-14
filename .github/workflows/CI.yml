@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: '**'
+    tags-ignore: '**'
+    paths:
+      - 'pak01_dir/**'
+      - 'smsm/**'
+  pull_request:
+    branches: '**'
+    paths:
+      - 'pak01_dir/**'
+      - 'smsm/**'
+  workflow_dispatch:
+
+jobs:
+  vpk:
+    name: Pack VPK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: pip install vpk
+
+      - name: Pack VPK
+        run: vpk -c pak01_dir pak01_dir.vpk
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pak01_dir
+          path: pak01_dir.vpk
+          if-no-files-found: error
+
+  build-lin:
+    name: SMSM Linux Build
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with: { fetch-depth: 0 }
+
+        - name: Install Dependencies
+          run: |
+            sudo apt-get update
+            sudo apt-get install -y g++-8-multilib
+
+        - name: Build
+          run: |
+            cd smsm
+            make -j$(nproc)
+
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: smsm-linux
+            path: smsm/smsm.so
+            if-no-files-found: error
+
+  build-win:
+    name: SMSM Windows Build
+    runs-on: windows-2019
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with: { fetch-depth: 0 }
+
+        - name: Setup MSBuild
+          uses: microsoft/setup-msbuild@v2
+
+        - name: Build
+          run: |
+            cd smsm
+            msbuild -m -t:chaos -p:"Configuration=Release;Platform=x86" SMSM.sln
+
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: smsm-windows
+            path: |
+              smsm\bin\smsm.dll
+              smsm\bin\smsm.pdb
+            if-no-files-found: error
