@@ -80,7 +80,7 @@ jobs:
         - name: Build
           run: |
             cd smsm
-            msbuild -m -t:chaos -p:"Configuration=Release;Platform=x86" SMSM.sln
+            msbuild -m -t:chaos -p:"Platform=x86" SMSM.sln
 
         - name: Upload Artifact
           uses: actions/upload-artifact@v4
