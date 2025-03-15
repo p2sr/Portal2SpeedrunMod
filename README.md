@@ -57,12 +57,12 @@ A mod for speedrunning Portal 2 with minimal downtime and support for alternate 
 ## Credits
 
 - Krzyhau - main developer.
-- Blenderiste 09 - Chapter 9 scripting.
-- Big D - constantly motivating me to finish this mod.
+- Blenderiste09 - Chapter 9 scripting.
+- Daniel - constantly motivating me to finish this mod.
 - NeKz - **HUGE** help with Speedrun Mod Simple Modifier plugin.
 - Can't Even, Rex, Spidda and many others - beta testing.
-- PortalRunner - Various different mode contributions 
+- PortalRunner - Various different mode contributions
 - Betsruner - Beta testing, maintenance, and content additions
 - AMJ - Maintenance, and content additions
-- Nano - Cooperative Speedrun Mod 
-- Valve - Making the greatest puzzle game 
+- Nanoman2525 - Cooperative Speedrun Mod
+- Valve - Making the greatest puzzle game
