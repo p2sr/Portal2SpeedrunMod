@@ -821,6 +821,25 @@ else if ( pszMapName == "mp_coop_paint_red_racer" )
 }
 else if ( pszMapName == "mp_coop_paint_speed_catch" )
 {
+    // The floor is not lava :)
+    EntFire("hurt_door_floor_1", "Kill");
+    EntFire("hurt_door_floor_2", "Kill");
+    EntFire("hurt_door_floor_3", "Kill");
+    EntFire("hurt_door_floor_4", "Kill");
+    EntFire("hurt_door_floor_5", "Kill");
+
+    // Platforms come up quicker
+    local floor1 = Entities.FindByName(null, "rot_door_floor_1");
+    floor1.__KeyValueFromFloat("speed", 1000.0)
+    local floor2 = Entities.FindByName(null, "rot_door_floor_2");
+    floor2.__KeyValueFromFloat("speed", 1000.0)
+    local floor3 = Entities.FindByName(null, "rot_door_floor_3");
+    floor3.__KeyValueFromFloat("speed", 1000.0)
+    local floor4 = Entities.FindByName(null, "rot_door_floor_4");
+    floor4.__KeyValueFromFloat("speed", 1000.0)
+    local floor5 = Entities.FindByName(null, "rot_door_floor_5");
+    floor5.__KeyValueFromFloat("speed", 1000.0)
+
     // Speed up gel.
     SpeedUpGel();
 }
