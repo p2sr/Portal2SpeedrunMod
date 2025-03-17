@@ -459,6 +459,24 @@ else if ( pszMapName == "mp_coop_lobby_2" || pszMapName == "mp_coop_lobby_3" )
         Entities.FindByName( null, "right_hub_to_dlc_destination" ).SetAbsOrigin( Vector( 3200, -1232, 1688 ) );
     }
 }
+else if (pszMapName == "mp_coop_doors")
+{
+    // Start ending door open
+    EntFire("team_door-relay_orange_out", "Kill")
+    EntFire("team_door-relay_blue_out", "Kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
+    EntFire("@exit_door", "Open")
+    EntFire("team_door-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue @glados:RunScriptCode:GladosCoopOpenExitDoor(1)")
+}
+else if (pszMapName == "mp_coop_laser_2")
+{
+    // Start ending door open
+    EntFire("team_door-relay_orange_out", "Kill")
+    EntFire("team_door-relay_blue_out", "Kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
+    EntFire("@exit_door", "Open")
+    EntFire("team_door-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue @glados:RunScriptCode:GladosCoopOpenExitDoor(1)")
+}
 else if ( pszMapName == "mp_coop_laser_crusher" )
 {
     // Stop cube from dropping in the players way
@@ -478,6 +496,13 @@ else if ( pszMapName == "mp_coop_laser_crusher" )
         EntFireByHandle( pLaserCatcher, "AddOutput", "OnPowered crasher2:SetSpeed:300", 0, null, null );
         EntFireByHandle( pLaserCatcher, "AddOutput", "OnUnPowered crasher2:SetSpeed:30", 0, null, null );
     }
+    // Start ending door open
+    EntFire("team_door-relay_orange_out", "Kill")
+    EntFire("team_door-relay_blue_out", "Kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
+    EntFire("@exit_door", "Open")
+    EntFire("team_door-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue @glados:RunScriptCode:GladosCoopOpenExitDoor(1)")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
 }
 else if ( pszMapName == "mp_coop_rat_maze" )
 {
@@ -497,7 +522,7 @@ else if ( pszMapName == "mp_coop_teambts" )
 }
 else if ( pszMapName == "mp_coop_infinifling_train" )
 {
-    // Button Starts down :) 
+    // Button Starts down :)
     EntFire("button_fling_wall_timer_2", "ClearParent");
     EntFire("button_fling_wall_timer_2", "SetLocalOrigin", "1088.30 -1220.15 457.26", 1)
     local buttonTrigger = Entities.FindByClassnameNearest("trigger_once", Vector(896, -1856, 576), 10)
@@ -518,6 +543,13 @@ else if ( pszMapName == "mp_coop_catapult_1" )
     EntFire( "@relay_exit_door_opened", "AddOutput", "OnTrigger team_trigger_door:Kill" );
     EntFire( "@relay_exit_door_opened", "AddOutput", "OnTrigger @command:Command:mp_earn_taunt robotDance 1;" );
     EntFire( "@relay_exit_door_opened", "AddOutput", "OnTrigger @glados:RunScriptCode:RespondToTaunt(5)" );
+
+    //Start ending door open
+    EntFire("team_door-relay_orange_out", "Kill")
+    EntFire("team_door-relay_blue_out", "Kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
+    EntFire("@exit_door", "Open")
+    EntFire("team_door-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue @glados:RunScriptCode:GladosCoopOpenExitDoor(1)")
 }
 else if ( pszMapName == "mp_coop_multifling_1" )
 {
@@ -529,6 +561,15 @@ else if ( pszMapName == "mp_coop_multifling_1" )
     EntFire( "catapult2a2", "AddOutput", "playerSpeed 850" );
     EntFire( "catapult2a2", "AddOutput", "physicsSpeed 1000" );
 }
+else if ( pszMapName == "mp_coop_fling_crushers")
+{
+    // Start ending door open
+    EntFire("team_door-relay_orange_out", "Kill")
+    EntFire("team_door-relay_blue_out", "Kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
+    EntFire("@exit_door", "Open")
+    EntFire("team_door-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue @glados:RunScriptCode:GladosCoopOpenExitDoor(1)")
+}
 else if ( pszMapName == "mp_coop_fan" )
 {
     FastFall( "blue_dropper-blue_dropper-cube_dropper_droptrigger_bottom", "blue_dropper-red_dropper-cube_dropper_droptrigger_bottom" );
@@ -538,6 +579,51 @@ else if ( pszMapName == "mp_coop_fan" )
     EntFire( "catcher", "AddOutput", "OnUnPowered brush_fan:AddOutput:fanfriction 18" );
 
     AddDiscTransition( -259.8, 881.89, 231.28 );
+}
+else if (pszMapName == "mp_coop_wall_2")
+{
+    // Start ending door open
+    EntFire("team_door-relay_orange_out", "Kill")
+    EntFire("team_door-relay_blue_out", "Kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
+    EntFire("@exit_door", "Open")
+    EntFire("team_door-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue @glados:RunScriptCode:GladosCoopOpenExitDoor(1)")
+}
+else if (pszMapName == "mp_coop_catapult_wall_intro")
+{
+    // Start ending door open
+    EntFire("team_door-relay_orange_out", "Kill")
+    EntFire("team_door-relay_blue_out", "Kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "Kill");
+    EntFire("@exit_door", "Open")
+    EntFire("team_door-coopman_airlock_success", "AddOutput", "OnChangeToAllTrue @glados:RunScriptCode:GladosCoopOpenExitDoor(1)")
+}
+else if (pszMapName == "mp_coop_wall_block")
+{
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+}
+else if (pszMapName == "mp_coop_catapult_2")
+{
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+}
+else if (pszMapName == "mp_coop_turret_ball")
+{
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
 }
 else if ( pszMapName == "mp_coop_wall_5" )
 {
@@ -559,6 +645,14 @@ else if ( pszMapName == "mp_coop_wall_5" )
 
     AddDiscTransition( 2133.35, -1587.71, 297.86 );
 }
+else if (pszMapName == "mp_coop_tbeam_redirect")
+{
+    // start ending door open
+    EntFire("team_door-exit_door-proxy", "Open",2) // I do not know why you have to open the ending door like this
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+}
 else if ( pszMapName == "mp_coop_tbeam_drill" )
 {
     // Make tractor beam faster.
@@ -566,11 +660,25 @@ else if ( pszMapName == "mp_coop_tbeam_drill" )
 }
 else if ( pszMapName == "mp_coop_tbeam_catch_grind_1" )
 {
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+
     // Make tractor beam faster.
     EntFire( "tractorbeam_emitter", "SetLinearForce", "500" );
 }
 else if ( pszMapName == "mp_coop_tbeam_laser_1" )
 {
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+
     // Prevent taunt at start of map, but also trigger the dialogue at the right time and conditions.
     Entities.FindByName( null, "@relay_grant_taunt" ).Destroy();
     Entities.CreateByClassname( "logic_relay" ).__KeyValueFromString( "targetname", "@relay_grant_taunt" );
@@ -579,6 +687,13 @@ else if ( pszMapName == "mp_coop_tbeam_laser_1" )
 }
 else if ( pszMapName == "mp_coop_tbeam_polarity" )
 {
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+
     // Make tractor beam faster.
     EntFire( "tbeam", "SetLinearForce", "600" );
     EntFire( "button_1_pressed", "Disable" );
@@ -588,8 +703,24 @@ else if ( pszMapName == "mp_coop_tbeam_polarity" )
     EntFire( "button_1-button", "AddOutput", "OnUnPressed tbeam:SetLinearForce:600" );
     EntFire( "button_1-button", "AddOutput", "OnUnPressed toggle_indicators:SetTextureIndex:0" );
 }
+else if (pszMapName == "mp_coop_tbeam_polarity2")
+{
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+}
 else if ( pszMapName == "mp_coop_tbeam_polarity3" )
 {
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+
     // Make tractor beam faster.
     EntFire( "tbeam", "SetLinearForce", "600",1.3 );
     EntFire( "button_1_pressed", "Disable" );
@@ -623,6 +754,14 @@ else if ( pszMapName == "mp_coop_tbeam_end" )
 }
 else if ( pszMapName == "mp_coop_paint_come_along" )
 {
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@relay_exit_door_open", "Trigger")
+    EntFire("@relay_exit_door_open", "Kill")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+
     // Speed up gel.
     SpeedUpGel();
 
@@ -632,13 +771,32 @@ else if ( pszMapName == "mp_coop_paint_come_along" )
 }
 else if ( pszMapName == "mp_coop_paint_redirect" )
 {
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@relay_exit_door_open", "Trigger")
+    EntFire("@relay_exit_door_open", "Kill")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
     // Speed up gel.
     SpeedUpGel();
 
     // Make tractor beam faster.
     EntFire( "tbeam", "SetLinearForce", "400" );
 }
-else if ( pszMapName == "mp_coop_paint_bridge" || pszMapName == "mp_coop_paint_walljumps" || pszMapName == "mp_coop_paint_speed_fling" )
+else if ( pszMapName == "mp_coop_paint_bridge" || pszMapName == "mp_coop_paint_walljumps")
+{
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@relay_exit_door_open", "Trigger")
+    EntFire("@relay_exit_door_open", "Kill")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+    // Speed up gel.
+    SpeedUpGel();
+}
+else if (pszMapName == "mp_coop_paint_speed_fling")
 {
     // Speed up gel.
     SpeedUpGel();
@@ -719,6 +877,13 @@ else if ( pszMapName == "mp_coop_paint_longjump_intro" )
 }
 else if ( pszMapName == "mp_coop_tripleaxis" )
 {
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+
     // Make crusher trigger faster.
     Entities.FindByName( null, "crusher_sequence_start_rl" ).Destroy();
     Entities.CreateByClassname( "logic_relay" ).__KeyValueFromString( "targetname", "crusher_sequence_start_rl" );
@@ -810,8 +975,24 @@ else if ( pszMapName == "mp_coop_paint_conversion" )
     EntFire( "paint_sprayer_white", "AddOutput", "maxblobcount 60" );
     EntFire( "paint_sprayer_white", "AddOutput", "blobs_per_second 20" );
 }
+else if (pszMapName == "mp_coop_bridge_catch")
+{
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+}
 else if ( pszMapName == "mp_coop_laser_tbeam" )
 {
+    // start ending door open
+    EntFire("team_door-relay_orange_out", "kill")
+    EntFire("team_door-relay_blue_out", "kill")
+    EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFire("@exit_door", "open")
+    EntFire("team_door-coopman_airlock_success", "addoutput", "onchangetoalltrue @glados:runscriptcode:gladoscoopopenexitdoor(1)")
+
     // Make tractor beam faster. (Hack: There's no real good way to do it for this map...)
     Entities.FindByName( null, "tbeam" ).__KeyValueFromString( "targetname", "tbeam_renamed" );
     EntFire( "tbeam_renamed", "SetLinearForce", "500" );
