@@ -98,12 +98,32 @@ function SpeedrunModeLoad(){
       // stop everything being dark as shit
       EntFire("@rl_poststasis_exposure_reload", "Enable")
       EntFire("@rl_poststasis_exposure_reload", "Trigger")
-      
-      DialogueMute_ForceFor(15);
-      EntFire("@exit_door-testchamber_door", "Open")
-      EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro01\")", 3)
-      EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro04\")", 7.2)
 
+      // Flashbang no longer through the door
+      local fadein = GetEntity("cryo_fade_in_from_white")
+      fadein.__KeyValueFromString("rendercolor","0 0 0")
+      fadein.__KeyValueFromInt("renderamt", 255)
+      EntFire("@exit_door-testchamber_door", "Open")
+
+      //Fast Start or Slow Start based on dialogue
+      local isDialogueEnabled = smsm.IsDialogueEnabled();
+      if(isDialogueEnabled == true){
+        EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro01\")", 3)
+        EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro04\")", 7.2)
+      }
+      else if (isDialogueEnabled == false){
+        GetPlayer().SetOrigin(Vector(-1190,4456,2724));
+        GetPlayer().SetAngles(-4, -115, 0)
+        EntFire("@music_awake", "kill")
+        EntFire("camera_intro","Kill")
+        //Do not delete is required for run to autostart
+        EntFire("camera_1", "TeleportPlayerToProxy")
+
+        EntFire("cryo_fade_in_from_white", "Kill")
+        // 1.15 is a close approximation to how long into the 3-2-1 counter is left on the normal wakeup and is used in some setups
+        EntFire("open_portal_relay", "trigger", 0, 1.15)
+      }
+      
       //keep saving active
       EntFire("@command", "Command", "map_wants_save_disable 0", 0)
 
@@ -246,16 +266,9 @@ function SpeedrunModeLoad(){
       EntFire("sphere_filter", "Kill")
       break
     case "sp_a1_wakeup": 
-      // Delete starting door and replace with a non-solid open one
-      local door = GetEntity("transition_entry_door-door_1")
-      local pos = Vector(6976, 642, 452)
-      local ang = door.GetAngles()
-      local newDoor = Entities.CreateByClassname("prop_dynamic");
+      // Fixed Fake Vertical Door
+      FakeVertDoor("transition_entry_door")
 
-      EntFireByHandle(door, "Kill", "", 0, null, null)
-      newDoor.SetOrigin(pos)
-      newDoor.SetAngles(ang.x, ang.y, ang.z)
-      newDoor.SetModel("models/props/vert_door/vert_door_frame.mdl")
       //HEKCING MESS, I DONT EVEN KNOW WHAT DOES WHAT, FORGOT TO COMMENT THIS AAAAAAAAGHGHH
       EntFire("@sphere", "Kill")
       EntFire("transition_entry_door-door_1", "SetPlaybackRate", 10)
@@ -370,6 +383,7 @@ function SpeedrunModeLoad(){
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_catapult_intro":
+      createCubeHelper(-20, 90, Vector(-192,-1376,-410))
       EntFire("door_1-door_open_relay", "Trigger")
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Trigger::1:1", 0)
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Kill::1.1:1", 0)
@@ -401,6 +415,9 @@ function SpeedrunModeLoad(){
       EntFire("open_button_escape_panels", "Trigger", 0, 8)
       EntFire("close_button_escape_panels", "Kill", 0, 8)
       EntFire("open_button_escape_panels", "Kill", 0, 10)
+
+      // Cube Helper
+      createCubeHelper(-20, 130, Vector(-191,1311,-230))
 
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
@@ -443,14 +460,8 @@ function SpeedrunModeLoad(){
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_ricochet":
-
-      local cubeZucc = Entities.CreateByClassname("point_push")  
-      cubeZucc.__KeyValueFromInt("SpawnFlags", 16)
-      cubeZucc.__KeyValueFromString("targetname", "cubeZucker")
-      cubeZucc.__KeyValueFromInt("magnitude", -20)
-      cubeZucc.__KeyValueFromInt("radius", 150)
-      EntFire("cubeZucker", "Enable")
-      cubeZucc.SetOrigin(Vector(3488, 959, -480))
+      // Cube Helper
+      createCubeHelper(-20, 150, Vector(3488, 959, -480))
 
       EntFire("cube_retrieved_relay", "Trigger")
       EntFire("cube_retrieved_relay", "Kill", 0, 1)
@@ -462,14 +473,8 @@ function SpeedrunModeLoad(){
     case "sp_a2_bridge_intro":
       EntFire("departure_elevator-elevator_turret_wife", "Kill", 1)
 
-      // Button Now sucks cube to it 👍
-      local cubeZucc = Entities.CreateByClassname("point_push")  
-      cubeZucc.__KeyValueFromInt("SpawnFlags", 16)
-      cubeZucc.__KeyValueFromString("targetname", "cubeZucker")
-      cubeZucc.__KeyValueFromInt("magnitude", -20)
-      cubeZucc.__KeyValueFromInt("radius", 150)
-      EntFire("cubeZucker", "Enable")
-      cubeZucc.SetOrigin(Vector(-479, -448, 100))
+      // Cube Helper
+      createCubeHelper(-20, 150, Vector(-479, -448, 100))
 
       //sometimes I just wonder why I hate someone without apparent reason
       //anyway so fuck you bets
@@ -517,11 +522,13 @@ function SpeedrunModeLoad(){
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_turret_blocker":
+      createCubeHelper(-20, 75, Vector(63, 510, 35))
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_laser_vs_turret":
+      createCubeHelper(-20, 130, Vector(-96, 96, 285))
       //make turrets explode faster if portals are in right position and laser is activated
       EntFire("button_1_pressed", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:StartFastFakeExplosionsInLvT():0:-1", 0)
       EntFire("button_1_unpressed", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:EndFastFakeExplosionsInLvT():0:-1", 0)
@@ -534,6 +541,7 @@ function SpeedrunModeLoad(){
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break;
     case "sp_a2_pull_the_rug":
+      createCubeHelper(-20, 115, Vector(192.9, -448.5, -163))
       FixCelesteModeWindow(Vector(128, -649, 192), Vector(0,270,0));
 
       // Remove Top from departure elevator
@@ -641,9 +649,8 @@ function SpeedrunModeLoad(){
       EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
       break
     case "sp_a2_bts4":
-      FasterVertDoor("entry_airlock_door")
-      EntFire("entry_airlock_door-open_door", "Trigger",0,0.3)
-      EntFire("entry_airlock_door-open_door", "Kill",0,1)
+      // Create non-solid fake vertical door
+      FakeVertDoor("entry_airlock_door")
 
       //always spawn broken turrets
       EntFire("turret_conveyor_1_pre_switch_case", "Kill")
@@ -655,11 +662,10 @@ function SpeedrunModeLoad(){
       
       EntFire("initial_template_turret", "AddOutput", "OnPhysGunPickup !self:SelfDestructimmediately::0:0")
 
-      //CreateSceneEntity("scenes/npc/announcer/sp_sabotage_factory_line04.vcd") //template missing
-      //CreateSceneEntity("scenes/npc/announcer/sp_sabotage_factory_line05.vcd") //new template accepted
       EntFire("exit_airlock_door-open_door", "Trigger")
       EntFire("exit_airlock_door-open_door", "Kill",0,1)
       EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
+      FasterVertDoor("exit_turret_room_door")
 
       local turretCode =
       "local i,v\n"+
@@ -670,23 +676,17 @@ function SpeedrunModeLoad(){
 
       EntFire("turret_vo_manager", "RunScriptCode", turretCode, 0.1)
 
-      //Give the player a one turn lead on Wheatley to avoid players getting stuck
+      //Give the player a lead on Wheatley to avoid players getting stuck
       local wheatleyMoveTrigger1 = Entities.FindByClassnameNearest("trigger_multiple", Vector(-2208, -7456, 6720), 100)
       EntFireByHandle(wheatleyMoveTrigger1, "Kill", "", 0, null, null)
       local wheatleyMoveTrigger2 = Entities.FindByClassnameNearest("trigger_multiple", Vector(-2560, -7552, 6576), 100)
       EntFireByHandle(wheatleyMoveTrigger2, "Kill", "", 0, null, null)
       break
     case "sp_a2_bts5":
-      //Just delete the door and replace it with an open one so it's non-solid
-      local door = GetEntity("exit_airlock_door-door_1")
-      local pos = Vector(3650, -1728, 3460)
-      local ang = door.GetAngles()
-      local newDoor = Entities.CreateByClassname("prop_dynamic");
-
-      EntFireByHandle(door, "Kill", "", 0, null, null)
-      newDoor.SetOrigin(pos)
-      newDoor.SetAngles(ang.x, ang.y, ang.z)
-      newDoor.SetModel("models/props/vert_door/vert_door_frame.mdl")
+      // Fake vertical doors
+      FakeVertDoor("exit_airlock_door")
+      FakeVertDoor("airlock_door_01")
+      FakeVertDoor("airlock_door_02")
 
       //make 2nd floor door open faster
       EntFire("security_door-open_door_slow", "Kill")
@@ -1084,6 +1084,7 @@ function SpeedrunModeLoad(){
       Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_tb_catch":
+      createCubeHelper(-20, 110, Vector(702,1183,323))
       local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(1440, 896, 148), 10)
       Chapter8ElevatorFix(endElevatorLeave)
       break
@@ -1183,6 +1184,8 @@ function SpeedrunModeLoad(){
       Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_finale1":
+      FakeVertDoor("liftshaft_airlock_exit")
+      FakeVertDoor("final_door")
       EntFire("final_door-open_door", "Trigger")
       EntFire("final_door-open_door", "Kill", 0, 0.1)
 
@@ -1208,6 +1211,8 @@ function SpeedrunModeLoad(){
       EntFire("@glados", "RunScriptCode", "nuke()", 8.5)
       break
     case "sp_a4_finale2":
+      FakeVertDoor("entrance_door")
+      FakeVertDoor("bts_door_1")
       EntFire("relay_world_shudder", "Kill")
       EntFire("env_shake", "Kill")
       EntFire("shake_pipe_fall", "Kill")
@@ -1487,7 +1492,19 @@ function SpeedrunModeUpdate(){
   }
 }
 
-
+function FakeVertDoor(prefabname){
+  EntFire(prefabname + "-door_1_clip", "kill")
+  local door = GetEntity(prefabname + "-door_1")
+  local ang = door.GetAngles()
+  local pos = door.GetOrigin()
+  local newDoor = Entities.CreateByClassname("prop_dynamic");
+  EntFireByHandle(door, "Kill", "", 0, null, null)
+  newDoor.SetOrigin(pos)
+  newDoor.SetAngles(ang.x, ang.y, ang.z)
+  newDoor.SetModel("models/props/vert_door/vert_door_animated.mdl")
+  newDoor.__KeyValueFromString("targetname", prefabname + "-door_1")
+  FasterVertDoor(prefabname)
+}
 
 //nice function for handling all elevator events in underground section
 function FastUndergroundTransition(idin, idout){
@@ -1523,6 +1540,15 @@ function FastUndergroundTransition(idin, idout){
     EntFire(elename2, "inpass", 0, 1.1)
   }
   
+}
+
+function createCubeHelper(power, radius, coords){
+  local cubeZucc = Entities.CreateByClassname("point_push")
+  cubeZucc.__KeyValueFromInt("SpawnFlags", 16)
+  cubeZucc.__KeyValueFromInt("magnitude", power)
+  cubeZucc.__KeyValueFromInt("radius", radius)
+  EntFireByHandle(cubeZucc, "Enable", "", 0, null, null)
+  cubeZucc.SetOrigin(coords)
 }
 
 function FasterVertDoor(prefabname, speed=0.1){
