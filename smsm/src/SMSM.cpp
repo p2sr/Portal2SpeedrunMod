@@ -9,6 +9,7 @@
 #include "Modules/Server.hpp"
 #include "Modules/Console.hpp"
 #include "Modules/Engine.hpp"
+#include "Modules/MaterialSystem.hpp"
 #include "Modules/Module.hpp"
 #include "Modules/Tier1.hpp"
 #include "Modules/VScript.hpp"
@@ -74,6 +75,7 @@ bool SMSM::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServer
             this->modules->AddModule<VScript>(&vscript);
             this->modules->AddModule<Surface>(&surface);
             this->modules->AddModule<VGui>(&vgui);
+            this->modules->AddModule<MaterialSystem>(&materialSystem);
             this->modules->InitAll();
 
             if (engine && client && engine->hasLoaded && client->hasLoaded && server->hasLoaded) {

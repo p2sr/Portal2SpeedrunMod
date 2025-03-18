@@ -184,6 +184,7 @@
     <ClCompile Include="Modules\Client.cpp" />
     <ClCompile Include="Modules\Console.cpp" />
     <ClCompile Include="Modules\Engine.cpp" />
+    <ClCompile Include="Modules\MaterialSystem.cpp" />
     <ClCompile Include="Modules\Module.cpp" />
     <ClCompile Include="Modules\Tier1.cpp" />
     <ClCompile Include="Offsets.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Modules\Client.hpp" />
     <ClInclude Include="Modules\Console.hpp" />
     <ClInclude Include="Modules\Engine.hpp" />
+    <ClInclude Include="Modules\MaterialSystem.hpp" />
     <ClInclude Include="Modules\Module.hpp" />
     <ClInclude Include="Modules\Tier1.hpp" />
     <ClInclude Include="Offsets.hpp" />

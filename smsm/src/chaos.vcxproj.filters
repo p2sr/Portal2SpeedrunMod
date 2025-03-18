@@ -64,6 +64,9 @@
     <ClCompile Include="Modules\Engine.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Modules\MaterialSystem.cpp">
+      <Filter>Source\Modules</Filter>
+    </ClCompile>
     <ClCompile Include="Modules\VScript.cpp">
       <Filter>Source\Modules</Filter>
     </ClCompile>
@@ -103,6 +106,9 @@
       <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Modules\Engine.hpp">
+      <Filter>Source\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Modules\MaterialSystem.hpp">
       <Filter>Source\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Modules\VScript.hpp">
