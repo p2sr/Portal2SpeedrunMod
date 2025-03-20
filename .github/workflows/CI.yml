@@ -23,16 +23,13 @@ jobs:
         uses: actions/checkout@v4
         with: { fetch-depth: 0 }
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Install Python dependencies
-        run: pip install vpk
-
       - name: Pack VPK
-        run: vpk -c pak01_dir pak01_dir.vpk
+        run: |
+          wget https://github.com/mlugg/zvpk/releases/download/v0.1.1/zvpk
+          # https://github.com/mlugg/zvpk/issues/1
+          rm -f pak01_dir/models/nintendo/marios_cap.dx90.vtx
+          rm -f pak01_dir/models/nintendo/marios_cap.sw.vtx
+          ./zvpk pak01_dir
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
