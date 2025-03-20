@@ -9,7 +9,7 @@ A mod for speedrunning Portal 2 with minimal downtime and support for alternate 
 0. Note: for now, this mod is for Windows and Linux users only. Sorry, Mac users :/ Also, make sure you have original game (Portal 2, duh) installed on Steam.
 1. Download newest release archive from [releases tab](https://github.com/p2sr/Portal2SpeedrunMod/releases). Do **NOT** download the repository: it contains uncompiled version of plugin and resource files, so it most likely won't work (if even launch) properly.
 2. Unzip `Portal 2 Speedrun Mod` folder into `sourcemods` directory (its default location is `Steam/steamapps/sourcemods/`).
-3. Restart Steam by going to the top left under steam then selecting exit.
+3. Restart Steam by going to the top left under Steam then selecting Exit.
 4. A new game, called "Portal 2 Speedrun Mod" should appear in your library.
 
 ## Currently implemented modes
@@ -30,7 +30,7 @@ A mod for speedrunning Portal 2 with minimal downtime and support for alternate 
 - Everything from Singleplayer Speedrun Mod.
 - Celeste-like movement added on top of Portal 2 movement (dash, wave dash, wallclimb and many more).
 - Container Ride, Portal Carousel, Portal Gun, Smooth Jazz and PotatOS have been modified to fit Celeste movement into the gameplay.
-- Over 280 moons difficult to find berries!
+- Over 100 difficult to find berries!
 
 ### Fog%
 
@@ -48,7 +48,7 @@ A mod for speedrunning Portal 2 with minimal downtime and support for alternate 
 - Everything from Singleplayer Speedrun Mod.
 - Super Mario Odyssey movement added on top of Portal 2 movement
 - Control objects at the drop of a hat
-- Many various difficult to find Moons!
+- Over 280 difficult to find Moons!
 
 ### The Floor is Lava
 
@@ -58,7 +58,7 @@ A mod for speedrunning Portal 2 with minimal downtime and support for alternate 
 
 - Krzyhau - main developer.
 - Blenderiste09 - Chapter 9 scripting.
-- Daniel - constantly motivating me to finish this mod.
+- BigDaniel - constantly motivating me to finish this mod.
 - NeKz - **HUGE** help with Speedrun Mod Simple Modifier plugin.
 - Can't Even, Rex, Spidda and many others - beta testing.
 - PortalRunner - Various different mode contributions
