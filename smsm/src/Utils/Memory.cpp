@@ -57,18 +57,23 @@ bool Memory::TryGetModule(const char* moduleName, Memory::ModuleInfo* info)
 
 #else
         dl_iterate_phdr([](struct dl_phdr_info* info, size_t, void*) {
-            auto module = Memory::ModuleInfo();
-
             std::string temp = std::string(info->dlpi_name);
             int index = temp.find_last_of("\\/");
             temp = temp.substr(index + 1, temp.length() - index);
-            snprintf(module.name, sizeof(module.name), "%s", temp.c_str());
 
-            module.base = info->dlpi_addr + info->dlpi_phdr[0].p_paddr;
-            module.size = info->dlpi_phdr[0].p_memsz;
-            strcpy(module.path, info->dlpi_name);
+            for (int i = 0; i < info->dlpi_phnum; ++i) {
+                // FIXME: we really want data segments too! but +x is more important
+                if (info->dlpi_phdr[i].p_flags & 1) { // execute
+                    Memory::ModuleInfo module;
+                    module.base = info->dlpi_addr + info->dlpi_phdr[i].p_vaddr;
+                    module.size = info->dlpi_phdr[i].p_memsz;
+                    std::strncpy(module.name, temp.c_str(), sizeof(module.name));
+                    std::strncpy(module.path, info->dlpi_name, sizeof(module.path));
+                    Memory::moduleList.push_back(module);
+                    break;
+                }
+            }
 
-            Memory::moduleList.push_back(module);
             return 0;
         },
             nullptr);

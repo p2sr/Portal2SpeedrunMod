@@ -17,8 +17,8 @@ bool MaterialSystem::Init()
     auto offSize = 1;
 #else
     auto sigSize = "81 C3 00 60 22 00";
-    auto sigInit = "A1 ? ? ? ? 85 C0 74 ? 83 C0 01";
     auto sigTerm = "83 2D ? ? ? ? 01 74 ? C3";
+    auto sigInit = "A1 ? ? ? ? 85 C0 74 ? 83 C0 01";
     auto offSize = 2;
 #endif
     auto defaultContextSize = Memory::Scan(this->Name(), sigSize, offSize);
