@@ -26,6 +26,7 @@ jobs:
       - name: Pack VPK
         run: |
           wget https://github.com/mlugg/zvpk/releases/download/v0.1.1/zvpk
+          chmod +x ./zvpk
           # https://github.com/mlugg/zvpk/issues/1
           rm -f pak01_dir/models/nintendo/marios_cap.dx90.vtx
           rm -f pak01_dir/models/nintendo/marios_cap.sw.vtx
