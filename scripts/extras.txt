@@ -65,7 +65,7 @@
 	//"cubecore"
 	//{
 	//	"title"		"Save The Cube"
-	//	"subtitle"	"Help the cube core to fullfill its dreams!"
+	//	"subtitle"	"Help the cube core to fulfill its dreams!"
 	//	"pic"		"srmod/menu_modes/normal"
 	//	"command"	"sm_mode 3;map sp_a1_intro1"
 	//}
