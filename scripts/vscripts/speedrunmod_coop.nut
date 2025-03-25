@@ -206,6 +206,10 @@ local OpenEndDoor = function() {
 //-----------------------------------------------------------------------------
 if ( pszMapName == "mp_coop_start" )
 {
+    // Start ending door open
+    OpenEndDoor();
+    EntFire("team_trigger_door", "Enable");
+
     // Pinging and taunting is always enabled when starting on this map in the game.
     // Fix an edge case where someone changes level to this while the state is disabled.
     EntFireByHandle( Entities.FindByName( null, "@global_no_pinging_blue" ), "TurnOff", "", 0, null, null );
