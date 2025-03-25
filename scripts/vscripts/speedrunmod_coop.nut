@@ -652,6 +652,7 @@ else if (pszMapName == "mp_coop_tbeam_redirect")
     EntFire("team_door-relay_orange_out", "kill")
     EntFire("team_door-relay_blue_out", "kill")
     EntFire("team_door-exit_door-trigger_glados_exit_door", "kill");
+    EntFireByHandle( Entities.FindByClassnameNearest( "trigger_playerteam", Vector( 751, -336, 640.03 ), 1 ), "Kill", "", 0, null, null );
 }
 else if ( pszMapName == "mp_coop_tbeam_drill" )
 {
