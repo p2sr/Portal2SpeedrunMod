@@ -16,7 +16,7 @@ on:
 
 jobs:
   vpk:
-    name: Pack VPK
+    name: Pack files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,8 +35,15 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pak01_dir
-          path: pak01_dir.vpk
+          name: mod-files
+          path: |
+            cfg/
+            maps/
+            resource/
+            scripts/
+            media/
+            gameinfo.txt  
+            pak01_dir.vpk
           if-no-files-found: error
 
   build-lin:
@@ -88,3 +95,14 @@ jobs:
               smsm\bin\smsm.dll
               smsm\bin\smsm.pdb
             if-no-files-found: error
+
+  merge:
+    name: Mod Package
+    needs: [vpk, build-lin, build-win]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: Portal 2 Speedrun Mod
+          delete-merged: true
