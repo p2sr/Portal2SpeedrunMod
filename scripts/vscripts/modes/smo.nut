@@ -851,7 +851,7 @@ smo.move.safetp <- function(pos) {
   SendToConsole("setang "+ang.x+" "+ang.y+" "+ang.z);
 
 }
-  
+
 smo.cap <- {
   ent = null,
   offset = Vector(0, 0, 5),
@@ -887,7 +887,7 @@ smo.cap.setup <- function() {
 }
 
 smo.cap.create <- function(func = function(){}) {
-  ppmod.create("player/items/eggbot/eggbot_beanie.mdl", function(ent, func = func) {
+  ppmod.create("nintendo/marios_cap.mdl", function(ent, func = func) {
     ent.SetOrigin(GetPlayer().GetOrigin());
     ent.SetAngles(0, 90, 0);
     ppmod.keyval(ent, "Targetname", "smo_cap");
@@ -1267,7 +1267,7 @@ smo.cap.core <- function(ent) {
   if (GetMapName() == "sp_a4_finale4") {
 
     if (ent.GetName().slice(6).tointeger() >= smo.cap.currcore) {
-      
+
       ppmod.fire(ent, "ClearParent");
       ppmod.fire(ent, "EnableMotion");
       ppmod.fire(ent, "Wake");
@@ -1862,7 +1862,7 @@ smo.moon.setup <- function() {
     }
 
   }
-  
+
   foreach (curr in smo.moon.table) {
     if (smo.moonlist[curr].map == GetMapName().tolower()) {
       smo.moon.str += smo.moon.char;
@@ -1902,7 +1902,7 @@ smo.moon.setup <- function() {
     txt[1].Display();
 
     smo.moon.ang = (smo.moon.ang + 7) % 360;
-    
+
   }, 0, "smo_moon_interval");
 
   ppmod.wait(function() {
@@ -1934,7 +1934,7 @@ smo.moon.setup <- function() {
         if (dist >= elevatordist) {
           elevatordist = dist;
           lastelevator = ent;
-        } 
+        }
 
       }
 
@@ -2327,7 +2327,7 @@ smo.moon.odyssey <- {
       }, 0, "smo_moon_chaptertext_interval");
 
       ppmod.interval(function() {
-        
+
         smo.moon.odyssey.textvelocity *= 0.9;
         smo.moon.odyssey.textoffset += smo.moon.odyssey.textvelocity;
         smo.moon.odyssey.chaptertext.SetPosition(-1, smo.moon.odyssey.textoffset);
@@ -2368,7 +2368,7 @@ smo.moon.odyssey <- {
           smo.moon.odyssey.statstext.SetChannel(2);
           smo.moon.odyssey.statstext.SetFade(0.5, 0);
           smo.moon.odyssey.statstext.Display(86400);
-          
+
           smo.moon.odyssey.enabled = 2;
 
         }
@@ -2393,7 +2393,7 @@ smo.moon.odyssey <- {
 
         required <= smo.moon.table.len() &&
         GetMapName().tolower() != smo.moon.chapters[smo.moon.chapternum][smo.moon.odyssey.selected]
-        
+
       ) {
 
         local storage = smo.moon.odyssey.currchapter == smo.moon.chapternum ? "T" : "F";
@@ -2407,7 +2407,7 @@ smo.moon.odyssey <- {
 
         local landmark = ppmod.get("info_landmark_exit");
         if (landmark) GetPlayer().SetOrigin(landmark.GetOrigin());
-        
+
         ppmod.fire("weapon_portalgun", "Kill");
 
         ppmod.fire(smo.move.speedmod, "ModifySpeed", 1);
@@ -2545,7 +2545,7 @@ smo.moon.odyssey <- {
 
           local brightness = step * (abs(smo.moon.odyssey.listanim));
           if (!smo.moon.odyssey.listmove) brightness = step * 15 - brightness;
-          
+
           text.SetColor(brightness+" "+brightness+" "+brightness);
 
           text.SetText(paddingL + smo.moon.levels[smo.moon.chapternum][smo.moon.odyssey.selected] + paddingR);
@@ -2558,11 +2558,11 @@ smo.moon.odyssey <- {
     }, 0.5);
 
   },
-  
+
   check = function () {
 
     if (smo.moon.odyssey.enabled) {
-      
+
       smo.moon.odyssey.show();
 
     } else {
@@ -2609,7 +2609,7 @@ smo.moon.setcount <- function(amount) {
       },
       sp_a2_turret_intro = function () {
         smo.setup <- function() {
-  
+
           ppmod.give("npc_security_camera", function (ent) {
 
             ent.SetOrigin(Vector(640.5, 638.5, 102.5));
@@ -2636,7 +2636,7 @@ smo.moon.setcount <- function(amount) {
       },
       sp_a2_fizzler_intro = function () {
         smo.setup <- function() {
-  
+
           local eleTrig = ppmod.trigger(Vector(-981, -128, -960), Vector(16, 16, 4));
           ppmod.addscript(eleTrig, "OnStartTouch", function() {
 
@@ -2676,12 +2676,12 @@ smo.moon.setcount <- function(amount) {
                     GetPlayer().SetAbsOrigin(ppos + Vector(0, 0, 15));
 
                     if (epos.z > -162) {
-                      
+
                       ppmod.get("smo_elevator_up_interval").Destroy();
 
                       ppmod.fire(smo.move.speedmod, "ModifySpeed", 1);
                       ppmod.keyval("!player", "MoveType", 2);
-                    
+
                     }
 
                   }, 0, "smo_elevator_up_interval");
@@ -2717,7 +2717,7 @@ smo.moon.setcount <- function(amount) {
     case "sp_a2_intro"  : EntFire("viewmodel", "DisableDraw"); break;
     default : EntFire("viewmodel", "EnableDraw");
 
-  } 
+  }
 
   ppmod.addoutput("weapon_portalgun", "OnPlayerPickup", "viewmodel", "EnableDraw");
 

@@ -25,12 +25,10 @@ jobs:
 
       - name: Pack VPK
         run: |
-          wget https://github.com/mlugg/zvpk/releases/download/v0.1.1/zvpk
-          chmod +x ./zvpk
-          # https://github.com/mlugg/zvpk/issues/1
-          rm -f pak01_dir/models/nintendo/marios_cap.dx90.vtx
-          rm -f pak01_dir/models/nintendo/marios_cap.sw.vtx
-          ./zvpk pak01_dir
+          wget https://github.com/craftablescience/VPKEdit/releases/download/v4.4.2/VPKEdit-Linux-Standalone-CLI-gcc-Release.zip
+          unzip VPKEdit-Linux-Standalone-CLI-gcc-Release.zip
+          chmod +x ./vpkeditcli
+          ./vpkeditcli -s -v 1 pak01_dir
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
