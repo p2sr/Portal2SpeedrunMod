@@ -49,6 +49,10 @@ if ( !bShouldRun )
     return; // Not a native coop map.
 }
 
+if (smsm.GetMode() != 0) {
+    smsm.SetMode(0);
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Speed up checkpoints and ending transitions based on map type.
 //-----------------------------------------------------------------------------

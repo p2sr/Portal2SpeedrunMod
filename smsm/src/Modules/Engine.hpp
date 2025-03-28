@@ -33,6 +33,9 @@ public:
 
     void* s_CommandBuffer = nullptr;
 
+    DECL_DETOUR_COMMAND(startuse);
+    DECL_DETOUR_COMMAND(enduse);
+
     Engine();
     bool Init() override;
     void Shutdown() override;
@@ -40,4 +43,3 @@ public:
 };
 
 extern Engine* engine;
-

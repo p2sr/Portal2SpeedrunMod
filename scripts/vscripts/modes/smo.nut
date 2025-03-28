@@ -545,10 +545,6 @@ smo.move.setup <- function() {
   smo.move.speedmod <- Entities.CreateByClassname("player_speedmod");
   ppmod.keyval(smo.move.speedmod, "SpawnFlags", 0);
 
-  // Horrible way of doing this. Will replace as soon as I can.
-  SendToConsole("alias +use \"script smo.move.use()\"");
-  SendToConsole("alias -use \"script smo.move.unuse()\"");
-
   // SLA softlock prevention
   SendToConsole("-jump");
   smo.move.speed(175);

@@ -8,6 +8,23 @@
 
 #include "SMSM.hpp"
 
+REDECL(Engine::startuse_callback);
+REDECL(Engine::enduse_callback);
+
+DETOUR_COMMAND(Engine::startuse) {
+    if (smsm.GetMode() == 6) { // SMO
+        engine->Cbuf_AddText(0, "script smo.move.use()", 0);
+    } else {
+        Engine::startuse_callback(args);
+    }
+}
+
+DETOUR_COMMAND(Engine::enduse) {
+    if (smsm.GetMode() == 6) { // SMO
+        engine->Cbuf_AddText(0, "script smo.move.unuse()", 0);
+    }
+    Engine::enduse_callback(args);
+}
 
 Engine::Engine()
     : Module()
@@ -54,6 +71,9 @@ bool Engine::Init()
         this->PrecacheModel = this->engineTool->Original<_PrecacheModel>(Offsets::PrecacheModel);
     }
 
+    Command::Hook("+use", Engine::startuse_callback_hook, Engine::startuse_callback);
+    Command::Hook("-use", Engine::enduse_callback_hook, Engine::enduse_callback);
+
     return this->hasLoaded = this->engineClient
         && this->engineTool
         && this->hoststate
@@ -75,6 +95,9 @@ void Engine::Shutdown()
     if (this->engineClient) Interface::Delete(this->engineClient);
     if (this->engineTrace) Interface::Delete(this->engineTrace);
     if (this->engineTool) Interface::Delete(this->engineTool);
+    
+    Command::Unhook("+use", Engine::startuse_callback);
+    Command::Unhook("-use", Engine::enduse_callback);
 }
 
 Engine* engine;
