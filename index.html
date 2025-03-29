@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal 2 Speedrun Mod Official Website</title>
+    <title>Portal 2 Speedrun Mod</title>
 
+    <link rel="shortcut icon" type="image/png" href="https://avatars.githubusercontent.com/u/83299896" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous" />
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -15,15 +16,17 @@
 <body>
     <script>
         //animated background
-        var bgMovX = 0;
+        var bgWidth = 1024;
+        var bgMovX = Math.floor(Math.random() * bgWidth);
+        document.body.style.backgroundPositionX = bgMovX + "px";
         setInterval(function(){
-            bgMovX += 1;
+            bgMovX = (bgMovX + 1) % bgWidth;
             document.body.style.backgroundPositionX = bgMovX + "px";
         },50);
     </script>
     <div class="container mt-sm-4">
         <div id="p2smlogo" class="p2box col-12"> 
-            <img src="img/logo.png">
+            <img src="img/logo.png" draggable="false">
         </div>
     </div>
     <div class="container sticky">
@@ -34,47 +37,57 @@
                 <a href="#download">Download</a>
             </div>
             <div class="side-links col-sm-12 col-md-3">
-                <a href="https://discordapp.com/invite/hRwE4Zr" title="Join the discord server!" target="_blank"><i class="fa fa-discord"></i></a>
-                <a href="https://github.com/p2sr/Portal2SpeedrunMod" title="GitHub repository" target="_blank"><i class="fa fa-github"></i></a>
+                <a href="https://discordapp.com/invite/hRwE4Zr" title="Join the discord server!" target="_blank"><i class="fa fa-brands fa-discord"></i></a>
+                <a href="https://github.com/p2sr/Portal2SpeedrunMod" title="GitHub repository" target="_blank"><i class="fa fa-brands fa-github"></i></a>
             </div>
         </nav>
     </div>
     <div class="container p2sm-content js-disabled">
         <div class="p2box col-12"> 
-            If you see this message then your browser [UNKNOWN] is too old<br>(or you have JavaScript disabled or sth, honestly I have no idea)
+            If you see this message then your browser is too old<br>
+            (or you have JavaScript disabled or sth, honestly I have no idea)
         </div>
     </div>
     <div class="container p2sm-content about hidden">
         <div class="p2box col-12"> 
             <h1>You don't have to go THAT slowly!</h1>
             <p>
-                It started as a simple hack for speedrunners, now aims to be <b>the greatest toy box</b> Portal 2 Speedrunning Community could ever receive. 
-                <b>Portal 2 Speedrun Mod</b> is a modification that alters the way you run through the default Portal 2 campaign. Not only it <b>removes majority
-                of cutscenes and downsides</b>, making the game a lot more entertaining to speedrun, but also introduces several <b>game-changing modes</b>, giving
-                a fresh experience into your favourite test chambers, allowing you to enjoy them in a new unique way.
+                It started as a simple hack for speedrunners, and now aims to be <b>the greatest toy box</b> the Portal 2 Speedrunning Community could ever receive. 
+                <b>Portal 2 Speedrun Mod</b> is a modification that alters the way you run through the default Portal 2 campaign. Not only does it
+                <b>remove most of the cutscenes and waiting</b>, making the game a lot more entertaining to speedrun, but it also introduces several
+                <b>game-changing modes</b>, giving a fresh experience of your favourite test chambers, allowing you to enjoy them in a new unique way.
             </p>
-
-            <br>
 
             <h1>Special thanks</h1>
             <p>
-                This project wouldn't be possible without help of these individuals:
+                This project wouldn't be possible without the help of these individuals:
                 <ul>
-                    <li><b>NeKz</b> - creating a base (<a target="_blank" href="https://github.com/NeKzor/chaos">Chaos mod</a>) for the plugin and massive support during its development.</li>
-                    <li><b>Blenderiste</b> - Chapter 9 scripting & testing.</li>
-                    <li><b>Big D</b> - motivation so large that it deserves a separate credit</li>
-                    <li><b>Valve</b> - creating original game.</li>
-                    <li><b>A bunch of generous people</b> - supporting development of this mod.</li>
+                    <li><a target="_blank" href="https://www.youtube.com/@Krzyhau"><b class="rainbow">Krzyhau</b></a> - the creator, the legend, the genesis. This mod wouldn't exist without him.</li>
+                    <li><a target="_blank" href="https://www.youtube.com/@PortalRunner"><b>PortalRunner</b></a> - creating the Reverse, Odyssey, and Floor is Lava modes. Check out his other crazy mods on YouTube!</li>
+                    <li><b>Nanoman2525</b> - creating the Coop Speedrun Mod mode.</li>
+                    <li><b>NeKzor</b> - creating a base (<a target="_blank" href="https://github.com/NeKzor/chaos">Chaos mod</a>) for the <i>SMSM</i> plugin and massive support during its development.</li>
+                    <li><b>Blenderiste09</b> - Chapter 9 scripting & testing.</li>
+                    <li><b>BigDaniel</b> - motivation so large that it deserves a separate credit.</li>
+                    <li><b>Valve</b> - creating the original game.</li>
+                    <li><b>A bunch of generous people</b> - supporting development of this mod. Find their exhibit!</li>
                 </ul>
 
-                I also thank people who helped debug and beta-test the project, including, but not limited to:
+                We also thank people who helped debug and beta-test the project, including, but not limited to:
                 <ul>
                     <li><b>Can't Even</b> - live testing.</li>
-                    <li><b>Betsruner</b></li>
                     <li><b>PH-MLK</b> - Laser Over Goo crash debugging.</li>
                     <li><b>BreweryJake</b></li>
                     <li><b>Rex</b></li>
-                    <li>..and bunch of other people I forgot to credit (sorry :/)</li>
+                    <li>Turkey, Façade, Oatsy, Soulfur - Coop testing.</li>
+                    <li>..and a bunch of other people we forgot to credit (sorry :/)</li>
+                </ul>
+
+                Although Krzyhau has <b>moved on</b> from this mod, the Portal 2 Speedrunning Community is still maintaining
+                it and <b>adding new modes and features</b>. We are grateful for his work and dedication to the project. The mod
+                is currently being maintained by:
+                <ul>
+                    <li><b>AMJ</b></li>
+                    <li><b>Betsruner</b></li>
                 </ul>
             </p>
         </div>
@@ -83,26 +96,26 @@
         <div class="p2box col-12"> 
             <div class="mode">
                 <div class="mode-header">
-                    <h1>Normal mode</h1>
+                    <h1>Normal mode<!--<span id="coop-ad">(Now featuring coop!)</span>--></h1>
                 </div>
                 <p>
-                    The main and original mode of Speedrun Mod. It's also a base to all other modes.
+                    The main and original mode of Speedrun Mod. It's also a base for all the other modes.
                     <ul>
                         <li>Most of the game's downtime is removed or shortened (like elevators, doors etc.)</li>
                         <li>Most of cutscenes were removed or shortened (like Tube Ride, Core etc.)</li>
-                        <li>A full list of every change can be found <a target="_blank" href="https://github.com/p2sr/Portal2SpeedrunMod/tree/master/doc/normalpercentlist.md">here</a>.</li>
+                        <li>A full list of every change can be found <a target="_blank" href="https://github.com/p2sr/Portal2SpeedrunMod/blob/master/doc/SingleplayerSRM.md">here</a>.</li>
                     </ul>
                 </p>
             </div>
             <div class="mode">
                 <div class="mode-header">
-                    <h1>Celeste 2</h1>
+                    <h1>Celeste Mode</h1>
                 </div>
                 <p>
                     A bunch of berries were scattered around Aperture. Dash your way through test chambers to collect them all!
                     <ul>
                         <li>Celeste-like movement added on top of current one (dash, wave dash, wallclimb and many more).</li>
-                        <li>Certain test chambers were modified in order to fit into the gameplay/teach mode's mechanics.</li>
+                        <li>Certain test chambers were modified in order to fit into the gameplay, and to teach the mechanics.</li>
                         <li>125 unique collectable berries hidden all around the levels:
                             <ul>
                                 <li><b>Red Berries</b> - difficult to find or difficult to get... sometimes both, sometimes none.</li>
@@ -110,25 +123,62 @@
                                 <li><b>Golden Berries</b> - <b>no.</b></li>
                             </ul>
                         </li>
-                        <li>Special ending allowing you to easily identify and collect berries you missed.</li>
+                        <li>Special ending allowing you to easily identify and collect the berries you missed.</li>
                     </ul>
-                    It is recommended to know the source material (Celeste) before playing the mod.
+                    It is recommended to know the source material (<a target="_blank" href="https://store.steampowered.com/app/504230">Celeste</a>) before playing this mode.
                 </p>
             </div>
             <div class="mode">
                 <div class="mode-header">
-                    <h1>fog% (beta)</h1>
+                    <h1>Fog% (beta)</h1>
                 </div>
                 <p>
-                    Put your muscle memory into test. Can you run the game with limited sight?
+                    Put your muscle memory to the test. Can you run the game with limited sight?
                     <ul>
                         <li>Dense fog makes you unable to see distant areas.</li>
-                        <li>If you don't move for 20 seconds, you can see through fog until you move again.</li>
-                        <li>Some say this mode will never exit beta testing...</li>
+                        <li>If you don't move for 10 seconds, you can see through the fog until you move again.</li>
+                        <li><i>Some say this mode will never exit beta testing...</i></li>
                     </ul>
                 </p>
             </div>
-            <h1>...and many more (in the future)</h1>
+            <div class="mode">
+                <div class="mode-header">
+                    <h1>Reverse Mod</h1>
+                </div>
+                <p>
+                    Go back to sleep. You monster.
+                    <ul>
+                        <li>Start in Finale 4 and make your way back to Container Ride.</li>
+                        <li>Un-solve puzzles along the way.</li>
+                    </ul>
+                </p>
+            </div>
+            <div class="mode">
+                <div class="mode-header">
+                    <h1>Odyssey Mod</h1>
+                </div>
+                <p>
+                    Don't tell Nintendo.
+                    <ul>
+                        <li>Super Mario Odyssey movement added on top of Portal 2's movement.</li>
+                        <li>Control objects at the drop of a hat.</li>
+                        <li>Over 280 hidden Moons!</li>
+                    </ul>
+                </p>
+            </div>
+            <div class="mode">
+                <div class="mode-header">
+                    <h1>The Floor is Lava</h1>
+                </div>
+                <p>
+                    Can you guess what this mode is about?
+                </p>
+            </div>
+            <br>
+            <h1>... and many more (in the future)</h1>
+            <p>
+                Stay tuned!
+            </p>
         </div>
     </div>
     <div class="container p2sm-content download hidden">
@@ -154,26 +204,33 @@
             <h1>Installation guide</h1>
             <ol start="0">
                 
-                <li>Make sure you have original game (Portal 2, duh) installed on Steam.</li>
-                <li>Download the newest release from the link available above.</li>
-                <li>Unzip Portal 2 Speedrun Mod folder into <code>sourcemods</code> directory.<br>(its default location is <code>Steam/steamapps/sourcemods/</code>).</li>
-                <li>Restart Steam.</li>
+                <li>Make sure you have the original game (<a target="_blank" href="https://store.steampowered.com/app/620">Portal 2</a>, duh) installed on Steam.</li>
+                <li>Download the newest release from the link above.</li>
+                <li>Unzip Portal 2 Speedrun Mod folder into <code>sourcemods</code> directory.<br>
+                    (Its default location is <code>Steam/steamapps/sourcemods/</code>)<br>
+                    (You should have the path <code>sourcemods/Portal 2 Speedrun Mod/gameinfo.txt</code>)</li>
+                <li>Restart Steam by right-clicking it in the taskbar and pressing Exit Steam.</li>
                 <li>A new game, called "Portal 2 Speedrun Mod" should appear in your library.</li>
 
             </ol>
 
-            <h1>"janky hack mate!"</h1>
+            <h1>Troubleshooting</h1>
             <p>
                 Keep in mind that this mod is a compilation of <b>dirty hacks</b> that this poor 2011 engine was not prepared for. 
                 In case the game crashes or bugs itself in unexplainable way, try one of these things:
                 <ul>
-                    <li>Launching the <b>main game</b>, then the mod</li>
-                    <li>Not using any other extensions (like SAR, for instance) because they might not like each other</li>
-                    <li>Updating other extensions (like SAR), because they might be the one causing trouble</li>
-                    <li>Taking a hot bath and <s>at least 30 minutes of walk in fresh air</s><code>#stayathome</code></li>
-                    <li>committing a jump from a ground floor window</li>
+                    <li>Launch the <b>main game</b>, then the mod.</li>
+                    <li>(D3D Error) Temporarily add <code>-safe</code> to the launch options in the mod's Steam properties</li>
+                    <li>(Manifest file error) Install the mod on the <b>same drive</b> as the main game.</li>
+                    <li>Disable any other extensions (like <a target="_blank" href="https://sar.portal2.sr">SAR</a>, for instance) because they might not like each other</li>
+                    <li>Update other extensions (like SAR), because they might be the one causing trouble</li>
                 </ul>
-                If none of these things work, seek help in <a href="https://discordapp.com/invite/hRwE4Zr" title="P2SR Discord server" target="_blank">P2SR Discord server</a>.
+                <hr>
+                <ul>
+                    <li>Taking a hot bath and walking in fresh air for at least 30 minutes (environment permitting)</li> <!-- Or stay at home. -->
+                    <li>Jumping from a ground-floor window</li>
+                </ul>
+                If none of these things work, seek help in the <a href="https://discordapp.com/invite/hRwE4Zr" title="P2SR Discord server" target="_blank">P2SR Discord server</a>.
             </p>
         </div>
     </div>
@@ -192,6 +249,9 @@
         $("a[href*='#']").click(function(e) {
             let href = $(this).attr("href");
             showSitePart(href);
+        });
+        document.querySelectorAll("a").forEach(a => {
+            a.draggable = false;
         });
 
         let anchor = window.top.location.hash || "#about";
