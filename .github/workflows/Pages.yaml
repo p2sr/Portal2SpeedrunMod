@@ -2,7 +2,7 @@ name: Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     paths:
       - 'doc/web/**'
   workflow_dispatch:
