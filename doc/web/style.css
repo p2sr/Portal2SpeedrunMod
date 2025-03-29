@@ -1,0 +1,255 @@
+@font-face {
+    font-family: "D-Din";
+    src: url("ddin.otf") format("opentype");
+}
+
+:root {
+    --body-color: black;
+    --nav-color: #d8d8d8;
+    --nav-color-selected: #555;
+    --code-bg-color: none;
+    --code-color: #c51e6c;
+    --rainbow-gradient: repeating-linear-gradient(-45deg, indigo, blue, green, orange, red, indigo 50%)
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --body-color: white;
+        --nav-color: #262626;
+        --nav-color-selected: #006fde;
+        --code-bg-color: #262626;
+        --code-color: #e4267f;
+        --rainbow-gradient: repeating-linear-gradient(-45deg, deeppink, turquoise, lime, yellow, red, deeppink 50%);
+    }
+}
+
+body {
+    color: var(--body-color);
+    background-color:black;
+    background-image:url("img/finale_stars.jpg");
+    background-repeat: repeat;
+    margin:0 -15px;
+    overflow-x: hidden;
+    overflow-y:scroll;
+    font-family: "D-Din", Arial, Helvetica, sans-serif;
+    font-size: 1.6em;
+    padding-bottom:1em;
+}
+@media (max-width: 767px) {
+    body{font-size:1.3em;}
+}
+
+h1 {
+    font-weight: 800;
+    font-size: 2.2em;
+    text-transform: uppercase;
+}
+
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+hr {
+    border-color: var(--body-color);
+}
+
+code {
+    padding: 0 0.2em;
+    margin: 0 0.2em;
+    background-color: var(--code-bg-color);
+    border: 1px solid var(--body-color);
+    border-radius: 5px;
+    color: var(--code-color);
+}
+
+.rainbow {
+    background: var(--rainbow-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbow_animation 10s linear infinite;
+    background-size: 200% 200%;
+}
+@keyframes rainbow_animation {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+#p2smlogo {
+    padding: 1em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("img/main_thumbnail_bg.png");
+    background-size: cover;
+}
+
+.p2box {
+    padding: 1em 1em;
+    background: url("img/tilebg.png");
+    background-size: 10% auto;
+    background-repeat: repeat;
+    -webkit-box-shadow: inset 0px 0px 30px 0px rgba(0,0,0,1);
+    -moz-box-shadow: inset 0px 0px 30px 0px rgba(0,0,0,1);
+    box-shadow: inset 0px 0px 30px 0px rgba(0,0,0,1);
+}
+@media (prefers-color-scheme: dark) {
+    .p2box {
+        background: url("img/tilebg-dark.png");
+    }
+}
+
+.p2sm-content.hidden {
+    display: none;
+}
+
+#p2smlogo > img {
+    max-width: 100%;
+}
+
+
+.p2sm-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--nav-color);
+    -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.5);
+    height: 2.5em;
+    user-select: none;
+}
+
+.sticky {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.p2sm-nav > div {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    height: 100%;
+}
+
+.p2sm-nav > .main-links {
+    justify-content: left;
+}
+.p2sm-nav > .side-links{
+    justify-content: right;
+}
+
+.p2sm-nav a {
+    padding: 0.5em 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1em;
+    height: 100%;
+    text-decoration: none;
+    transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
+}
+
+.p2sm-nav > .side-links a {
+    padding: 0 0.5em;
+    font-size: 1.5em;
+}
+
+.p2sm-nav a:hover, .p2sm-nav a.clicked{
+    color: white;
+    background-color: var(--nav-color-selected);
+    text-decoration: none;
+}
+
+
+
+
+@media (max-width: 767px) {
+    .p2sm-nav {
+        flex-direction: column;
+        height: 5em;
+    }
+
+    .p2sm-nav > .side-links, .p2sm-nav > .main-links {
+        justify-content: stretch;
+        flex: inherit;
+    }
+    .p2sm-nav a {
+        width: 100%;
+    }
+}
+
+
+.fa-discord {
+    color: #697fc7;
+}
+.fa-github {
+    color: #555;
+    padding: 0 0.2em;
+}
+.fa-paypal{color:#0070ba;}
+.p2sm-nav a:hover i{ color:white; }
+
+#coop-ad {
+    color: red;
+    font-size: xx-large;
+    white-space: nowrap;
+}
+
+.download-info {
+    text-align: center;
+    padding-bottom: 1em;
+}
+
+.download-info > .release-info {
+    display: flex;
+    justify-content: center;
+}
+
+.download-info > .release-info > p {
+    margin: 0 1em;
+}
+
+.downloadbtn {
+    display: inline-block;
+    padding: 0.1em 0.5em;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    background: #006fde;
+    width: auto;
+    font-size: 1.5em;
+    margin: 0 auto;
+    border-radius: 5px;
+    user-select: none;
+}
+
+.download-info .info {
+    font-size: 0.6em;
+    margin: 0;
+}
+
+.downloadbtn:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.downloadbtn.gh-release, .downloadbtn.gh-source {
+    margin-top: 0.3em;
+    font-size: 1.2em;
+    background: #222;
+}
+
+.download-info.loading {
+    visibility: hidden;
+}
