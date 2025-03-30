@@ -13,6 +13,7 @@ Variable sv_transition_fade_time;
 Variable ui_loadingscreen_transition_time;
 Variable ui_loadingscreen_fadein_time;
 Variable ui_loadingscreen_mintransition_time;
+Variable sv_player_collide_with_laser;
 
 Variable sv_cheats;
 Variable crosshair;
@@ -25,6 +26,7 @@ void Cheats::Init()
     ui_loadingscreen_transition_time = Variable("ui_loadingscreen_transition_time");
     ui_loadingscreen_fadein_time = Variable("ui_loadingscreen_fadein_time");
     ui_loadingscreen_mintransition_time = Variable("ui_loadingscreen_mintransition_time");
+    sv_player_collide_with_laser = Variable("sv_player_collide_with_laser");
 
     sv_transition_fade_time.Modify(FCVAR_DEVELOPMENTONLY, FCVAR_CHEAT | FCVAR_HIDDEN);
     sv_transition_fade_time.SetValue(0);
@@ -38,6 +40,7 @@ void Cheats::Init()
     ui_loadingscreen_mintransition_time.Modify(FCVAR_DEVELOPMENTONLY, FCVAR_CHEAT | FCVAR_HIDDEN);
     ui_loadingscreen_mintransition_time.SetValue(0);
     ui_loadingscreen_mintransition_time.ThisPtr()->m_pszDefaultValue = "0";
+    sv_player_collide_with_laser.Modify(FCVAR_CHEAT);
 
     sv_cheats = Variable("sv_cheats");
     crosshair = Variable("crosshair");

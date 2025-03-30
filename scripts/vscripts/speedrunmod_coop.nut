@@ -53,6 +53,8 @@ if (smsm.GetMode() != 0) {
     smsm.SetMode(0);
 }
 
+EntFire("@command", "Command", "sv_player_collide_with_laser 0")
+
 //-----------------------------------------------------------------------------
 // Purpose: Speed up checkpoints and ending transitions based on map type.
 //-----------------------------------------------------------------------------

@@ -77,6 +77,7 @@ function SpeedrunModeLoad(){
 
   //well, that happens
   EntFire("@command", "Command", "mat_fullbright 0")
+  EntFire("@command", "Command", "sv_player_collide_with_laser 0")
 
   //get rid of default hints, who needs them lmao
   local hint = null;
