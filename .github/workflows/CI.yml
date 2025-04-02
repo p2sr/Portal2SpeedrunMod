@@ -4,14 +4,12 @@ on:
   push:
     branches: '**'
     tags-ignore: '**'
-    paths:
-      - 'pak01_dir/**'
-      - 'smsm/**'
+    paths-ignore:
+      - 'doc/**'
   pull_request:
     branches: '**'
-    paths:
-      - 'pak01_dir/**'
-      - 'smsm/**'
+    paths-ignore:
+      - 'doc/**'
   workflow_dispatch:
 
 jobs:
