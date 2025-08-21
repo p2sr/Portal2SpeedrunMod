@@ -39,7 +39,7 @@ You'll need:
 - [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 - Windows Universal C Runtime
 - C++ Build Tools core features
-- Windows 10 SDK (10.0.18362.0)
+- Windows 10 SDK (10.0.19041.0)
 - MSVC v142 - VS 2019 C++ x64/x86 build tools
 
 ```batch
