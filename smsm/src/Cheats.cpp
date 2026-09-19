@@ -78,3 +78,10 @@ CON_COMMAND(sm_param, "sm_param [id] <value> - get and set mode-specific variabl
 
     smsm.SetModeParam(paramId, param);
 }
+
+CON_COMMAND(sm_about, "sm_about - prints info about SMSM plugin.\n") {
+    console->Print("SMSM (Speedrun Mod Simple Modifier) is a basic plugin that Speedrun Mod uses to handle modes, settings, etc.\n");
+    console->Print("More information at: " SMSM_WEB " or https://sm.portal2.sr\n");
+    console->Print("Speedrun Mod version: " SMSM_VERSION "\n");
+    console->Print("Built: " SMSM_BUILD "\n");
+}
