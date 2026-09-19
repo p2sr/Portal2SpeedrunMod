@@ -1511,7 +1511,7 @@ smo.moonlist <- [
   { pos = Vector(9326, 1225, 1320), name = "Atop the Spinning Rings", map = "sp_a1_wakeup" },
   { pos = Vector(10817, 1010, -2), name = "On a Crumbled Catwalk", map = "sp_a1_wakeup" },
   { pos = Vector(8960, 1300, -160), name = "Going Off the Beaten Catwalk", map = "sp_a1_wakeup" },
-  { pos = Vector(8977, 1088, 136), name = "Powerup Initiated", map = "sp_a1_wakeup" },
+  // { pos = Vector(8977, 1088, 136), name = "Powerup Initiated", map = "sp_a1_wakeup" },
 
   { pos = Vector(-1953, 431, -10102), name = "A Staircase of Bumps", map = "sp_a2_intro" },
   { pos = Vector(-1535, 352, -10705), name = "Overlooking The Dual Portal Device", map = "sp_a2_intro" },
@@ -1544,7 +1544,7 @@ smo.moonlist <- [
   { pos = Vector(3140, -1779, 199), name = "Hole in the Wall", map = "sp_a2_laser_over_goo" },
 
   { pos = Vector(256, -1493, -95), name = "Quick Enough to get Stuck", map = "sp_a2_catapult_intro" }, // softlock spot
-  { pos = Vector(-63, -929, -515), name = "Hold the Door", map = "sp_a2_catapult_intro" },
+  // { pos = Vector(-63, -929, -515), name = "Hold the Door", map = "sp_a2_catapult_intro" },
   { pos = Vector(596, 34, 309), name = "On the Slanted Wall", map = "sp_a2_catapult_intro" },
   { pos = Vector(512, 672, 553), name = "In the Ceiling Pocket", map = "sp_a2_catapult_intro" },
   { pos = Vector(-877, -352, -341), name = "Behind the Collapsing Panels", map = "sp_a2_catapult_intro" },
@@ -1558,7 +1558,7 @@ smo.moonlist <- [
 
   { pos = Vector(523, -384, -436), name = "Making Your Own Way Up", map = "sp_a2_pit_flings" },
   { pos = Vector(132, 86, 434), name = "X Marks the Spot", map = "sp_a2_pit_flings" },
-  { pos = Vector(352, 216, -553), name = "Protected by Wheatley", map = "sp_a2_pit_flings" },
+  // { pos = Vector(352, 216, -553), name = "Protected by Wheatley", map = "sp_a2_pit_flings" },
   { pos = Vector(384, 320, 0), name = "Wrong Texture, Valve", map = "sp_a2_pit_flings" },
 
   { pos = Vector(-982, -129, -960), name = "Leaping Past a Trigger", map = "sp_a2_fizzler_intro" }, // under the elevator
@@ -1569,7 +1569,7 @@ smo.moonlist <- [
   // CHAPTER 3 - 38 moons
 
   { pos = Vector(-1566, 1821, 648), name = "Fluorescent Sunbathing", map = "sp_a2_sphere_peek" },
-  { pos = Vector(-1909, 1168, 584), name = "A Tough Climb for Wheatley", map = "sp_a2_sphere_peek" },
+  // { pos = Vector(-1909, 1168, 584), name = "A Tough Climb for Wheatley", map = "sp_a2_sphere_peek" },
   { pos = Vector(-1712, 1026, -38), name = "Atop the Raging Panels", map = "sp_a2_sphere_peek" },
   { pos = Vector(-543, 1281, 320), name = "Racing the Stairs", map = "sp_a2_sphere_peek" },
   { pos = Vector(-971, 1982, 640), name = "On a Lonely Hanging Arm", map = "sp_a2_sphere_peek" },
@@ -1617,7 +1617,7 @@ smo.moonlist <- [
 
   // CHAPTER 4 - 25 moons
 
-  { pos = Vector(-1375, 255, -2468), name = "Dane Skip", map = "sp_a2_column_blocker" },
+  // { pos = Vector(-1375, 255, -2468), name = "Dane Skip", map = "sp_a2_column_blocker" },
   { pos = Vector(-96, -670, 101), name = "In Front of the Fake Door", map = "sp_a2_column_blocker" },
   { pos = Vector(996, 384, 401), name = "A Pocket in the Wall", map = "sp_a2_column_blocker" },
   { pos = Vector(384, 1274, 54), name = "Under the Blocked Off Ramp", map = "sp_a2_column_blocker" },
@@ -1675,7 +1675,7 @@ smo.moonlist <- [
   { pos = Vector(197, 907, -96), name = "The End of a Broken Bridge", map = "sp_a2_core" },
   { pos = Vector(-1004, 0, 312), name = "Atop The Gate to HER Chamber", map = "sp_a2_core" },
   { pos = Vector(0, -1280, 158), name = "Do It, Press the Button!", map = "sp_a2_core" },
-  { pos = Vector(336, -11, -211), name = "Believe Me, It'll Hurt", map = "sp_a2_core" },
+  // { pos = Vector(336, -11, -211), name = "Believe Me, It'll Hurt", map = "sp_a2_core" },
 
   // CHAPTER 6 - 37 moons
 
@@ -1776,7 +1776,7 @@ smo.moonlist <- [
   { pos = Vector(256, 332, 812), name = "Behind the Exit Bridge", map = "sp_a4_tb_trust_drop" },
   { pos = Vector(-125, 625, 305), name = "An Unevenly Balanced Block", map = "sp_a4_tb_trust_drop" },
 
-  { pos = Vector(-680, 1580, 570), name = "Racing the Moving Chamber", map = "sp_a4_tb_wall_button" },
+  // { pos = Vector(-680, 1580, 570), name = "Racing the Moving Chamber", map = "sp_a4_tb_wall_button" },
   { pos = Vector(543, 959, 0), name = "Crawling In With a Helper", map = "sp_a4_tb_wall_button" },
   { pos = Vector(-674, 1408, 155), name = "Right on Target", map = "sp_a4_tb_wall_button" },
 
