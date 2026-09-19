@@ -59,6 +59,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
+  <PreBuildEvent>
+    <Command>call ..\genversion.bat</Command>
+  </PreBuildEvent>
     <PostBuildEvent>
       <Command>call ..\..\COPY.bat</Command>
     </PostBuildEvent>
@@ -90,9 +93,6 @@
       <PreprocessorDefinitions>_WINDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;NOMINMAX</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
-  <PreBuildEvent>
-    <Command>call ..\genversion.bat</Command>
-  </PreBuildEvent>
   <ItemGroup>
     <ClCompile Include="CelesteMoveset.cpp" />
     <ClCompile Include="Hud\Hud.cpp" />
