@@ -2,6 +2,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #else
+#include <cstdint>
 #include <dlfcn.h>
 #include <sys/mman.h>
 #define MAX_PATH 4096
