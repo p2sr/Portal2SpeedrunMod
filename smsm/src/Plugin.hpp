@@ -1,8 +1,7 @@
 #pragma once
 #include "Utils.hpp"
 
-#define SMSM_SIGNATURE \
-    new char[28] { 83, 112, 101, 101, 100, 114, 117, 110, 32, 77, 111, 100, 32, 119, 97, 115, 32, 97, 32, 109, 105, 115, 116, 97, 107, 101, 46, 00 }
+#define SMSM_SIGNATURE "Speedrun Mod was a mistake."
 
 // CServerPlugin
 #define CServerPlugin_m_Size 16

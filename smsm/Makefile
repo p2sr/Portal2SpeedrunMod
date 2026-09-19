@@ -5,6 +5,8 @@ CXX=g++-10
 SDIR=src
 ODIR=obj
 
+SMSM_VER=$(shell git describe --tags)
+
 SRCS=$(wildcard $(SDIR)/*.cpp)
 SRCS+=$(wildcard $(SDIR)/Utils/*.cpp)
 SRCS+=$(wildcard $(SDIR)/Modules/*.cpp)
@@ -24,13 +26,16 @@ LDFLAGS=-m32 -shared -lstdc++fs
 
 all: smsm.so
 clean:
-	rm -rf $(ODIR) smsm.so
+	rm -rf $(ODIR) smsm.so src/Version.hpp
 
 -include $(DEPS)
 
-smsm.so: $(OBJS)
+smsm.so: src/Version.hpp $(OBJS)
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 $(ODIR)/%.o: $(SDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -MMD -c $< -o $@
+
+src/Version.hpp: .FORCE
+	echo "#define SMSM_VERSION \"$(SMSM_VER)\"" > $@

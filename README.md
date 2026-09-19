@@ -55,3 +55,7 @@ You'll need:
 ```bash
 make -j$(nproc)
 ```
+
+### Releases
+
+The version number must be manually updated in `resource/basemodui_english.txt` under `"P2SM_VERSION"` prior to a release.

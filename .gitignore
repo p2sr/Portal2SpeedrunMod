@@ -3,6 +3,7 @@ smsm/.vs
 smsm/bin
 smsm/src/**/Debug
 smsm/src/**/Release
+smsm/src/Version.hpp
 smsm/obj
 smsm/smsm.so
 smsm/config.mk

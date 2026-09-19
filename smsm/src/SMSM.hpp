@@ -12,8 +12,8 @@
 #include "Game.hpp"
 #include "Plugin.hpp"
 #include "Utils/SDK.hpp"
+#include "Version.hpp"
 
-#define SMSM_VERSION "1.2"
 #define SMSM_BUILD __TIME__ " " __DATE__
 #define SMSM_WEB "https://github.com/p2sr/Portal2SpeedrunMod"
 

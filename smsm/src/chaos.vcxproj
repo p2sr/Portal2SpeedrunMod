@@ -90,6 +90,9 @@
       <PreprocessorDefinitions>_WINDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;NOMINMAX</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
+  <PreBuildEvent>
+    <Command>call ..\genversion.bat</Command>
+  </PreBuildEvent>
   <ItemGroup>
     <ClCompile Include="CelesteMoveset.cpp" />
     <ClCompile Include="Hud\Hud.cpp" />
